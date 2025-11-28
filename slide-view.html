@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Slides | Sunesis</title>
+  <link rel="stylesheet" href="slide-view.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="top-banner">
+    <div class="top-left">
+      <h1><i class="fa-solid fa-brain"></i> Sunesis</h1>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search...">
+      <button id="searchBtn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
+    </div>
+
+    <div class="top-right">
+      <ul class="nav-links" id="navLinks">
+        <li class="home-icon"><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
+        <li><a href="slide-admin.html">Manage-slides</a></li>
+        <li>
+          <section class="select-topic">
+            <select id="topicDropdown">
+              <option value="">Choose a topic</option>
+            </select>
+          </section>
+        </li>
+      </ul>
+      <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Slide Display -->
+    <section class="display-slide">
+      <div id="slideDisplay" class="slide-viewer">
+        <button id="prevArrow" class="arrow-btn" disabled>&#10094;</button>
+        <button id="nextArrow" class="arrow-btn" disabled>&#10095;</button>
+
+        <p>Select a topic to view slides</p>
+      </div>
+    </section>
+  </main>
+
+  <script src=""></script>
+</body>
+</html>
