@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Slides | Sunesis</title>
+  <link rel="stylesheet" href="slide-view.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="top-banner">
+    <div class="top-left">
+      <h1>Sunesis</h1>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search...">
+      <button id="searchBtn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
+    </div>
+
+    <div class="top-right">
+      <ul class="nav-links" id="navLinks">
+        <li class="home-icon"><a href="slide-view.html"><i class="fa-solid fa-tv"></i></a></li>
+        <li><a href="sunesisAdmin.html">Manage-slides</a></li>
+        <li>
+          <section class="select-topic">
+            <select id="topicDropdown">
+              <option value="">Topics</option>
+            </select>
+          </section>
+        </li>
+      </ul>
+      <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+  </div>
