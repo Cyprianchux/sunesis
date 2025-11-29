@@ -10,7 +10,7 @@
 <body>
   <div class="top-banner">
     <div class="top-left">
-      <h1>Sunesis</h1>
+      <h1><i class="fa-solid fa-brain"></i> Sunesis</h1>
     </div>
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search...">
@@ -19,16 +19,21 @@
 
     <div class="top-right">
       <ul class="nav-links" id="navLinks">
-        <li class="home-icon"><a href="slide-view.html"><i class="fa-solid fa-tv"></i></a></li>
-        <li><a href="sunesisAdmin.html">Manage-slides</a></li>
-        <li>
-          <section class="select-topic">
+        <li><a href="slide-view.html"><i class="fa-solid fa-tv"></i></a></li>
+        <li><a href="slide-view.html">View-Slides</a></li>
+        <li id="topicsMenu" class="topics-menu">
+          Topics
+          <div class="topics-dropdown">
             <select id="topicDropdown">
-              <option value="">Topics</option>
+              <option value="">Choose a topic</option>
             </select>
-          </section>
+          </div>
         </li>
       </ul>
-      <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+      <button class="nav-toggle" onclick="menuToggle()">☰</button>
     </div>
   </div>
+
+  <script src="sunesisDB.js"></script>
+
+</body>

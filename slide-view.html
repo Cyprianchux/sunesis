@@ -19,17 +19,18 @@
 
     <div class="top-right">
       <ul class="nav-links" id="navLinks">
-        <li class="home-icon"><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
-        <li><a href="slide-admin.html">Manage-slides</a></li>
-        <li>
-          <section class="select-topic">
+        <li><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
+        <li><a href="slide-admin.html">Manage-Slides</a></li>
+        <li id="topicsMenu" class="topics-menu">
+          Topics
+          <div class="topics-dropdown">
             <select id="topicDropdown">
               <option value="">Choose a topic</option>
             </select>
-          </section>
+          </div>
         </li>
       </ul>
-      <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+      <button class="nav-toggle" onclick="menuToggle()">☰</button>
     </div>
   </div>
 
@@ -45,6 +46,7 @@
     </section>
   </main>
 
-  <script src=""></script>
+  <script src="sunesisDB.js"></script>
+
 </body>
 </html>
