@@ -1,0 +1,132 @@
+
+.add-slide {
+  margin-top: 0;
+}
+
+.wide-create-topic {
+  display: none;
+}
+
+@media (min-width: 670px) {
+  .create-add-div {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .wide-create-topic {
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .wide-create-topic img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid lightblue;
+  }
+}
+
+.create-topic h2, .add-slide h2 {
+  margin: 0 auto 10px 10px;
+}
+
+.create-topic input {
+  padding: 5px;
+  font-size: 14.5px;
+}
+
+.add-slide button {
+  margin-top: 10px;
+  background-color: blanchedalmond;
+  border: 1px solid rgb(47, 168, 243);
+  color: rgb(16, 99, 151);
+}
+
+.add-slide button:hover {
+  background-color: navajowhite;
+  border: 1px solid rgb(47, 168, 243);
+  color: rgb(16, 99, 151);
+}
+
+.add-slide {
+  width: 300px;
+}
+
+section select {
+  padding: 8px;
+  width: 96%;
+}
+
+section select, section textarea, section label { 
+  margin-left: 8px;
+  display: block;
+}
+
+section label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+section input, section button {
+  display: block;
+  margin-left: 8px;
+}
+
+textarea {
+  width: 91%;
+  padding: 6px;
+  font-size: 15px;
+}
+
+#slide-media {
+  margin: 0 auto 15px 8px;
+}
+
+.add-slide h2, .del-slide h2 {
+  margin-top: 0;
+  margin-left: 10px;
+  font-size: clamp(1.5rem, 3vw, 2rem); 
+}
+
+.slide-list h2 {
+  text-align: center;
+}
+
+.topic-section {
+  margin-bottom: 5rem;
+}
+
+.topic-section h3 {
+  margin-left: 18px;
+  color: blue;
+}
+
+.topic-section button {
+  display: inline-flex;
+  margin-bottom: 1rem;
+}
+
+.topic-section button:hover {
+  background-color: crimson;
+  color: white;
+  border: 1px solid crimson;
+  transition: 0.5s;
+}
+
+.slide-item button {
+  display: block;
+  margin-top: 5px;
+  margin-left: 0;
+}
+
+#deleteAllBtn {
+  margin-top: 3rem;
+  background-color: crimson;
+  color: white;
+}
+
+#deleteAllBtn:hover {
+  border: firebrick;
+  scale: 1.05;
+  transition: 0.5s;
+}
+
