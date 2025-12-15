@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Slides | Sunesis</title>
+  <title>Admin Page | Sunesis</title>
   <link rel="stylesheet" href="slide-view.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="slide-admin.css">
+
 </head>
 <body>
   <div class="top-banner">
@@ -21,19 +23,54 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="slide-view.html"><i class="fa-solid fa-tv"></i></a></li>
         <li><a href="slide-view.html">View-Slides</a></li>
-        <li id="topicsMenu" class="topics-menu">
-          Topics
-          <div class="topics-dropdown">
-            <select id="topicDropdown">
-              <option value="">Choose a topic</option>
-            </select>
-          </div>
+        <li><a href="">Board</a>
         </li>
       </ul>
       <button class="nav-toggle" onclick="menuToggle()">☰</button>
     </div>
   </div>
 
-  <script src="sunesisDB.js"></script>
+  <main class="container1">
+    <div class="create-add-div">
+      <!-- Create New Topic Section -->
+      <section class="add-slide create-topic">
+        <h2>Create a New Topic</h2>
+        <input type="text" id="topicName" placeholder="Enter a new topic name" required>
+        <button id="createTopicBtn">Create Topic</button>
+        <div class="wide-create-topic">
+          <img src="" alt="">
+        </div>
+      </section>
+
+      <!-- Add Slide Section -->
+      <section class="add-slide">
+        <h2>Add a Slide</h2>
+
+        <label for="topicSelect">Select Topic:</label>
+        <select id="topicSelect">
+          <option value="">-- Choose a topic --</option>
+        </select>
+
+        <label for="slide-title">Slide Title:</label>
+        <textarea id="slide-title" placeholder="Enter slide title" rows="1"></textarea>
+
+        <label for="slide-desc">Slide Description:</label>
+        <textarea id="slide-desc" placeholder="Enter slide description" rows="3"></textarea>
+
+        <label for="slide-media">Upload Media (optional):</label>
+        <input type="file" id="slide-media" accept="image/*,video/*">
+
+        <button id="addSlideBtn">Add Slide</button>
+      </section>
+    </div>
+
+    <section class="slide-list">
+      <h2>Existing Topics and Slides</h2>
+      <div id="slideContainer"></div>
+      <button id="deleteAllBtn">Delete All Topics & Slides</button>
+    </section>
+  </main>
+
+  <script src="sunesis.js"></script>
 
 </body>
