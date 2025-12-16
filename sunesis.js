@@ -274,51 +274,40 @@ if (isViewPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
     await loadTopicsView();
+    bindTopicSelection();
 
-    const topicDropdown = document.getElementById("topicDropdown");
-    const prevBtn = document.getElementById("prevArrow");
-    const nextBtn = document.getElementById("nextArrow");
+  function bindTopicSelection() {
+    const select = document.getElementById("topicSelect");
+    if (!select) return;
 
-    topicDropdown.addEventListener("change", async (e) => {
-      const topicName = e.target.value;
-      if (topicName) {
-        slides = await getSlidesByTopic(topicName);
-        currentSlideIndex = 0;
-        displayCurrentSlide();
-      } else {
-        slides = [];
+    select.addEventListener("change", async () => {
+      const topicName = select.value;
+
+      if (!topicName) {
         document.getElementById("slideDisplay").innerHTML =
-          '<p style="text-align:center; font-weight:bold;">Select a topic to view slides</p>';
+          '<p>Select a topic to view slides</p>';
+        return;
       }
-      updateButtons();
-    });
 
-    prevBtn.addEventListener("click", () => {
-      if (currentSlideIndex > 0) {
-        currentSlideIndex--;
-        displayCurrentSlide();
-      }
-      updateButtons();
+      slides = await getSlidesByTopic(topicName);
+      currentSlideIndex = 0;
+      renderCurrentSlide();
     });
-
-    nextBtn.addEventListener("click", () => {
-      if (currentSlideIndex < slides.length - 1) {
-        currentSlideIndex++;
-        displayCurrentSlide();
-      }
-      updateButtons();
-    });
-  });
+  }
 
   async function loadTopicsView() {
     const topics = await getAllTopics();
-    const dropdown = document.getElementById("topicDropdown");
-    dropdown.innerHTML = `<option value="">-- Choose a topic --</option>`;
+    const select = document.getElementById("topicSelect");
+
+    if (!select) return;
+
+    select.innerHTML = `<option value="">Choose a topic </option>`;
+
     topics.forEach((topic) => {
       const opt = document.createElement("option");
       opt.value = topic.name;
       opt.textContent = topic.name;
-      dropdown.appendChild(opt);
+      select.appendChild(opt);
     });
   }
 
@@ -375,11 +364,64 @@ if (isViewPage) {
   }
 
   function updateButtons() {
-    const prev = document.getElementById("prevSlideBtn");
-    const next = document.getElementById("nextSlideBtn");
+    const prev = document.getElementById("prevArrow");
+    const next = document.getElementById("nextArrow");
     prev.disabled = currentSlideIndex === 0 || slides.length === 0;
     next.disabled = currentSlideIndex === slides.length - 1 || slides.length === 0;
   }
+
+  function renderCurrentSlide() {
+    const display = document.getElementById("slideDisplay");
+    const prev = document.getElementById("prevArrow");
+    const next = document.getElementById("nextArrow");
+
+    if (!slides.length) {
+      display.innerHTML = "<p>No slides for this topic.</p>";
+      prev.disabled = true;
+      next.disabled = true;
+      return;
+    }
+
+    const slide = slides[currentSlideIndex];
+
+    display.innerHTML = `
+      <button id="prevArrow" class="arrow-btn">&#10094;</button>
+      <button id="nextArrow" class="arrow-btn">&#10095;</button>
+
+      <div class="slide-content">
+        <h3>${slide.title}</h3>
+        <p>${slide.desc || ""}</p>
+
+        ${
+          slide.media
+            ? slide.type === "image"
+              ? `<img src="${slide.media}" width="300">`
+              : `<video src="${slide.media}" width="400" controls></video>`
+            : ""
+        }
+
+        <p>${currentSlideIndex + 1} / ${slides.length}</p>
+      </div>
+    `;
+
+    prev.disabled = currentSlideIndex === 0;
+    next.disabled = currentSlideIndex === slides.length - 1;
+
+    document.getElementById("prevArrow").onclick = () => {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderCurrentSlide();
+      }
+    };
+
+    document.getElementById("nextArrow").onclick = () => {
+      if (currentSlideIndex < slides.length - 1) {
+        currentSlideIndex++;
+        renderCurrentSlide();
+      }
+    };
+  }
+})
 }
 
 // ADMIN PAGE (slide-admin.html) 
