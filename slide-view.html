@@ -51,13 +51,19 @@
     const topicsMenu = document.getElementById("topicsMenu");
     const topicsDropdown = document.querySelector(".topics-dropdown");
     if (topicsMenu && topicsDropdown) {
+      // Toggle dropdown when clicking "Topics"
       topicsMenu.addEventListener("click", (e) => {
         e.stopPropagation();
         topicsDropdown.style.display =
           topicsDropdown.style.display === "block" ? "none" : "block";
       });
 
-      // Close dropdown when clicking outside
+      // Prevent clicks inside dropdown from closing it
+      topicsDropdown.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+
+      // Close only when clicking truly outside
       document.addEventListener("click", () => {
         topicsDropdown.style.display = "none";
       });
