@@ -62,9 +62,16 @@ function createTopic(name) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("topics", "readwrite");
     const store = tx.objectStore("topics");
-    store.add({ name });
+
+    const request = store.add({ name });
+
+    request.onerror = () => {
+      alert("Topic already exists.");
+      reject(request.error);
+    };
+
     tx.oncomplete = resolve;
-    tx.onerror = () => reject(tx.error);
+    alert(`The topic "${name}" has been added succesfully!`);
   });
 }
 
@@ -124,6 +131,7 @@ function deleteSlidesByTopic(topicName) {
   });
 }
 
+ // Delete Handlers
 function deleteAllTopicsAndSlides() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(["topics", "slides"], "readwrite");
@@ -135,6 +143,90 @@ function deleteAllTopicsAndSlides() {
   });
 }
 
+async function deleteSlideHandler(slideId) {
+  if (!confirm("Delete this slide?")) return;
+  await deleteSlide(slideId);
+  await displayAllTopics();
+  await loadTopicsAdmin();
+}
+
+async function deleteSlidesFromTopicHandler(topicName) {
+  if (!confirm(`Delete all slides from "${topicName}"?`)) return;
+  await deleteSlidesByTopic(topicName);
+  await displayAllTopics();
+}
+
+async function deleteTopicHandler(topicName) {
+  if (!confirm(`Delete the topic "${topicName}" and all its slides?`)) return;
+
+  await deleteSlidesByTopic(topicName);
+
+  const tx = db.transaction("topics", "readwrite");
+  tx.objectStore("topics").delete(topicName);
+
+  await new Promise((res, rej) => {
+    tx.oncomplete = res;
+    tx.onerror = () => rej(tx.error);
+  });
+
+  await displayAllTopics();
+  await loadTopicsAdmin();
+}
+
+async function loadTopicsAdmin() {
+  const topics = await getAllTopics();
+  const select = document.getElementById("topicSelect");
+  select.innerHTML = `<option value="">-- Choose a topic --</option>`;
+  topics.forEach((topic) => {
+    const opt = document.createElement("option");
+    opt.value = topic.name;
+    opt.textContent = topic.name;
+    select.appendChild(opt);
+  });
+}
+
+// Display All Topics
+
+async function displayAllTopics() {
+  const container = document.getElementById("slideContainer");
+  const topics = await getAllTopics();
+  container.innerHTML = "";
+
+  for (const topic of topics) {
+    const topicSlides = await getSlidesByTopic(topic.name);
+    const topicDiv = document.createElement("div");
+    topicDiv.classList.add("topic-section");
+
+    topicDiv.innerHTML = `
+      <h3>${topic.name}</h3>
+      <button onclick="deleteTopicHandler('${topic.name}')">Delete Topic</button>
+      <button onclick="deleteSlidesFromTopicHandler('${topic.name}')">Delete All Slides</button>
+    `;
+
+    if (topicSlides.length === 0) {
+      topicDiv.innerHTML += `<p style="margin-left:15px;">No slides yet.</p>`;
+    } else {
+      topicSlides.forEach((slide) => {
+        topicDiv.innerHTML += `
+          <div class="slide-item" style="margin:8px 0;padding:8px;border:1.5px solid #ccc;border-radius:8px;">
+            <h4>${slide.title}</h4>
+            <p>${slide.desc}</p>
+            ${
+              slide.media
+                ? slide.type === "image"
+                  ? `<img src="${slide.media}" width="150">`
+                  : `<video src="${slide.media}" width="160" controls></video>`
+                : ""
+            }
+            <button class="delete-slide-btn" data-id="${slide.id}">Delete Slide</button>
+          </div>
+        `;
+      });
+    }
+    container.appendChild(topicDiv);
+    bindAdminActions();
+  }
+}
 
 // COMMON SEARCH FUNCTIONALITY
 
@@ -349,57 +441,18 @@ if (isAdminPage) {
     });
   });
 
-  async function loadTopicsAdmin() {
-    const topics = await getAllTopics();
-    const select = document.getElementById("topicSelect");
-    select.innerHTML = `<option value="">-- Choose a topic --</option>`;
-    topics.forEach((topic) => {
-      const opt = document.createElement("option");
-      opt.value = topic.name;
-      opt.textContent = topic.name;
-      select.appendChild(opt);
+  
+
+  function bindAdminActions() {
+    document.querySelectorAll(".delete-slide-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = Number(btn.dataset.id);
+      });
     });
   }
 
-  async function displayAllTopics() {
-    const container = document.getElementById("slideContainer");
-    const topics = await getAllTopics();
-    container.innerHTML = "";
+  bindAdminActions();
 
-    for (const topic of topics) {
-      const topicSlides = await getSlidesByTopic(topic.name);
-      const topicDiv = document.createElement("div");
-      topicDiv.classList.add("topic-section");
-
-      topicDiv.innerHTML = `
-        <h3>${topic.name}</h3>
-        <button onclick="deleteTopicHandler('${topic.name}')">Delete Topic</button>
-        <button onclick="deleteSlidesFromTopicHandler('${topic.name}')">Delete All Slides</button>
-      `;
-
-      if (topicSlides.length === 0) {
-        topicDiv.innerHTML += `<p style="margin-left:15px;">No slides yet.</p>`;
-      } else {
-        topicSlides.forEach((slide) => {
-          topicDiv.innerHTML += `
-            <div class="slide-item" style="margin:8px 0;padding:8px;border:1.5px solid #ccc;border-radius:8px;">
-              <h4>${slide.title}</h4>
-              <p>${slide.desc}</p>
-              ${
-                slide.media
-                  ? slide.type === "image"
-                    ? `<img src="${slide.media}" width="150">`
-                    : `<video src="${slide.media}" width="160" controls></video>`
-                  : ""
-              }
-              <button onclick="deleteSlideHandler(${slide.id})">Delete Slide</button>
-            </div>
-          `;
-        });
-      }
-      container.appendChild(topicDiv);
-    }
-  }
 }
 
   function displayFilteredAdminSlides(filteredSlides) {
@@ -424,37 +477,8 @@ if (isAdminPage) {
         </div>`
       )
       .join("");
-
-        // Delete Handlers
-    async function deleteTopicHandler(topicName) {
-      if (confirm(`Delete topic "${topicName}" and all its slides?`)) {
-        await deleteSlidesByTopic(topicName);
-
-        const tx = db.transaction("topics", "readwrite");
-        tx.objectStore("topics").delete(topicName);
-
-        await new Promise((res, rej) => {
-          tx.oncomplete = res;
-          tx.onerror = () => rej(tx.error);
-        });
-
-        await displayAllTopics();
-        await loadTopicsAdmin();
-      }
-    }
-
-    async function deleteSlideHandler(slideId) {
-      if (confirm("Delete this slide?")) {
-        await deleteSlide(slideId);
-        await displayAllTopics();
-        await loadTopicsAdmin();
-      }
-    }
-
-    async function deleteSlidesFromTopicHandler(topicName) {
-      if (confirm(`Delete all slides from "${topicName}"?`)) {
-        await deleteSlidesByTopic(topicName);
-        await displayAllTopics();
-      }
-    }
   }
+
+
+
+  
