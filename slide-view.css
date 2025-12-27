@@ -10,7 +10,7 @@ body {
   left: 0;
   right: 0;
   height: 70px;
-  background: linear-gradient(to left, #987911, #fdfeff);
+  background: linear-gradient(to left, firebrick, #fdfeff);
   border-bottom: 1px solid rgba(178, 34, 34, 0.4);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   z-index: 10;
@@ -44,7 +44,7 @@ body {
 
 .search-bar {
   padding: 17px 5px;
-  margin-left: 20px;
+  margin-left: 50px;
   margin-right: 10px;
   display: flex;
   max-width: 400px;
@@ -113,7 +113,7 @@ button:active {
   position: absolute;
   top: 12px;
   right: 15px;
-  color: #1d1d97;
+  color: firebrick;
   border-radius: 10px 0 10px 0;
   padding: 5px 10px;
 
@@ -121,8 +121,7 @@ button:active {
 
 .nav-toggle:hover {
   background-color: aliceblue;
-  color: #987911;
-  border-color: #987911;
+  color: blue;
 }
 
 .nav-links {
@@ -139,11 +138,11 @@ button:active {
   text-decoration: none;
   font-weight: bold;
   padding: 0px 5px;
-  color: #1d1d97;
+  color: floralwhite;
 }
 
 .nav-links a:hover {
-  color: #d8e4ff;
+  color: rgba(255, 250, 240, 0.7);
   transition: 0.6s ease;
 }
 
@@ -164,13 +163,13 @@ button:active {
     padding: 30px 10px;
     text-align: right;
     font-size: large;
-    background-color: rgb(60, 108, 230);
+    background-color: firebrick;
     border-radius: 0 0 0 15px;
     row-gap: 30px;
   }
 
   .nav-links a {
-    color: azure;
+    color: floralwhite;
     padding: 5px;
     border-radius: 10px 0 10px 0;
   }
@@ -195,47 +194,37 @@ button:active {
   }
 }
 
-/* Hover effect same as other nav links */
-.nav-links select:hover {
-  color: rgb(153, 178, 241);
-  transition: 0.3s ease;
-}
-
-
 section {
   width: 100%;
-  max-width: 1000px;
   margin: 20px auto;
-  border: 1px solid rgb(60, 108, 230);
+  border: 1px solid firebrick;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.15);
   padding: 10px;
   box-sizing: border-box;
-  background: #e0e7f7;
+  background: #fbf2f2;
   color: rgb(19, 7, 149);
 }
-/*
-#topicDropdown {
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: firebrick;
-}*/
+
+.container {
+  justify-items: center;
+  width: 100%;
+}
 
 .display-slide {
   margin: 0;
   padding: 4px;
-  width: 100%;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  border-color: firebrick;
 }
 
 .slide-viewer {
   position: relative;
-  width: 100%;
-  height: calc(115vh - 180px); /* full screen minus top banner & margins */
-  background: #fff; 
-  color: white;
+  height: calc(109vh - 180px); /* full screen minus top banner & margins */
+  background: #fbf2f2;
   border: none;
-  border-radius: 0;
   box-shadow: none;
   overflow: hidden;
   display: flex;
@@ -258,17 +247,41 @@ section {
   color: #0b1f6d;
 }
 
-.slide-viewer p:last-of-type {
-  font-size: 15px;
-  margin-bottom: 0;
-  color: firebrick;
-}
-
 .slide-content img,
 .slide-content video {
   display: block;
   margin: 10px auto;
   border-radius: 8px;
+}
+
+.slide-desc {
+  text-align: left;
+  margin: 20px auto;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.slide-desc p {
+  margin: 0;
+}
+
+.slide-desc ul {
+  padding-left: 20px;
+  margin: 0;
+  color: #0b1f6d;
+  font-size: 18px;
+}
+
+.slide-desc li {
+  margin: 0;
+}
+
+.slide-viewer h1 {
+  font-size: 15px;
+  margin-top: 20px;
+  margin-bottom: 0;
+  color: firebrick;
+  text-align: center;
 }
 
 /* ===== Navigation Arrows ===== */
@@ -279,8 +292,8 @@ section {
   transform: translateY(-50%);
   font-size: 20px;
   font-weight: bold;
-  color: white;
-  background: #e5d5a2;
+  color: firebrick;
+  background: rgba(178, 34, 34, 0.05);
   border: none;
   width: 45px;
   height: 45px;
@@ -296,8 +309,11 @@ section {
 }
 
 .arrow-btn:hover {
-  background: #e5d5a2;
+  background: firebrick;
   transform: translateY(-50%) scale(1.12);
+  border-color: firebrick;
+  color: floralwhite;
+  transition: 0.3s ease;
 }
 
 @keyframes pulse {
@@ -324,13 +340,13 @@ section {
 /* --- Topics Menu Dropdown --- */
 .topics-menu {
   position: relative;
-  color: #0b1f6d;
+  color: floralwhite;
   cursor: pointer;
   font-weight: bold;
 }
 
 .topics-menu:hover {
-  color: #d8e4ff;
+  color: rgba(255, 250, 240, 0.7);
   transition: 0.6s ease;
 }
 
@@ -363,9 +379,7 @@ section {
   font-size: 14px;
   font-weight: bold;
   border-radius: 5px;
-  border: 1px solid #1d4dc4;
+  color: firebrick;
+  border: 1px solid firebrick;
 }
 
-.container {
-  justify-items: center;
-}
