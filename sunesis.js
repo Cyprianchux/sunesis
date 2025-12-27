@@ -210,7 +210,9 @@ async function displayAllTopics() {
         topicDiv.innerHTML += `
           <div class="slide-item" style="margin:8px 0;padding:8px;border:1.5px solid #ccc;border-radius:8px;">
             <h4>${slide.title}</h4>
-            <p>${slide.desc}</p>
+            <div class="slide-desc">
+              ${formatDescription(slide.desc)}
+            </div>
             ${
               slide.media
                 ? slide.type === "image"
@@ -329,11 +331,18 @@ if (isViewPage) {
     }
 
     display.innerHTML = `
-      <div class="slide-content" style="text-align: center;">
+      <div class="slide-content">
         <h3>${slide.title}</h3>
-        <p>${slide.desc}</p>
+
+        <div class="slide-desc">
+          ${formatDescription(slide.desc)}
+        </div>
+
         ${mediaHTML}
-        <p style="margin-top:10px;">Slide ${currentSlideIndex + 1} of ${slides.length}</p>
+
+        <h1>
+          Slide ${currentSlideIndex + 1} of ${slides.length}
+        </h1>
       </div>
     `;
   }
@@ -350,7 +359,10 @@ if (isViewPage) {
         (s) => `
         <div style="border:1px solid #ccc; padding:10px; margin:8px; border-radius:8px;">
           <h4>${s.title}</h4>
-          <p>${s.desc}</p>
+          <div class="slide-desc">
+            ${formatDescription(s.desc)}
+          </div>
+
           ${
             s.media
               ? s.type === "image"
@@ -376,7 +388,7 @@ if (isViewPage) {
     const next = document.getElementById("nextArrow");
 
     if (!slides.length) {
-      display.innerHTML = "<p>No slides for this topic.</p>";
+      display.innerHTML = "<p>No slide saved for this topic.</p>";
       prev.disabled = true;
       next.disabled = true;
       return;
@@ -390,7 +402,9 @@ if (isViewPage) {
 
       <div class="slide-content">
         <h3>${slide.title}</h3>
-        <p>${slide.desc || ""}</p>
+        <div class="slide-desc">
+          ${formatDescription(slide.desc)}
+        </div>
 
         ${
           slide.media
@@ -400,7 +414,7 @@ if (isViewPage) {
             : ""
         }
 
-        <p>${currentSlideIndex + 1} / ${slides.length}</p>
+        <h1>${currentSlideIndex + 1} / ${slides.length}</h1>
       </div>
     `;
 
@@ -508,7 +522,10 @@ if (isAdminPage) {
         (s) => `
         <div class="slide-item" style="margin:8px;padding:8px;border:1px solid #ccc;border-radius:8px;">
           <h4>${s.title}</h4>
-          <p>${s.desc}</p>
+          <div class="slide-desc">
+            ${formatDescription(s.desc)}
+          </div>
+
           ${
             s.media
               ? s.type === "image"
@@ -521,6 +538,46 @@ if (isAdminPage) {
       .join("");
   }
 
+// Formatted text (newline and bullet points) function
 
+function formatDescription(rawText = "") {
+  // Normalize Windows newlines
+  const text = rawText.replace(/\r\n/g, "\n").trim();
 
-  
+  const lines = text.split("\n");
+
+  let html = "";
+  let inList = false;
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+
+    // Bullet detection: -, *, •
+    if (/^([-*•])\s+/.test(trimmed)) {
+      if (!inList) {
+        html += "<ul>";
+        inList = true;
+      }
+      html += `<li>${trimmed.replace(/^([-*•])\s+/, "")}</li>`;
+      continue;
+    }
+
+    // Close list if switching back to text
+    if (inList) {
+      html += "</ul>";
+      inList = false;
+    }
+
+    // Empty line = spacing
+    if (trimmed === "") {
+      html += "<br>";
+    } else {
+      html += `<p>${trimmed}</p>`;
+    }
+  }
+
+  if (inList) html += "</ul>";
+
+  return html;
+}
+
