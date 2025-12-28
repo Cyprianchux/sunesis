@@ -25,6 +25,7 @@ body {
 .top-left img {
   width: 4.5rem;
   margin-left: 20px;
+  cursor: pointer;
 }
 
 .top-left span:first-child {
@@ -52,34 +53,38 @@ body {
 
 .search-bar input {
   font-size: 16px;
-  padding: 8px;
   width: 80%;
   border-radius: 5px 0 0 5px;
-  border: 1px solid #b28222;
-  height: 20px;
+  border: 1px solid firebrick;
+  height: 34px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  background: floralwhite;
+  padding-left: 10px;
 }
 
 .search-bar button {
   padding: 0px 6px;
   cursor: pointer;
-  border: none;
-  background: #ffffff;
+  background: floralwhite;
   color: firebrick;
   border-radius: 0 5px 5px 0;
   transition: background 0.3s;
-  border: 1px solid rgb(87, 105, 45);
+  border: 1px solid firebrick;
+  border-left: none;
   height: 37.5px;
   font-size: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 .search-bar button:hover {
-  background: rgb(208, 83, 83);
+  background: rgb(206, 106, 106);
+  box-shadow: nones;
 }
 
 button {
   padding: 7px 15px;
   border-radius: 15px;
-  background-color: honeydew;
+  background-color: floralwhite;
   border: 1px solid firebrick;
   color: firebrick;
   cursor: pointer;
@@ -89,8 +94,8 @@ button {
 
 button:hover {
   background-color: blanchedalmond;
-  border: 1px solid rgb(47, 168, 243);
-  color: rgb(16, 99, 151);
+  border: 1px solid firebrick;
+  color: floralwhite;
 }
 
 button:active {
@@ -107,21 +112,24 @@ button:active {
 
 .nav-toggle {
   display: none;
-  background: aliceblue;
+  background: floralwhite;
   border: none;
   font-size: 1.8rem;
   position: absolute;
   top: 12px;
   right: 15px;
   color: firebrick;
-  border-radius: 10px 0 10px 0;
+  border-radius: 10px;
   padding: 5px 10px;
-
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 .nav-toggle:hover {
-  background-color: aliceblue;
-  color: blue;
+  background: floralwhite;
+  color: #0b1f6d;
+  border: none;
+  box-shadow: none;
+  transition: 0.3s;
 }
 
 .nav-links {
@@ -176,7 +184,7 @@ button:active {
 
   .nav-links a:hover {
     background-color: azure;
-    color: blue;
+    color: #0b1f6d;
     padding: 5px 15px;
     transition: 0.5s ease;
   }
@@ -203,12 +211,7 @@ section {
   padding: 10px;
   box-sizing: border-box;
   background: #fbf2f2;
-  color: rgb(19, 7, 149);
-}
-
-.container {
-  justify-items: center;
-  width: 100%;
+  color: #0b1f6d;
 }
 
 .display-slide {
@@ -234,16 +237,30 @@ section {
 
 .slide-viewer h3 {
   color: firebrick;
-  font-size: 25px;
-  margin: 0;
   text-align: center;
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.slide-body {
+  overflow-y: auto;
+  max-height: 100%;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  text-align: center;
+  justify-items: center;
 }
 
 .slide-viewer p {
   text-align: center;
-  font-size: 22px;
+  font-size: 1.4rem;
   font-weight: bold;
-  margin-top: 10px;
   color: #0b1f6d;
 }
 
@@ -277,11 +294,15 @@ section {
 }
 
 .slide-viewer h1 {
-  font-size: 15px;
+  font-size: 1rem;
   margin-top: 20px;
   margin-bottom: 0;
   color: firebrick;
   text-align: center;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
 }
 
 /* ===== Navigation Arrows ===== */

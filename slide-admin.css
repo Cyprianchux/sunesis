@@ -37,8 +37,8 @@
 .add-slide button {
   margin-top: 10px;
   background-color: blanchedalmond;
-  border: 1px solid rgb(47, 168, 243);
-  color: rgb(16, 99, 151);
+  border: 1px solid #145a7d;
+  color: #0f426b;
 }
 
 .add-slide button:hover {
@@ -97,7 +97,7 @@ textarea {
 
 .topic-section h3 {
   margin-left: 18px;
-  color: blue;
+  color: #0f426b;
 }
 
 .topic-section button {
@@ -125,8 +125,9 @@ textarea {
 }
 
 #deleteAllBtn:hover {
-  border: firebrick;
-  scale: 1.05;
+  background-color: white;
+  border: 1px solid crimson;
   transition: 0.5s;
+  color: crimson;
 }
 
