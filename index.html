@@ -4,53 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Page | Sunesis</title>
-  <link rel="icon" href="images/sunesisBG_830x730.png" type="image/png" sizes="512x512">
+  <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <div class="heading-div">
     <div class="imagery">
-      <h1><span>Su</span><span>ne</span>sis</h1>
-      <img src="images/sunesisBG_cropped.png" alt="Sunesis Image">
+      <img src="images/sunesisBG2.png" alt="Sunesis Image">
     </div>
     <div class="texts">
-      <p><span>Su</span><span>ne</span>sis</p>
-      <p>
-        Sunesis is a noun derived from the Greek word sýnesis (σύνεσις), meaning understanding, intelligence, or sound judgment.
-
-In more precise terms, sunesis refers to:
-
-The ability to comprehend situations clearly
-
-Practical wisdom applied to real-life decisions
-
-Good sense or discernment, especially in complex matters
-      </p>
+      <div class="text-heading">
+        <p><span>Su</span><span>ne</span>sis</p> is a noun derived from the Greek word sýnesis (σύνεσις), meaning understanding, intelligence, or sound judgment.
+      </div>
+      <div class="text-detail">
+        <ul>In more precise terms, sunesis refers to:
+          <li>The ability to comprehend situations clearly.</li>
+          <li>Practical wisdom applied to real-life decisions.</li>
+          <li>Good sense or discernment, especially in complex matters.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="account-container">
-    <h1>Choose Your Account</h1>
-    <select id="accountSelector">
-      <option value="" disabled selected>Select an account</option>
-      <option value="account1.html">Account 1</option>
-      <option value="account2.html">Account 2</option>
-      <option value="account3.html">Account 3</option>
-    </select>
-    <button onclick="goToAccount()">Go</button>
+    <h1 class="js-account">Register</h1>
+    <input id="regUser" placeholder="Username">
+    <input id="regPass" type="password" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a href="login.html">Login</a></p>
   </div>
-
+  
   <footer>&copy; 2025 Sunesis</footer>
 
   <script>
-    function goToAccount() {
-      const selected = document.getElementById('accountSelector').value;
-      if (!selected) {
-        alert('Please select an account.');
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
+    async function register() {
+      const username = regUser.value.trim();
+      const password = regPass.value;
+
+      if (!username || !password) {
+        alert("All fields required");
         return;
       }
-      window.location.href = selected;
+
+      const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
+
+      if (users[username]) {
+        alert("User already exists");
+        return;
+      }
+
+      users[username] = {
+        password: await hashPassword(password)
+      };
+
+      localStorage.setItem("sunesis_users", JSON.stringify(users));
+      alert("Registration successful");
     }
   </script>
 
