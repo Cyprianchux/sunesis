@@ -117,7 +117,6 @@ function getAllSlides() {
   });
 }
 
-
 function deleteSlide(id) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("slides", "readwrite");
@@ -251,7 +250,10 @@ async function performSearch() {
 
   // RESET behavior
   if (!term) {
-    if (isViewPage) renderCurrentSlide();
+    if (isViewPage) {
+      displayCurrentSlide();
+      renderCurrentSlide()
+    }
     if (isAdminPage) displayAllTopics();
     return;
   }
@@ -339,109 +341,109 @@ if (isViewPage) {
       });
     }
 
-    function displayCurrentSlide() {
-      const display = document.getElementById("slideDisplay");
-      if (slides.length === 0) {
-        display.innerHTML =
-          '<p style="text-align:center;">No slides available for this topic.</p>';
-        return;
-      }
-
-      const slide = slides[currentSlideIndex];
-      let mediaHTML = "";
-      if (slide.media) {
-        mediaHTML =
-          slide.type === "image"
-            ? `<img src="${slide.media}" alt="${slide.title}" width="300">`
-            : `<video src="${slide.media}" width="400" controls autoplay></video>`;
-      }
-
-      display.innerHTML = `
-        <div class="slide-content">
-          <h3>${slide.title}</h3>
-
-          <div class="slide-desc">
-            ${formatDescription(slide.desc)}
-          </div>
-
-          ${mediaHTML}
-
-          <h1>
-            Slide ${currentSlideIndex + 1} of ${slides.length}
-          </h1>
-        </div>
-      `;
-    }
-
     function updateButtons() {
       const prev = document.getElementById("prevArrow");
       const next = document.getElementById("nextArrow");
       prev.disabled = currentSlideIndex === 0 || slides.length === 0;
       next.disabled = currentSlideIndex === slides.length - 1 || slides.length === 0;
     }
-
-    function renderCurrentSlide() {
-      const display = document.getElementById("slideDisplay");
-      const prev = document.getElementById("prevArrow");
-      const next = document.getElementById("nextArrow");
-
-      if (!slides.length) {
-        display.innerHTML = "<p>No slide saved for this topic.</p>";
-        prev.disabled = true;
-        next.disabled = true;
-        return;
-      }
-
-      const slide = slides[currentSlideIndex];
-
-      display.innerHTML = `
-        <div class="slide-content">
-          <h3>${slide.title}</h3>
-          <div class="slide-body">
-            <div class="slide-desc">
-              ${formatDescription(slide.desc)}
-            </div>
-
-            ${
-              slide.media
-                ? slide.type === "image"
-                  ? `<img src="${slide.media}" width="500">`
-                  : `<video src="${slide.media}" width="600" controls></video>`
-                : ""
-            }
-          </div>
-
-          <h1>Slide ${currentSlideIndex + 1} of ${slides.length}</h1>
-        </div>
-        
-        <button id="prevArrow" class="arrow-btn">&#10094;</button>
-        <button id="nextArrow" class="arrow-btn">&#10095;</button>
-      `;
-
-      prev.disabled = currentSlideIndex === 0;
-      next.disabled = currentSlideIndex === slides.length - 1;
-
-      document.getElementById("prevArrow").onclick = () => {
-        if (currentSlideIndex > 0) {
-          currentSlideIndex--;
-          renderCurrentSlide();
-        }
-      };
-
-      document.getElementById("nextArrow").onclick = () => {
-        if (currentSlideIndex < slides.length - 1) {
-          currentSlideIndex++;
-          renderCurrentSlide();
-        }
-      };
-    }
   })
+}
+
+function displayCurrentSlide() {
+  const display = document.getElementById("slideDisplay");
+  if (slides.length === 0) {
+    display.innerHTML =
+      '<p style="text-align:center;">No slides available for this topic.</p>';
+    return;
+  }
+
+  const slide = slides[currentSlideIndex];
+  let mediaHTML = "";
+  if (slide.media) {
+    mediaHTML =
+      slide.type === "image"
+        ? `<img src="${slide.media}" alt="${slide.title}" width="300">`
+        : `<video src="${slide.media}" width="400" controls autoplay></video>`;
+  }
+
+  display.innerHTML = `
+    <div class="slide-content">
+      <h3>${slide.title}</h3>
+
+      <div class="slide-desc">
+        ${formatDescription(slide.desc)}
+      </div>
+
+      ${mediaHTML}
+
+      <h1>
+        Slide ${currentSlideIndex + 1} of ${slides.length}
+      </h1>
+    </div>
+  `;
+}
+
+function renderCurrentSlide() {
+  const display = document.getElementById("slideDisplay");
+  const prev = document.getElementById("prevArrow");
+  const next = document.getElementById("nextArrow");
+
+  if (!slides.length) {
+    display.innerHTML = "<p>No slide saved for this topic.</p>";
+    prev.disabled = true;
+    next.disabled = true;
+    return;
+  }
+
+  const slide = slides[currentSlideIndex];
+
+  display.innerHTML = `
+    <div class="slide-content">
+      <h4>${slide.title}</h4>
+      <div class="slide-body">
+        <div class="slide-desc">
+          ${formatDescription(slide.desc)}
+        </div>
+
+        ${
+          slide.media
+            ? slide.type === "image"
+              ? `<img src="${slide.media}" width="500">`
+              : `<video src="${slide.media}" width="600" controls></video>`
+            : ""
+        }
+      </div>
+
+      <h1>Slide ${currentSlideIndex + 1} of ${slides.length}</h1>
+    </div>
+    
+    <button id="prevArrow" class="arrow-btn">&#10094;</button>
+    <button id="nextArrow" class="arrow-btn">&#10095;</button>
+  `;
+
+  prev.disabled = currentSlideIndex === 0;
+  next.disabled = currentSlideIndex === slides.length - 1;
+
+  document.getElementById("prevArrow").onclick = () => {
+    if (currentSlideIndex > 0) {
+      currentSlideIndex--;
+      renderCurrentSlide();
+    }
+  };
+
+  document.getElementById("nextArrow").onclick = () => {
+    if (currentSlideIndex < slides.length - 1) {
+      currentSlideIndex++;
+      renderCurrentSlide();
+    }
+  };
 }
 
 function displayFilteredSlides(filteredSlides) {
   const display = document.getElementById("slideDisplay");
   if (filteredSlides.length === 0) {
-    display.innerHTML = `<p style="text-align:center;">No results found.</p>`;
+    display.innerHTML = `<p>No results found.</p>`;
     return;
   }
 
@@ -458,8 +460,8 @@ function displayFilteredSlides(filteredSlides) {
           ${
             s.media
               ? s.type === "image"
-                ? `<img src="${s.media}" width="200">`
-                : `<video src="${s.media}" width="250" controls></video>`
+                ? `<img src="${s.media}" width="500">`
+                : `<video src="${s.media}" width="600" controls></video>`
               : ""
           }
         </div>
