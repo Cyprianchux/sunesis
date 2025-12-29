@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page | Sunesis</title>
+  <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="heading-div">
+    <div class="imagery">
+      <img src="images/sunesisBG2.png" alt="Sunesis Image">
+    </div>
+    <div class="texts">
+      <div class="text-heading">
+        <p><span>Su</span><span>ne</span>sis</p> is a noun derived from the Greek word sýnesis (σύνεσις), meaning understanding, intelligence, or sound judgment.
+      </div>
+      <div class="text-detail">
+        <ul>In more precise terms, sunesis refers to:
+          <li>The ability to comprehend situations clearly.</li>
+          <li>Practical wisdom applied to real-life decisions.</li>
+          <li>Good sense or discernment, especially in complex matters.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="account-container">
+    <h1 class="js-account">Login</h1>
+    <input id="loginUser" placeholder="Username">
+    <input id="loginPass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a href="index.html">Register</a></p>
+  </div>
+  
+  <footer>&copy; 2025 Sunesis</footer>
+
+  <script>
+    async function login() {
+      const username = loginUser.value.trim();
+      const password = loginPass.value;
+
+      const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
+
+      if (!users[username]) {
+        alert("Invalid username or password");
+        return;
+      }
+
+      const hash = await hashPassword(password);
+
+      if (hash !== users[username].password) {
+        alert("Invalid username or password");
+        return;
+      }
+
+      sessionStorage.setItem("sunesis_logged_in", "true");
+      sessionStorage.setItem("sunesis_user", username);
+
+      window.location.href = "account.html";
+    }
+  </script>
+</body>
+</html>
