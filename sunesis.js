@@ -347,6 +347,18 @@ if (isViewPage) {
       prev.disabled = currentSlideIndex === 0 || slides.length === 0;
       next.disabled = currentSlideIndex === slides.length - 1 || slides.length === 0;
     }
+
+    const params = new URLSearchParams(window.location.search);
+    const topicFromUrl = params.get("topic");
+
+    if (topicFromUrl) {
+      const select = document.getElementById("topicSelect");
+      select.value = topicFromUrl;
+      slides = await getSlidesByTopic(topicFromUrl);
+      currentSlideIndex = 0;
+      renderCurrentSlide();
+    }
+
   })
 }
 
