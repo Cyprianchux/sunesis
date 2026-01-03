@@ -98,15 +98,27 @@ input {
 }
 
 .remember-me {
-  display: block;
-  background-color: rgb(134, 134, 16);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 5px;
+  width: 100%;
+  justify-content: flex-start;
 }
-.remember-me input {
-  width: 10%;
-  vertical-align: middle;
+
+.remember-me input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: firebrick;
 }
-.remember-me span {
-  margin: 0px;
+
+.remember-me label {
+  cursor: pointer;
+  font-size: 14px;
+  color: #0b1f6d;
+  display: flex;
+  align-items: center;
 }
 
 button {
