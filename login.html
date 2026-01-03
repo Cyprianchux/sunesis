@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Page | Sunesis</title>
+  <title>Login Page | Sunesis</title>
   <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -38,6 +38,15 @@
   <footer>&copy; 2025 Sunesis</footer>
 
   <script>
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+    }
+
     async function login() {
       const username = loginUser.value.trim();
       const password = loginPass.value;
