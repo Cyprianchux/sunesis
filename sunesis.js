@@ -422,8 +422,8 @@ function renderCurrentSlide() {
         ${
           slide.media
             ? slide.type === "image"
-              ? `<img src="${slide.media}" width="500">`
-              : `<video src="${slide.media}" width="600" controls></video>`
+              ? `<img src="${slide.media}">`
+              : `<video src="${slide.media}" controls></video>`
             : ""
         }
       </div>
