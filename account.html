@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account | Sunesis</title>
+  <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
+  <link rel="stylesheet" href="slide-view.css">
+  <link rel="stylesheet" href="account.css">
+
+</head>
+<body>
+
+  <div class="top-banner">
+    <div class="top-left">
+      <img src="images/sunesisBG2.png" alt="Image">
+      <h1><span>Su</span><span>ne</span>sis</h1>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search...">
+      <button id="searchBtn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
+    </div>
+
+    <div class="top-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
+        <li><a href="slide-admin.html">Manage-Slides</a></li>
+        <li id="topicsMenu" class="topics-menu">
+          Topics
+          <div class="topics-dropdown">
+            <select id="topicSelect">
+              <option value="">Choose a topic</option>
+            </select>
+          </div>
+        </li>
+      </ul>
+      <button class="nav-toggle" onclick="menuToggle()">☰</button>
+    </div>
+  </div>
+
+  <div class="banner">
+    <h1>Welcome, <span id="loginUser"></span></h1>
+    <p>Select a topic to continue</p>
+    <button class="back-btn" onclick="logout()">← Logout</button>
+  </div>
+
+  <div class="topics-container" id="topicsContainer">
+   <!-- Auto-generated topic cards from slide-admin -->
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      /* ---------- AUTH GUARD ---------- */
+      const sessionUser = sessionStorage.getItem("sunesis_user");
+      const rememberUser = localStorage.getItem("sunesis_user");
+      const isRemembered = localStorage.getItem("sunesis_remember");
+
+      const activeUser = sessionUser || (isRemembered ? rememberUser : null);
+/*
+      if (!activeUser) {
+        alert("Access denied. Please login.");
+        window.location.href = "index.html";
+        return;
+      }
+*/
+      /* ---------- DISPLAY USERNAME ---------- */
+      const formattedName =
+        activeUser.charAt(0).toUpperCase() + activeUser.slice(1);
+
+      document.getElementById("loginUser").textContent = formattedName;
+
+      /* ---------- LOGOUT GUARD ---------- */
+      window.logout = function () {
+        sessionStorage.clear();
+        localStorage.removeItem("sunesis_remember");
+        localStorage.removeItem("sunesis_user");
+
+        window.location.href = "index.html";
+      };
+
+    });
+  </script>
+
+  <script src="sunesis.js"></script>
+
+
+</body>
+</html>
