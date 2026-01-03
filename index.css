@@ -1,126 +1,157 @@
+/* ---------- BASE RESET ---------- */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom right, floralwhite, firebrick);
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+  color: #0b1f6d;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  color: white;
-  z-index: 1;
-  position: relative;
 }
 
+/* ---------- BRANDING SECTION ---------- */
 .heading-div {
   display: flex;
-  flex-direction: row;
-  position: absolute;
-  top: 0;
-  height: 40vh;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1100px;
+  padding: 1.5rem;
+  gap: 1.5rem;
 }
+
 .imagery {
-  flex: 1;
-  padding: 1rem;
-  
+  flex: 1 1 250px;
 }
 
 .imagery img {
   width: 100%;
+  max-width: 320px;
 }
 
-.texts{
-  flex: 2;
-  text-align: justify;
-  padding: 1.5rem;
-  padding-right: 5rem;
+.texts {
+  flex: 2 1 300px;
   font-weight: bold;
-  line-height: 1.4;
-}
-.texts p {
-  color: #0b1f6d;
-  font-size: 1.1rem;
-  display: inline-block;
-  margin: 0;
-}
-.texts span:first-child {
-  color: #145a7d;
-}
-.texts span:last-child  {
-  color: #0f426b;
+  line-height: 1.5;
 }
 
 .text-heading {
   color: firebrick;
+  font-size: 1.05rem;
 }
-.text-detail {
+
+.texts p {
+  margin: 0;
+  color: #0b1f6d;
+  font-size: 2rem;
+}
+
+.texts span:first-child {
+  color: #145a7d;
+}
+
+.texts span:last-child {
   color: #0f426b;
 }
 
-@media (max-width: 710px) {
-  .text-detail {
-    display: none;
-    color: #0b1f6d;
-  }
-  .text {
-    text-align: left;
-    padding-right: 0.2rem;
-  }
+.text-detail {
+  color: #0f426b;
+  margin-top: 0.8rem;
 }
 
 .account-container {
-  display: block;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-  padding: 20px 40px;
-  padding-top: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  padding: 1.8rem;
+  margin: 2rem 1rem 5rem;
+  width: 100%;
+  max-width: 340px;
   text-align: center;
-  width: 40vw;
-  max-width: 300px;
-  z-index: 10;
-  margin-top: 10rem;
-  color: #0b1f6d;
 }
 
 h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+  margin-bottom: 0.8rem;
+  font-size: 1.6rem;
 }
 
-button, input {
+ input,
+ button {
   width: 100%;
-  padding: 12px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 15px;
+  border-radius: 22px;
+  border: none;
+  transition: 0.25s;
+}
+
+ input {
   background: floralwhite;
   color: firebrick;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 10px;
+  font-weight: 500;
 }
 
-button:hover, input:hover {
-  background: #ebf8ff;
-  color: #1a365d;
-}
-
-input {
-  padding-left: 20px;
-  padding-right: 0;
-  font-size: 14px;
-  font-weight: 100;
-}
-
-a {
+ button {
+  background: firebrick;
   color: floralwhite;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #9b1c1c;
+}
+
+input:hover,
+input:focus {
+  background: #ebf8ff;
+  outline: none;
+}
+
+.toggle-link {
+  color: firebrick;
+  font-weight: bold;
+  cursor: pointer;
   text-decoration: none;
 }
 
+.toggle-link:hover {
+  text-decoration: underline;
+}
+
 footer {
-  position: fixed;
-  bottom: 15px;
-  margin-top: 120px;
-  font-size: 18px;
+  margin-top: auto;
+  padding: 1rem 0;
+  font-size: 0.95rem;
   color: #0b1f6d;
+}
+
+@media (max-width: 720px) {
+  .heading-div {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .imagery img {
+    max-width: 260px;
+  }
+  
+  .text-heading {
+    margin-top: -2rem;
+  }
+
+  .text-detail {
+    display: none;
+  }
+
+  .account-container {
+    margin-top: -11rem;
+  }
 }
