@@ -60,6 +60,7 @@
       <h1>Register</h1>
       <input id="regUser" placeholder="Username">
       <input id="regPass" type="password" placeholder="Password">
+      <input id="confirmPass" type="password" placeholder="Confirm Password">
       <button onclick="register()">Register</button>
       <p>
         Already have an account?
@@ -97,14 +98,20 @@
     async function register() {
       const username = regUser.value.trim();
       const password = regPass.value;
+      const confirmPassword = confirmPassword.value;
 
-      if (!username || !password) {
+      if (!username || !password || !confirmPassword) {
         alert("All fields are required");
         return;
       }
 
       if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
         alert("Password must be at least 8 characters, include a number and an uppercase letter.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
         return;
       }
 
