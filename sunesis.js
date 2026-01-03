@@ -181,6 +181,7 @@ async function deleteTopicHandler(topicName) {
 
   await displayAllTopics();
   await loadTopicsAdmin();
+  renderTopicCards();
 }
 
 async function loadTopicsAdmin() {
