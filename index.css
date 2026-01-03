@@ -80,8 +80,8 @@ h1 {
   font-size: 1.6rem;
 }
 
- input,
- button {
+input,
+button {
   width: 100%;
   padding: 12px 16px;
   margin-top: 12px;
@@ -91,13 +91,25 @@ h1 {
   transition: 0.25s;
 }
 
- input {
+input {
   background: floralwhite;
   color: firebrick;
   font-weight: 500;
 }
 
- button {
+.remember-me {
+  display: block;
+  background-color: rgb(134, 134, 16);
+}
+.remember-me input {
+  width: 10%;
+  vertical-align: middle;
+}
+.remember-me span {
+  margin: 0px;
+}
+
+button {
   background: firebrick;
   color: floralwhite;
   font-weight: bold;
