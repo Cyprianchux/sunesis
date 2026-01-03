@@ -252,7 +252,7 @@ async function performSearch() {
   if (!term) {
     if (isViewPage) {
       displayCurrentSlide();
-      renderCurrentSlide()
+      renderCurrentSlide();
     }
     if (isAdminPage) displayAllTopics();
     return;
@@ -612,3 +612,47 @@ function formatDescription(rawText = "") {
   return html;
 }
 
+// Account page  topics generated functionality
+const isAccountPage = window.location.pathname.includes("account.html");
+
+if (isAccountPage) {
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initDB();
+    renderTopicCards();
+  });
+}
+
+async function renderTopicCards() {
+  const container = document.getElementById("topicsContainer");
+  if (!container) return;
+
+  const topics = await getAllTopics();
+  container.innerHTML = "";
+
+  if (topics.length === 0) {
+    container.innerHTML = "<p>No topics available.</p>";
+    return;
+  }
+
+  for (const topic of topics) {
+    const slides = await getSlidesByTopic(topic.name);
+
+    // Skip empty topics (optional – remove if you want empty topics visible)
+  //  if (slides.length === 0) continue;
+
+    const card = document.createElement("div");
+    card.className = "topic-card";
+
+    card.innerHTML = `
+      <h3>${topic.name}</h3>
+      <p>${slides.length} slide${slides.length > 1 ? "s" : ""}</p>
+      <button onclick="openTopic('${topic.name}')">View</button>
+    `;
+
+    container.appendChild(card);
+  }
+}
+
+function openTopic(topicName) {
+  window.location.href = `slide-view.html?topic=${encodeURIComponent(topicName)}`;
+}
