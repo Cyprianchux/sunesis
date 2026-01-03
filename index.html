@@ -44,6 +44,10 @@
       <h1>Login</h1>
       <input id="loginUser" placeholder="Username">
       <input id="loginPass" type="password" placeholder="Password">
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="remember-me"><span>Remember Me</span></label>
+      </div>
       <button onclick="login()">Login</button>
       <p>
         Don’t have an account?
@@ -99,6 +103,11 @@
         return;
       }
 
+      if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+        alert("Password must be at least 8 characters, include a number and an uppercase letter.");
+        return;
+      }
+
       const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
 
       if (users[username]) {
@@ -120,6 +129,11 @@
     async function login() {
       const username = loginUser.value.trim();
       const password = loginPass.value;
+
+      if (rememberMe.checked) {
+        localStorage.setItem("sunesis_remember", "true");
+        localStorage.setItem("sunesis_user", username);
+      }
 
       const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
 
