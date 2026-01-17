@@ -112,21 +112,21 @@ button:active {
 
 .nav-toggle {
   display: none;
-  background: floralwhite;
+  background: none;
   border: none;
   font-size: 1.8rem;
   position: absolute;
-  top: 12px;
+  top: 16px;
   right: 15px;
-  color: firebrick;
-  border-radius: 10px;
-  padding: 5px 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  color: floralwhite;
+  border-radius: 5px;
+  padding: 0 8px 4px 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
 .nav-toggle:hover {
   background: floralwhite;
-  color: #0b1f6d;
+  color: firebrick;
   border: none;
   box-shadow: none;
   transition: 0.3s;
@@ -150,7 +150,7 @@ button:active {
 }
 
 .nav-links a:hover {
-  color: rgba(255, 250, 240, 0.7);
+  color: rgba(255, 241, 240, 0.7);
   transition: 0.6s ease;
 }
 
@@ -171,13 +171,12 @@ section {
   padding: 4px;
   border-left: none;
   border-right: none;
-  border-radius: 0;
   border-color: firebrick;
 }
 
 .slide-viewer {
   position: relative;
-  height: calc(109vh - 180px); /* full screen minus top banner & margins */
+  height: calc(114vh - 180px); /* full screen minus top banner & margins */
   background: #fbf2f2;
   border: none;
   box-shadow: none;
@@ -195,13 +194,14 @@ section {
   top: 0;
   left: 0;
   right: 0;
+  margin-top: 1rem;
 }
 
 .slide-body {
   overflow-y: auto;
   max-height: 100%;
   position: absolute;
-  top: 80px;
+  top: 50px;
   left: 0;
   right: 0;
   bottom: 50px;
@@ -220,7 +220,7 @@ section {
 
 .slide-content img,
 .slide-content video {
-  margin: 0.5rem auto;
+  margin: 0rem auto;
   border-radius: 8px;
   width: 40vw;
   min-width: 400px;
@@ -387,14 +387,14 @@ section {
   .nav-links a {
     color: floralwhite;
     padding: 5px;
-    border-radius: 10px 0 10px 0;
+    border-radius: 10px 0;
   }
 
   .nav-links a:hover {
     background-color: floralwhite;
-    color: #0b1f6d;
+    color: firebrick;
     padding: 5px 15px;
-    transition: 0.5s ease;
+    transition: 0.8s ease;
   }
   .nav-links a:active {
     font-size: 20px;
