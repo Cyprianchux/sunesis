@@ -1,5 +1,17 @@
-// Menu Toggle function
+/* ---------- AUTH GUARD ---------- 
+const sessionUser = sessionStorage.getItem("sunesis_user");
+const rememberUser = localStorage.getItem("sunesis_user");
+const isRemembered = localStorage.getItem("sunesis_remember");
 
+const activeUser = sessionUser || (isRemembered ? rememberUser : null);
+
+if (!activeUser) {
+  alert("Access denied. Please login.");
+  window.location.href = "index.html";
+  return;
+}
+*/
+// Menu Toggle function
 function menuToggle() {
   const navLinks = document.getElementById("navLinks");
 
@@ -19,6 +31,8 @@ let currentSlideIndex = 0;
 const isAdminPage = window.location.pathname.includes("slide-admin.html");
 
 const isViewPage = window.location.pathname.includes("slide-view.html");
+
+const isAccountPage = window.location.pathname.includes("account.html");
 
 
 // INITIALIZE DATABASE
@@ -626,14 +640,34 @@ function formatDescription(rawText = "") {
 }
 
 // Account page  topics generated functionality
-const isAccountPage = window.location.pathname.includes("account.html");
 
 if (isAccountPage) {
   document.addEventListener("DOMContentLoaded", async () => {
+
+    /* ---------- AUTH GUARD ---------- */
+    const sessionUser = sessionStorage.getItem("sunesis_user");
+    const rememberUser = localStorage.getItem("sunesis_user");
+    const isRemembered = localStorage.getItem("sunesis_remember");
+
+    const activeUser = sessionUser || (isRemembered ? rememberUser : null);
+
+    if (!activeUser) {
+      alert("Access denied. Please login.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    /* ---------- DISPLAY USERNAME ---------- */
+    const formattedName =
+      activeUser.charAt(0).toUpperCase() + activeUser.slice(1);
+
+    document.getElementById("loginUser").textContent = formattedName;
+
     await initDB();
     renderTopicCards();
   });
 }
+
 
 async function renderTopicCards() {
   const container = document.getElementById("topicsContainer");
@@ -668,4 +702,26 @@ async function renderTopicCards() {
 
 function openTopic(topicName) {
   window.location.href = `slide-view.html?topic=${encodeURIComponent(topicName)}`;
+}
+
+// Protect pages (Access control)
+/*function requireAuth() {
+  if (!sessionStorage.getItem("sunesis_logged_in")) {
+    window.location.replace("login.html");
+  }
+}
+console.log("auth check");
+
+
+if (!sessionStorage.getItem("sunesis_logged_in")) {
+  window.location.href = "login.html";
+}
+*/ 
+
+/* ---------- LOGOUT GUARD ---------- */
+function logout() {
+  sessionStorage.clear();
+  localStorage.removeItem("sunesis_remember");
+  localStorage.removeItem("sunesis_user");
+  window.location.href = "index.html";
 }
