@@ -25,13 +25,8 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
         <li><a href="slide-admin.html">Manage-Slides</a></li>
-        <li id="topicsMenu" class="topics-menu">
-          Topics
-          <div class="topics-dropdown">
-            <select id="topicSelect">
-              <option value="">Choose a topic</option>
-            </select>
-          </div>
+        <li>
+          <a href="">Board</a>
         </li>
       </ul>
       <button class="nav-toggle" onclick="menuToggle()">☰</button>
@@ -49,28 +44,10 @@
   </div>
 
   <script>
+    /*
     document.addEventListener("DOMContentLoaded", () => {
 
-      /* ---------- AUTH GUARD ---------- */
-      const sessionUser = sessionStorage.getItem("sunesis_user");
-      const rememberUser = localStorage.getItem("sunesis_user");
-      const isRemembered = localStorage.getItem("sunesis_remember");
 
-      const activeUser = sessionUser || (isRemembered ? rememberUser : null);
-/*
-      if (!activeUser) {
-        alert("Access denied. Please login.");
-        window.location.href = "index.html";
-        return;
-      }
-*/
-      /* ---------- DISPLAY USERNAME ---------- */
-      const formattedName =
-        activeUser.charAt(0).toUpperCase() + activeUser.slice(1);
-
-      document.getElementById("loginUser").textContent = formattedName;
-
-      /* ---------- LOGOUT GUARD ---------- */
       window.logout = function () {
         sessionStorage.clear();
         localStorage.removeItem("sunesis_remember");
@@ -79,11 +56,10 @@
         window.location.href = "index.html";
       };
 
-    });
+    });*/
   </script>
 
   <script src="sunesis.js"></script>
-
 
 </body>
 </html>
