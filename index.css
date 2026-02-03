@@ -4,11 +4,6 @@
   margin: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-
 .body-container {
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom right, floralwhite, firebrick);
@@ -20,7 +15,6 @@ html {
   align-items: center;
 }
 
-/* ---------- BRANDING SECTION ---------- */
 .heading-div {
   display: flex;
   flex-wrap: wrap;
@@ -47,26 +41,34 @@ html {
 
 .text-heading {
   color: firebrick;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
 }
 
-.texts p {
+.page-title {
+    font-size: 3rem;
+}
+
+.text-heading p:first-child {
   margin: 0;
   color: #0b1f6d;
-  font-size: 2rem;
 }
 
-.texts span:first-child {
+.page-title span:first-child {
   color: #145a7d;
 }
 
-.texts span:last-child {
+.page-title span:last-child {
   color: #0f426b;
 }
 
 .text-detail {
   color: #0f426b;
-  margin-top: 0.8rem;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+.text-detail ul {
+  margin-top: 1rem;
 }
 
 .account-container {
@@ -84,6 +86,7 @@ html {
 h1 {
   margin-bottom: 0.8rem;
   font-size: 1.6rem;
+  color: firebrick;
 }
 
 input,
@@ -171,7 +174,7 @@ input:focus {
   }
   
   .text-heading {
-    margin-top: -2rem;
+    margin-top: -3rem;
   }
 
   .text-detail {
