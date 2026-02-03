@@ -27,6 +27,13 @@
 
 .create-topic h2, .add-slide h2 {
   margin: 0 auto 10px 10px;
+  color: firebrick;  
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.slide-list h2 {
+  text-align: center;
+  color: firebrick;
 }
 
 .create-topic input {
@@ -79,16 +86,6 @@ textarea {
 
 #slide-media {
   margin: 0 auto 15px 8px;
-}
-
-.add-slide h2, .del-slide h2 {
-  margin-top: 0;
-  margin-left: 10px;
-  font-size: clamp(1.5rem, 3vw, 2rem); 
-}
-
-.slide-list h2 {
-  text-align: center;
 }
 
 .topic-section {
