@@ -26,6 +26,9 @@ function menuToggle() {
 let db;
 let slides = [];
 let currentSlideIndex = 0;
+let selectedTopic = null;
+let allSlidesCache = [];
+
 
 // Detect page type
 const isAdminPage = window.location.pathname.includes("slide-admin.html");
@@ -34,6 +37,7 @@ const isViewPage = window.location.pathname.includes("slide-view.html");
 
 const isAccountPage = window.location.pathname.includes("account.html");
 
+const isWebPage = window.location.pathname.includes("web-view.html");
 
 // INITIALIZE DATABASE
 
@@ -167,9 +171,9 @@ function deleteAllTopicsAndSlides() {
   });
 }
 
-async function deleteSlideHandler(slideId) {
+async function deleteSlideHandler(id) {
   if (!confirm("Delete this slide?")) return;
-  await deleteSlide(slideId);
+  await deleteSlide(id);
   await displayAllTopics();
   await loadTopicsAdmin();
 }
@@ -251,8 +255,9 @@ async function displayAllTopics() {
       });
     }
     container.appendChild(topicDiv);
-    bindAdminActions();
   }
+  
+  bindAdminActions();
 }
 
 // COMMON SEARCH FUNCTIONALITY
@@ -264,7 +269,7 @@ async function performSearch() {
   const term = searchInput.value.trim().toLowerCase();
 
   // RESET behavior
-  if (!term) {
+/*  if (!term) {
     if (isViewPage) {
       displayCurrentSlide();
       renderCurrentSlide();
@@ -272,17 +277,47 @@ async function performSearch() {
     if (isAdminPage) displayAllTopics();
     return;
   }
+*/
+
+  if (!term) {
+    if (isViewPage) {
+      if (selectedTopic) {
+        slides = allSlidesCache.filter(s => s.topic === selectedTopic);
+      } else {
+        slides = [];
+        document.getElementById("slideDisplay").innerHTML =
+          "<p>Select a topic to view slides</p>";
+        return;
+      }
+      currentSlideIndex = 0;
+      renderCurrentSlide();
+    }
+
+    if (isAdminPage) {
+      displayAllTopics();
+    }
+    
+    if (isWebPage) {
+      renderPageSlides(allSlidesCache);
+    }
+    
+    return;
+  }
 
   // VIEW PAGE SEARCH (within selected topic)
   if (isViewPage) {
-    const filtered = slides.filter(
+    //const filtered = slides.filter(
+      const filtered = allSlidesCache.filter(
       s =>
         s.title?.toLowerCase().includes(term) ||
         s.desc?.toLowerCase().includes(term) ||
         s.topic?.toLowerCase().includes(term)
     );
 
-    displayFilteredSlides(filtered);
+    // displayFilteredSlides(filtered);
+    slides = filtered;
+    currentSlideIndex = 0;
+    renderCurrentSlide();
   }
 
   // ADMIN PAGE SEARCH (across ALL slides)
@@ -297,6 +332,18 @@ async function performSearch() {
     );
 
     displayFilteredAdminSlides(filtered);
+  }
+
+  // Web-view page search
+  if (isWebPage) {
+    const filtered = allSlidesCache.filter(
+      s =>
+        s.title?.toLowerCase().includes(term) ||
+        s.desc?.toLowerCase().includes(term) ||
+        s.topic?.toLowerCase().includes(term)
+    );
+
+    renderPageSlides(filtered);
   }
 }
 
@@ -318,6 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
 if (isViewPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
+    allSlidesCache = await getAllSlides();
     await loadTopicsView();
     bindTopicSelection();
 
@@ -334,7 +382,10 @@ if (isViewPage) {
           return;
         }
 
-        slides = await getSlidesByTopic(topicName);
+      //  slides = await getSlidesByTopic(topicName);
+        selectedTopic = topicName;
+        slides = allSlidesCache.filter(s => s.topic === topicName);
+
         currentSlideIndex = 0;
         renderCurrentSlide();
       });
@@ -355,14 +406,14 @@ if (isViewPage) {
         select.appendChild(opt);
       });
     }
-
+/*
     function updateButtons() {
       const prev = document.getElementById("prevArrow");
       const next = document.getElementById("nextArrow");
       prev.disabled = currentSlideIndex === 0 || slides.length === 0;
       next.disabled = currentSlideIndex === slides.length - 1 || slides.length === 0;
     }
-
+*/
     const params = new URLSearchParams(window.location.search);
     const topicFromUrl = params.get("topic");
 
@@ -373,7 +424,6 @@ if (isViewPage) {
       currentSlideIndex = 0;
       renderCurrentSlide();
     }
-
   })
 }
 
@@ -562,11 +612,11 @@ if (isAdminPage) {
     document.querySelectorAll(".delete-slide-btn").forEach(btn => {
       btn.addEventListener("click", async () => {
         const id = Number(btn.dataset.id);
+
+        deleteSlideHandler(id);
       });
     });
   }
-
-  bindAdminActions();
 }
 
 function displayFilteredAdminSlides(filteredSlides) {
@@ -724,4 +774,93 @@ function logout() {
   localStorage.removeItem("sunesis_remember");
   localStorage.removeItem("sunesis_user");
   window.location.href = "index.html";
+}
+
+function renderPageSlides(list) {
+  const slideContainer = document.querySelector(".js-slide-container");
+
+  if (!slideContainer) return;
+
+  if (!list.length) {
+    slideContainer.innerHTML = "<p>No slides found.</p>";
+    return;
+  }
+
+  slideContainer.innerHTML = list.map(slide => {
+
+    const media = slide.media
+      ? slide.type === "image"
+        ? `<img src="${slide.media}" alt="">`
+        : `<video src="${slide.media}" controls></video>`
+      : "";
+
+    return `
+      <section class="page-slide">
+        <div class="header">
+          <div class="header-text">
+            <h2>${slide.title}</h2>
+            <div class="slide-desc">
+              ${formatDescription(slide.desc)}
+            </div>
+          </div>
+
+          <div class="header-img">
+            ${media}
+          </div>
+
+        </div>
+
+        <small>${slide.topic}</small>
+      </section>
+    `;
+  }).join("");
+}
+
+
+// WEB PAGE (web-view.html) 
+if (isWebPage) {
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    await initDB();
+    allSlidesCache = await getAllSlides();
+    await loadTopicsView();
+    bindTopicSelection();
+    renderPageSlides(allSlidesCache);
+
+    function bindTopicSelection() {
+      const select = document.getElementById("topicSelect");
+      if (!select) return;
+
+      select.addEventListener("change", async () => {
+        const topicName = select.value;
+
+        if (!topicName) {
+          renderPageSlides(allSlidesCache);
+          return;
+        }
+
+      //  slides = await getSlidesByTopic(topicName);
+        selectedTopic = topicName;
+        const filtered = allSlidesCache.filter(s => s.topic === topicName);
+        renderPageSlides(filtered);
+
+      });
+    }
+
+    async function loadTopicsView() {
+      const topics = await getAllTopics();
+      const select = document.getElementById("topicSelect");
+
+      if (!select) return;
+
+      select.innerHTML = `<option value="">Choose a topic </option>`;
+
+      topics.forEach((topic) => {
+        const opt = document.createElement("option");
+        opt.value = topic.name;
+        opt.textContent = topic.name;
+        select.appendChild(opt);
+      });
+    }
+  })
 }
