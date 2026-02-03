@@ -7,6 +7,7 @@
 
   <link rel="icon" href="images/sunesisIcon.png" type="image/png">
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     .hidden { display: none; }
@@ -16,61 +17,175 @@
 </head>
 
 <body>
-  <div class="heading-div">
-    <div class="imagery">
-      <img src="images/sunesisBG2.png" alt="Sunesis Image">
-    </div>
-
-    <div class="texts">
-      <div class="text-heading">
-        <p><span>Su</span><span>ne</span>sis</p>
-        derived from the Greek word <em>sýnesis</em> (σύνεσις),
-        meaning understanding, intelligence, or sound judgment.
+  <div class="body-container">
+    <div class="heading-div">
+      <div class="imagery">
+        <img src="images/sunesisBG2.png" alt="Sunesis Image">
       </div>
 
-      <div class="text-detail">
-        <ul>
-          <li>Clear comprehension of situations</li>
-          <li>Practical wisdom in real decisions</li>
-          <li>Sound judgment in complexity</li>
-        </ul>
+      <div class="texts">
+        <div class="text-heading">
+          <p><span>Su</span><span>ne</span>sis</p>
+          derived from the Greek word <em>sýnesis</em> (σύνεσις),
+          meaning understanding, intelligence, or sound judgment.
+        </div>
+
+        <div class="text-detail">
+          <ul>
+            <li>Clear comprehension of situations</li>
+            <li>Practical wisdom in real decisions</li>
+            <li>Sound judgment in complexity</li>
+          </ul>
+        </div>
       </div>
     </div>
+
+    <div class="account-container" id="auth-section">
+      <!-- LOGIN -->
+      <div id="loginBox">
+        <h1>Login</h1>
+        <input id="loginUser" placeholder="Username">
+        <input id="loginPass" type="password" placeholder="Password">
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe">
+          <label for="rememberMe"><span>Remember Me</span></label>
+        </div>
+        <button onclick="login()">Login</button>
+        <p>
+          Don’t have an account?
+          <span class="toggle-link" onclick="showRegister()">Register</span>
+        </p>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="registerBox" class="hidden">
+        <h1>Register</h1>
+        <input id="regUser" placeholder="Username">
+        <input id="regPass" type="password" placeholder="Password">
+        <input id="confirmPass" type="password" placeholder="Confirm Password">
+        <button onclick="register()">Register</button>
+        <p>
+          Already have an account?
+          <span class="toggle-link" onclick="showLogin()">Login</span>
+        </p>
+      </div>
+    </div>
+
+    <section class="features">
+
+      <div class="feature-box">
+        <i class="fa-solid fa-brain feature-icon"></i>
+        <h3>Smart Understanding</h3>
+        <p>Break down complex topics into structured, digestible knowledge.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-layer-group feature-icon"></i>
+        <h3>Topic-Based Learning</h3>
+        <p>Organize content by themes for faster comprehension and recall.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-clapperboard feature-icon"></i>
+        <h3>Slide View Mode</h3>
+        <p>Present knowledge one slide at a time for focused learning.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-globe feature-icon"></i>
+        <h3>Web View Mode</h3>
+        <p>Browse all content in a full-page layout like a digital knowledge hub.</p>
+      </div>
+
+
+      <div class="feature-box">
+        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
+        <h3>Search & Filter</h3>
+        <p>Instantly find insights across all topics and materials.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-pen-to-square feature-icon"></i>
+        <h3>Create & Manage Slides</h3>
+        <p>Build visual knowledge cards with text, images, and videos.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-bolt feature-icon"></i>
+        <h3>Fast Navigation</h3>
+        <p>Move through topics and materials with zero friction.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-database feature-icon"></i>
+        <h3>Persistent Storage</h3>
+        <p>Your learning content stays available even offline.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-shield-halved feature-icon"></i>
+        <h3>Secure Access</h3>
+        <p>Hashed credentials and protected user sessions.</p>
+      </div>
+
+      <div class="feature-box">
+        <i class="fa-solid fa-chart-line feature-icon"></i>
+        <h3>Progress Tracking</h3>
+        <p>Monitor learning growth over time (coming soon).</p>
+      </div>
+
+      <div class="feature-box highlight">
+        <h3>Start in Seconds</h3>
+        <p>Create an account and begin mastering information right away.</p>
+        <button class="cta-btn" onclick="scrollToAuth()">Get Started</button>
+      </div>
+
+    </section>
+
   </div>
+  
+  <footer>
 
-  <div class="account-container">
-    <!-- LOGIN -->
-    <div id="loginBox">
-      <h1>Login</h1>
-      <input id="loginUser" placeholder="Username">
-      <input id="loginPass" type="password" placeholder="Password">
-      <div class="remember-me">
-        <input type="checkbox" id="rememberMe">
-        <label for="rememberMe"><span>Remember Me</span></label>
+    <div class="footer-grid">
+
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#">Platform Overview</a>
+        <a href="#">Solutions</a>
+        <a href="#">How It Works</a>
+        <a href="#">Safety Approach</a>
       </div>
-      <button onclick="login()">Login</button>
-      <p>
-        Don’t have an account?
-        <span class="toggle-link" onclick="showRegister()">Register</span>
-      </p>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Guides</a>
+        <a href="#">Updates</a>
+        <a href="#">Community</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cookies</a>
+        <a href="#">Data Protection</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Sunesis</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+        <a href="#">Partnerships</a>
+      </div>
+
     </div>
 
-    <!-- REGISTER -->
-    <div id="registerBox" class="hidden">
-      <h1>Register</h1>
-      <input id="regUser" placeholder="Username">
-      <input id="regPass" type="password" placeholder="Password">
-      <input id="confirmPass" type="password" placeholder="Confirm Password">
-      <button onclick="register()">Register</button>
-      <p>
-        Already have an account?
-        <span class="toggle-link" onclick="showLogin()">Login</span>
-      </p>
-    </div>
+    <p class="footer-copy">© 2025 Sunesis. All rights reserved.</p>
 
-  </div>
+  </footer>
 
-  <footer>&copy; 2025 Sunesis</footer>
 
   <script>
     // UI TOGGLE 
@@ -161,6 +276,16 @@
 
       window.location.href = "account.html";
     }
+
+    function scrollToAuth() {
+      const target = document.getElementById("auth-section");
+      if (!target) return;
+
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      showRegister(); // switches UI automatically
+    }
+
   </script>
 
 </body>
