@@ -30,8 +30,8 @@ No technical knowledge is required to use the platform.
 
 1. You open the Sunesis website
 2. You log in or register using a username and password
-3. You choose a topic
-4. You view slides related to that topic
+3. You choose a topic (created by you or existing users)
+4. You view slides/contents related to that topic
 5. Your login can be remembered on your device if you choose
 
 All data is stored safely in your browser. No external servers are required.
@@ -40,43 +40,71 @@ All data is stored safely in your browser. No external servers are required.
 
 ## Screenshots
 
-> _(Add screenshots here)_
-
-Suggested screenshots to include:
-
-- Login / Register page
-- Account dashboard (Welcome page)
-- Topic selection view
-- Slide viewer interface
-
-Example:
-
 ```
-/screenshots/login.png
-/screenshots/account.png
-/screenshots/slides.png
+/screenshots/login-register-page.png
+/screenshots/features.png
+/screenshots/account-page.png
+/screenshots/slide-page.png
+/screenshots/web-page.png
 ```
+
+---
+
+## Features
+
+### Topic & Slide Management
+
+- Create unlimited learning topics
+- Add text, images, and videos to slides
+- Organize slides by topic
+- Delete individual slides or entire topics
+
+### Multiple Viewing Modes
+
+- Slide View Mode — focused presentation, one slide at a time
+- Web View Mode — full content browsing like a knowledge website
+
+### Smart Search
+
+- Search across:
+- - Slide titles
+- - Descriptions
+- - Topics
+- Works in:
+- - Admin dashboard (Setup)
+- - Slide view
+- - Web view
+
+### Persistent Storage
+
+- Uses IndexedDB for high-performance browser storage
+- Data persists across sessions
+- No server required
+
+### Authentication System
+
+- Secure password hashing (SHA-256)
+- Login & registration system
+- Remember-me functionality
+- Session & local storage guards
+
+### Modern UI/UX
+
+- Responsive layout
+- Feature-based homepage
+- Smooth scrolling
+- Mobile optimized
 
 ---
 
 ## Tech Stack
 
-![HTML5](https://img.shields.io/badge/HTML5-Structure-orange)
-![CSS3](https://img.shields.io/badge/CSS3-Styling-blue)
-![JavaScript](https://img.shields.io/badge/JavaScript-Logic-yellow)
-![LocalStorage](https://img.shields.io/badge/Browser-LocalStorage-green)
-![IndexedDB](https://img.shields.io/badge/Browser-IndexedDB-purple)
-
----
-
-## Key Features
-
-- Hybrid Login & Registration (one page)
-- Remember Me option
-- Password strength validation
-- Automatic login protection
-- Topic-based navigation
-- Responsive design (works on mobile and desktop)
+| **Layer** | **Technology** |
+| Frontend | HTML5, CSS#, JavaScript |
+| Storage | IndexedDB |
+| Security | Web Crypto API (SHA-256) |
+| Architecture | Client-side style |
+| UI Icons | Font Awesome |
 
 ---
 
@@ -88,14 +116,53 @@ It is **not intended for sensitive or production-level data**.
 
 ---
 
-## Project Status
+## How It Works
 
-Sunesis is an active frontend project and can be extended with:
+1. Topics
+   Topics are stored in IndexedDB:
+   `topics = { name: "About Sunesis" }`
 
-- A backend server
-- Database integration
-- Multi-user authentication
-- Cloud hosting
+2. Slides
+   Slides are linked to topics:
+
+```
+{
+  id: 1,
+  topic: "About Sunesis",
+  title: "Sunesis Platform",
+  desc: "Learning to use the platform",
+  media: "base64-data",
+  type: "image"
+}
+```
+
+''' 3. Viewing Logic
+
+- Slide View filters by topic and navigates one-by-one
+- Web View displays all slides as content sections
+- Search filters cached data instantly
+
+---
+
+## User Flow
+
+- Register or login
+- Create or view topics
+- Add slides with content/media
+- View content via:
+- - Slide View
+- - Web View
+- Search & manage knowledge
+
+---
+
+## Security Notes
+
+- Passwords never stored in plain text
+- Hashed using SHA-256
+- Session based access control
+- Remember-me stored separately
+- For production: backend auth is recommended
 
 ---
 
