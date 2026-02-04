@@ -40,13 +40,25 @@ All data is stored safely in your browser. No external servers are required.
 
 ## Screenshots
 
-```
-/screenshots/login-register-page.png
-/screenshots/features.png
-/screenshots/account-page.png
-/screenshots/slide-page.png
-/screenshots/web-page.png
-```
+### Home page
+
+![Homepage](screenshots/login-register-page.png)
+
+### Features
+
+![Features](screenshots/homepage.png)
+
+### Slide View Mode
+
+![Slide View](screenshots/slide-page.png)
+
+### Web View Mode
+
+![Web View](screenshots/web-page.png)
+
+### User Home Page
+
+![User Home Page](screenshots/account-page.png)
 
 ---
 
