@@ -48,6 +48,10 @@ All data is stored safely in your browser. No external servers are required.
 
 ![Features](screenshots/features.png)
 
+### User Home Page
+
+![User Home Page](screenshots/account-page.png)
+
 ### Slide View Mode
 
 ![Slide View](screenshots/slide-page.png)
@@ -55,10 +59,6 @@ All data is stored safely in your browser. No external servers are required.
 ### Web View Mode
 
 ![Web View](screenshots/web-page.png)
-
-### User Home Page
-
-![User Home Page](screenshots/account-page.png)
 
 ---
 
@@ -78,14 +78,15 @@ All data is stored safely in your browser. No external servers are required.
 
 ### Smart Search
 
-- Search across:
-- - Slide titles
-- - Descriptions
-- - Topics
-- Works in:
-- - Admin dashboard (Setup)
-- - Slide view
-- - Web view
+**Search across:**
+
+- Slide titles
+- Descriptions
+- Topics
+  **Works in:**
+- Admin dashboard (Setup)
+- Slide view
+- Web view
 
 ### Persistent Storage
 
@@ -111,7 +112,8 @@ All data is stored safely in your browser. No external servers are required.
 
 ## Tech Stack
 
-**Layer** - **Technology Used**
+### Layer & Technology Used
+
 **Frontend:** HTML5, CSS#, JavaScript
 **Storage:** IndexedDB
 **Security:** Web Crypto API (SHA-256)
@@ -132,7 +134,8 @@ It is **not intended for sensitive or production-level data**.
 
 1. Topics
    Topics are stored in IndexedDB:
-   `topics = { name: "About Sunesis" }`
+
+`topics = { name: "About Sunesis" }`
 
 2. Slides
    Slides are linked to topics:
@@ -148,7 +151,7 @@ It is **not intended for sensitive or production-level data**.
 }
 ```
 
-''' 3. Viewing Logic
+3. Viewing Logic
 
 - Slide View filters by topic and navigates one-by-one
 - Web View displays all slides as content sections
@@ -162,8 +165,8 @@ It is **not intended for sensitive or production-level data**.
 - Create or view topics
 - Add slides with content/media
 - View content via:
-- - Slide View
-- - Web View
+  - Slide View
+  - Web View
 - Search & manage knowledge
 
 ---
