@@ -46,7 +46,7 @@ All data is stored safely in your browser. No external servers are required.
 
 ### Features
 
-![Features](screenshots/homepage.png)
+![Features](screenshots/features.png)
 
 ### Slide View Mode
 
@@ -111,12 +111,12 @@ All data is stored safely in your browser. No external servers are required.
 
 ## Tech Stack
 
-| **Layer** | **Technology** |
-| Frontend | HTML5, CSS#, JavaScript |
-| Storage | IndexedDB |
-| Security | Web Crypto API (SHA-256) |
-| Architecture | Client-side style |
-| UI Icons | Font Awesome |
+**Layer** - **Technology Used**
+**Frontend:** HTML5, CSS#, JavaScript
+**Storage:** IndexedDB
+**Security:** Web Crypto API (SHA-256)
+**Architecture:** Client-side style
+**UI Icons:** Font Awesome
 
 ---
 
