@@ -4,6 +4,19 @@
   margin: 0;
 }
 
+.hidden {
+  display: none;
+}
+.account-container input {
+  display: block;
+  margin: 10px 0;
+}
+.toggle-link {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
 .body-container {
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom right, floralwhite, firebrick);
@@ -20,7 +33,7 @@
   flex-wrap: wrap;
   width: 100%;
   max-width: 1100px;
-  padding: 1.5rem;
+  padding: 2rem;
   gap: 1.5rem;
 }
 
@@ -108,6 +121,41 @@ input {
   background: floralwhite;
   color: firebrick;
   font-weight: 500;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
+.password-rules {
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 20px;
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.password-rules li {
+  color: red;
+}
+
+.password-rules li.valid {
+  color: green;
 }
 
 .remember-me {
@@ -317,4 +365,34 @@ footer {
 #auth-section:target {
   box-shadow: 0 0 0 4px rgba(178,34,34,0.4);
   transition: 0.4s;
+}
+
+.popup {
+  position: relative;
+  top: 0px;
+  padding: 12px 18px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  z-index: 9;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.popup.show {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+
+.popup.success {
+  background-color: #28a745;
+}
+
+.popup.error {
+  background-color: #dc3545;
+}
+
+.popup.info {
+  background-color: #007bff;
 }
