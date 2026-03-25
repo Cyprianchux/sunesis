@@ -20,7 +20,6 @@ function menuToggle() {
   }
 }
 
-
 // GLOBAL VARIABLES
 
 let db;
@@ -28,7 +27,6 @@ let slides = [];
 let currentSlideIndex = 0;
 let selectedTopic = null;
 let allSlidesCache = [];
-
 
 // Detect page type
 const isAdminPage = window.location.pathname.includes("slide-admin.html");
@@ -71,7 +69,6 @@ function initDB() {
     request.onerror = (event) => reject(event.target.error);
   });
 }
-
 
 // DATABASE FUNCTIONS
 
@@ -159,7 +156,7 @@ function deleteSlidesByTopic(topicName) {
   });
 }
 
- // Delete Handlers
+// Delete Handlers
 function deleteAllTopicsAndSlides() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(["topics", "slides"], "readwrite");
@@ -256,7 +253,7 @@ async function displayAllTopics() {
     }
     container.appendChild(topicDiv);
   }
-  
+
   bindAdminActions();
 }
 
@@ -269,7 +266,7 @@ async function performSearch() {
   const term = searchInput.value.trim().toLowerCase();
 
   // RESET behavior
-/*  if (!term) {
+  /*  if (!term) {
     if (isViewPage) {
       displayCurrentSlide();
       renderCurrentSlide();
@@ -282,7 +279,7 @@ async function performSearch() {
   if (!term) {
     if (isViewPage) {
       if (selectedTopic) {
-        slides = allSlidesCache.filter(s => s.topic === selectedTopic);
+        slides = allSlidesCache.filter((s) => s.topic === selectedTopic);
       } else {
         slides = [];
         document.getElementById("slideDisplay").innerHTML =
@@ -296,22 +293,33 @@ async function performSearch() {
     if (isAdminPage) {
       displayAllTopics();
     }
-    
+
     if (isWebPage) {
-      renderPageSlides(allSlidesCache);
+      const savedTopic = localStorage.getItem("sunesis_selected_topic");
+
+      if (savedTopic) {
+        selectedTopic = savedTopic;
+        const filtered = allSlidesCache.filter((s) => s.topic === savedTopic);
+        renderPageSlides(filtered);
+
+        const select = document.getElementById("topicSelect");
+        if (select) select.value = savedTopic;
+      } else {
+        renderPageSlides(allSlidesCache);
+      }
     }
-    
+
     return;
   }
 
   // VIEW PAGE SEARCH (within selected topic)
   if (isViewPage) {
     //const filtered = slides.filter(
-      const filtered = allSlidesCache.filter(
-      s =>
+    const filtered = allSlidesCache.filter(
+      (s) =>
         s.title?.toLowerCase().includes(term) ||
         s.desc?.toLowerCase().includes(term) ||
-        s.topic?.toLowerCase().includes(term)
+        s.topic?.toLowerCase().includes(term),
     );
 
     // displayFilteredSlides(filtered);
@@ -325,10 +333,10 @@ async function performSearch() {
     const allSlides = await getAllSlides();
 
     const filtered = allSlides.filter(
-      s =>
+      (s) =>
         s.title?.toLowerCase().includes(term) ||
         s.desc?.toLowerCase().includes(term) ||
-        s.topic?.toLowerCase().includes(term)
+        s.topic?.toLowerCase().includes(term),
     );
 
     displayFilteredAdminSlides(filtered);
@@ -337,10 +345,10 @@ async function performSearch() {
   // Web-view page search
   if (isWebPage) {
     const filtered = allSlidesCache.filter(
-      s =>
+      (s) =>
         s.title?.toLowerCase().includes(term) ||
         s.desc?.toLowerCase().includes(term) ||
-        s.topic?.toLowerCase().includes(term)
+        s.topic?.toLowerCase().includes(term),
     );
 
     renderPageSlides(filtered);
@@ -358,10 +366,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 // PAGE-SPECIFIC LOGIC
 
-// VIEW PAGE (slide-view.html) 
+// VIEW PAGE (slide-view.html)
 if (isViewPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
@@ -378,13 +385,14 @@ if (isViewPage) {
 
         if (!topicName) {
           document.getElementById("slideDisplay").innerHTML =
-            '<p>Select a topic to view slides</p>';
+            "<p>Select a topic to view slides</p>";
           return;
         }
 
-      //  slides = await getSlidesByTopic(topicName);
+        localStorage.setItem("sunesis_selected_topic", topicName); // <-- sync
+
         selectedTopic = topicName;
-        slides = allSlidesCache.filter(s => s.topic === topicName);
+        slides = allSlidesCache.filter((s) => s.topic === topicName);
 
         currentSlideIndex = 0;
         renderCurrentSlide();
@@ -406,7 +414,7 @@ if (isViewPage) {
         select.appendChild(opt);
       });
     }
-/*
+    /*
     function updateButtons() {
       const prev = document.getElementById("prevArrow");
       const next = document.getElementById("nextArrow");
@@ -415,16 +423,35 @@ if (isViewPage) {
     }
 */
     const params = new URLSearchParams(window.location.search);
-    const topicFromUrl = params.get("topic");
+    let topicFromUrl = params.get("topic");
+
+    // fallback to saved topic
+    if (!topicFromUrl) {
+      topicFromUrl = localStorage.getItem("sunesis_selected_topic");
+    }
 
     if (topicFromUrl) {
       const select = document.getElementById("topicSelect");
       select.value = topicFromUrl;
-      slides = await getSlidesByTopic(topicFromUrl);
+
+      selectedTopic = topicFromUrl;
+      slides = allSlidesCache.filter((s) => s.topic === topicFromUrl);
+
       currentSlideIndex = 0;
       renderCurrentSlide();
-    }
-  })
+    } 
+
+    /*const savedTopic = localStorage.getItem("sunesis_selected_topic");
+
+    if (savedTopic) {
+      const select = document.getElementById("topicSelect");
+      select.value = savedTopic;
+      slides = allSlidesCache.filter(s => s.topic === savedTopic);
+      selectedTopic = savedTopic;
+      currentSlideIndex = 0;
+      renderCurrentSlide();
+    }*/
+  });
 }
 
 function displayCurrentSlide() {
@@ -542,12 +569,12 @@ function displayFilteredSlides(filteredSlides) {
               : ""
           }
         </div>
-      </div>`
+      </div>`,
     )
     .join("");
 }
 
-// ADMIN PAGE (slide-admin.html) 
+// ADMIN PAGE (slide-admin.html)
 if (isAdminPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
@@ -555,61 +582,72 @@ if (isAdminPage) {
     displayAllTopics();
 
     // Create topic
-    document.getElementById("createTopicBtn").addEventListener("click", async () => {
-      const name = document.getElementById("topicName").value.trim();
-      if (!name) return alert("Please enter a topic name.");
-      await createTopic(name);
-      document.getElementById("topicName").value = "";
-      await loadTopicsAdmin();
-      displayAllTopics();
-    });
+    document
+      .getElementById("createTopicBtn")
+      .addEventListener("click", async () => {
+        const name = document.getElementById("topicName").value.trim();
+        if (!name) return alert("Please enter a topic name.");
+        await createTopic(name);
+        document.getElementById("topicName").value = "";
+        await loadTopicsAdmin();
+        displayAllTopics();
+      });
 
     // Add slide
-    document.getElementById("addSlideBtn").addEventListener("click", async () => {
-      const topic = document.getElementById("topicSelect").value;
-      const title = document.getElementById("slide-title").value.trim();
-      const desc = document.getElementById("slide-desc").value.trim();
-      const mediaFile = document.getElementById("slide-media").files[0] || null;
+    document
+      .getElementById("addSlideBtn")
+      .addEventListener("click", async () => {
+        const topic = document.getElementById("topicSelect").value;
+        const title = document.getElementById("slide-title").value.trim();
+        const desc = document.getElementById("slide-desc").value.trim();
+        const mediaFile =
+          document.getElementById("slide-media").files[0] || null;
 
-      if (!topic || !title) return alert("Please select a topic and enter a title.");
+        if (!topic || !title)
+          return alert("Please select a topic and enter a title.");
 
-      const slide = { topic, title, desc, type: mediaFile ? mediaFile.type.split("/")[0] : "text" };
+        const slide = {
+          topic,
+          title,
+          desc,
+          type: mediaFile ? mediaFile.type.split("/")[0] : "text",
+        };
 
-      if (mediaFile) {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          slide.media = e.target.result;
+        if (mediaFile) {
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            slide.media = e.target.result;
+            await addSlide(slide);
+            displayAllTopics();
+            alert("Slide added successfully!");
+          };
+          reader.readAsDataURL(mediaFile);
+        } else {
           await addSlide(slide);
           displayAllTopics();
           alert("Slide added successfully!");
-        };
-        reader.readAsDataURL(mediaFile);
-      } else {
-        await addSlide(slide);
-        displayAllTopics();
-        alert("Slide added successfully!");
-      }
+        }
 
-      document.getElementById("slide-title").value = "";
-      document.getElementById("slide-desc").value = "";
-      document.getElementById("slide-media").value = "";
-    });
+        document.getElementById("slide-title").value = "";
+        document.getElementById("slide-desc").value = "";
+        document.getElementById("slide-media").value = "";
+      });
 
     // Delete all topics/slides
-    document.getElementById("deleteAllBtn").addEventListener("click", async () => {
-      if (confirm("⚠ Delete ALL topics and slides? This cannot be undone.")) {
-        await deleteAllTopicsAndSlides();
-        await loadTopicsAdmin();
-        displayAllTopics();
-        alert("All topics and slides deleted.");
-      }
-    });
+    document
+      .getElementById("deleteAllBtn")
+      .addEventListener("click", async () => {
+        if (confirm("⚠ Delete ALL topics and slides? This cannot be undone.")) {
+          await deleteAllTopicsAndSlides();
+          await loadTopicsAdmin();
+          displayAllTopics();
+          alert("All topics and slides deleted.");
+        }
+      });
   });
 
-  
-
   function bindAdminActions() {
-    document.querySelectorAll(".delete-slide-btn").forEach(btn => {
+    document.querySelectorAll(".delete-slide-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const id = Number(btn.dataset.id);
 
@@ -641,7 +679,7 @@ function displayFilteredAdminSlides(filteredSlides) {
               : `<video src="${s.media}" width="160" controls></video>`
             : ""
         }
-      </div>`
+      </div>`,
     )
     .join("");
 }
@@ -693,7 +731,6 @@ function formatDescription(rawText = "") {
 
 if (isAccountPage) {
   document.addEventListener("DOMContentLoaded", async () => {
-
     /* ---------- AUTH GUARD ---------- */
     const sessionUser = sessionStorage.getItem("sunesis_user");
     const rememberUser = localStorage.getItem("sunesis_user");
@@ -718,7 +755,6 @@ if (isAccountPage) {
   });
 }
 
-
 async function renderTopicCards() {
   const container = document.getElementById("topicsContainer");
   if (!container) return;
@@ -735,7 +771,7 @@ async function renderTopicCards() {
     const slides = await getSlidesByTopic(topic.name);
 
     // Skip empty topics (optional – remove if you want empty topics visible)
-  //  if (slides.length === 0) continue;
+    //  if (slides.length === 0) continue;
 
     const card = document.createElement("div");
     card.className = "topic-card";
@@ -751,6 +787,10 @@ async function renderTopicCards() {
 }
 
 function openTopic(topicName) {
+  // Save globally
+  localStorage.setItem("sunesis_selected_topic", topicName);
+
+  // Navigate
   window.location.href = `slide-view.html?topic=${encodeURIComponent(topicName)}`;
 }
 
@@ -766,7 +806,7 @@ console.log("auth check");
 if (!sessionStorage.getItem("sunesis_logged_in")) {
   window.location.href = "login.html";
 }
-*/ 
+*/
 
 /* ---------- LOGOUT GUARD ---------- */
 function logout() {
@@ -786,15 +826,15 @@ function renderPageSlides(list) {
     return;
   }
 
-  slideContainer.innerHTML = list.map(slide => {
+  slideContainer.innerHTML = list
+    .map((slide) => {
+      const media = slide.media
+        ? slide.type === "image"
+          ? `<img src="${slide.media}" alt="">`
+          : `<video src="${slide.media}" controls></video>`
+        : "";
 
-    const media = slide.media
-      ? slide.type === "image"
-        ? `<img src="${slide.media}" alt="">`
-        : `<video src="${slide.media}" controls></video>`
-      : "";
-
-    return `
+      return `
       <section class="page-slide">
         <div class="header">
           <div class="header-text">
@@ -813,19 +853,26 @@ function renderPageSlides(list) {
         <small>${slide.topic}</small>
       </section>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
-
-// WEB PAGE (web-view.html) 
+// WEB PAGE (web-view.html)
 if (isWebPage) {
-
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
     allSlidesCache = await getAllSlides();
     await loadTopicsView();
     bindTopicSelection();
-    renderPageSlides(allSlidesCache);
+
+    const savedTopic = localStorage.getItem("sunesis_selected_topic");
+    if (savedTopic) {
+      const filtered = allSlidesCache.filter(s => s.topic === savedTopic);
+      renderPageSlides(filtered);
+      document.getElementById("topicSelect").value = savedTopic;
+    } else {
+      renderPageSlides(allSlidesCache);
+    }
 
     function bindTopicSelection() {
       const select = document.getElementById("topicSelect");
@@ -833,18 +880,16 @@ if (isWebPage) {
 
       select.addEventListener("change", async () => {
         const topicName = select.value;
-
+        localStorage.setItem("sunesis_selected_topic", topicName); // sync to other pages
         if (!topicName) {
           renderPageSlides(allSlidesCache);
           return;
         }
-
-      //  slides = await getSlidesByTopic(topicName);
         selectedTopic = topicName;
         const filtered = allSlidesCache.filter(s => s.topic === topicName);
         renderPageSlides(filtered);
-
       });
+
     }
 
     async function loadTopicsView() {
@@ -862,5 +907,12 @@ if (isWebPage) {
         select.appendChild(opt);
       });
     }
-  })
+  });
 }
+
+// For real time sync across all tabs
+window.addEventListener("storage", (e) => {
+  if (e.key === "sunesis_selected_topic") {
+    location.reload();
+  }
+});
