@@ -41,9 +41,9 @@ const isWebPage = window.location.pathname.includes("web-view.html");
 
 function initDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open("Sunesis", 1);
+    const openRequest = indexedDB.open("Sunesis", 1);
 
-    request.onupgradeneeded = (event) => {
+    openRequest.onupgradeneeded = (event) => {
       db = event.target.result;
 
       // Topics store
@@ -61,12 +61,25 @@ function initDB() {
       }
     };
 
-    request.onsuccess = (event) => {
+    openRequest.onsuccess = (event) => {
       db = event.target.result;
       resolve();
     };
 
-    request.onerror = (event) => reject(event.target.error);
+    openRequest.onerror = (event) => {
+      const error = event.target.error;
+      if (error && error.name === "VersionError") {
+        const deleteRequest = indexedDB.deleteDatabase("Sunesis");
+        deleteRequest.onsuccess = () => {
+          initDB().then(resolve).catch(reject);
+        };
+        deleteRequest.onerror = () => reject(deleteRequest.error);
+        deleteRequest.onblocked = () =>
+          reject(new Error("Database delete blocked. Close other tabs and try again."));
+        return;
+      }
+      reject(error);
+    };
   });
 }
 
@@ -85,8 +98,10 @@ function createTopic(name) {
       reject(request.error);
     };
 
-    tx.oncomplete = resolve;
-    alert(`The topic "${name}" has been added succesfully!`);
+    tx.oncomplete = () => {
+      alert(`The topic "${name}" has been added successfully!`);
+      resolve();
+    };
   });
 }
 
@@ -111,15 +126,9 @@ function addSlide(slide) {
   });
 }
 
-function getSlidesByTopic(topicName) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("slides", "readonly");
-    const store = tx.objectStore("slides");
-    const index = store.index("topic");
-    const request = index.getAll(IDBKeyRange.only(topicName));
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
+async function getSlidesByTopic(topicName) {
+  const allSlides = await getAllSlides();
+  return allSlides.filter(s => s.topic === topicName);
 }
 
 function getAllSlides() {
@@ -620,17 +629,19 @@ if (isAdminPage) {
             await addSlide(slide);
             displayAllTopics();
             alert("Slide added successfully!");
+            document.getElementById("slide-title").value = "";
+            document.getElementById("slide-desc").value = "";
+            document.getElementById("slide-media").value = "";
           };
           reader.readAsDataURL(mediaFile);
         } else {
           await addSlide(slide);
           displayAllTopics();
           alert("Slide added successfully!");
+          document.getElementById("slide-title").value = "";
+          document.getElementById("slide-desc").value = "";
+          document.getElementById("slide-media").value = "";
         }
-
-        document.getElementById("slide-title").value = "";
-        document.getElementById("slide-desc").value = "";
-        document.getElementById("slide-media").value = "";
       });
 
     // Delete all topics/slides
