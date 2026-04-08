@@ -1,49 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account | Sunesis</title>
-  <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
-  <link rel="stylesheet" href="slide-view.css">
-  <link rel="stylesheet" href="account.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account | Sunesis</title>
+    <link
+      rel="icon"
+      href="images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link rel="stylesheet" href="all.css" />
+    <link rel="stylesheet" href="account.css" />
+  </head>
+  <body>
+    <div class="top-banner">
+      <div class="top-left">
+        <img src="images/sunesisBG2.png" alt="Image" />
+        <h1><span>Su</span><span>ne</span>sis</h1>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchBtn">
+          <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
+        </button>
+      </div>
 
-</head>
-<body>
-
-  <div class="top-banner">
-    <div class="top-left">
-      <img src="images/sunesisBG2.png" alt="Image">
-      <h1><span>Su</span><span>ne</span>sis</h1>
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="slide-admin.html">Setup</a></li>
+          <li>
+            <a href="">Board</a>
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      </div>
     </div>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search...">
-      <button id="searchBtn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
+
+    <div class="banner">
+      <h1>Welcome, <span id="loginUser"></span></h1>
+      <p>Select a topic to continue</p>
+      <button class="back-btn" onclick="logout()">← Logout</button>
     </div>
 
-    <div class="top-right">
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html"><i class="fa-solid fa-house-user"></i></a></li>
-        <li><a href="slide-admin.html">Setup</a></li>
-        <li>
-          <a href="">Board</a>
-        </li>
-      </ul>
-      <button class="nav-toggle" onclick="menuToggle()">☰</button>
+    <div class="topics-container" id="topicsContainer">
+      <!-- Auto-generated topic cards from slide-admin -->
     </div>
-  </div>
 
-  <div class="banner">
-    <h1>Welcome, <span id="loginUser"></span></h1>
-    <p>Select a topic to continue</p>
-    <button class="back-btn" onclick="logout()">← Logout</button>
-  </div>
+    <div id="popup" class="popup"></div>
 
-  <div class="topics-container" id="topicsContainer">
-   <!-- Auto-generated topic cards from slide-admin -->
-  </div>
-
-  <script src="sunesis.js"></script>
-
-</body>
+    <script src="sunesis.js"></script>
+  </body>
 </html>
