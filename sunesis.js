@@ -6,7 +6,7 @@ const isRemembered = localStorage.getItem("sunesis_remember");
 const activeUser = sessionUser || (isRemembered ? rememberUser : null);
 
 if (!activeUser) {
-  alert("Access denied. Please login.");
+  ("Access denied. Please login.");
   window.location.href = "index.html";
   return;
 }
@@ -94,12 +94,12 @@ function createTopic(name) {
     const request = store.add({ name });
 
     request.onerror = () => {
-      alert("Topic already exists.");
+      showPopup("Topic already exists.", "error");
       reject(request.error);
     };
 
     tx.oncomplete = () => {
-      alert(`The topic "${name}" has been added successfully!`);
+      showPopup(`The topic "${name}" has been added successfully!`, "success");
       resolve();
     };
   });
@@ -178,20 +178,25 @@ function deleteAllTopicsAndSlides() {
 }
 
 async function deleteSlideHandler(id) {
-  if (!confirm("Delete this slide?")) return;
+  if (!(await showConfirm("Delete this slide?"))) return;
+  showPopup("Deleting slide...", "info");
   await deleteSlide(id);
   await displayAllTopics();
   await loadTopicsAdmin();
+  showPopup("Slide deleted successfully.", "success");
 }
 
 async function deleteSlidesFromTopicHandler(topicName) {
-  if (!confirm(`Delete all slides from "${topicName}"?`)) return;
+  if (!(await showConfirm(`Delete all slides from "${topicName}"?`))) return;
+  showPopup(`Deleting all slides from "${topicName}"...`, "info");
   await deleteSlidesByTopic(topicName);
   await displayAllTopics();
+  showPopup(`All slides from "${topicName}" deleted.`, "success");
 }
 
 async function deleteTopicHandler(topicName) {
-  if (!confirm(`Delete the topic "${topicName}" and all its slides?`)) return;
+  if (!(await showConfirm(`Delete the topic "${topicName}" and all its slides?`))) return;
+  showPopup(`Deleting topic "${topicName}" and all its slides...`, "info");
 
   await deleteSlidesByTopic(topicName);
 
@@ -206,6 +211,8 @@ async function deleteTopicHandler(topicName) {
   await displayAllTopics();
   await loadTopicsAdmin();
   renderTopicCards();
+
+  showPopup(`Topic "${topicName}" and all its slides deleted.`, "success");
 }
 
 async function loadTopicsAdmin() {
@@ -595,7 +602,10 @@ if (isAdminPage) {
       .getElementById("createTopicBtn")
       .addEventListener("click", async () => {
         const name = document.getElementById("topicName").value.trim();
-        if (!name) return alert("Please enter a topic name.");
+        if (!name) {
+          showPopup("Please enter a topic name.", "error");
+          return;
+        }
         await createTopic(name);
         document.getElementById("topicName").value = "";
         await loadTopicsAdmin();
@@ -612,8 +622,10 @@ if (isAdminPage) {
         const mediaFile =
           document.getElementById("slide-media").files[0] || null;
 
-        if (!topic || !title)
-          return alert("Please select a topic and enter a title.");
+        if (!topic || !title) {
+          showPopup("Please select a topic and enter a title.", "error");
+          return;
+        }
 
         const slide = {
           topic,
@@ -628,7 +640,7 @@ if (isAdminPage) {
             slide.media = e.target.result;
             await addSlide(slide);
             displayAllTopics();
-            alert("Slide added successfully!");
+            showPopup("Slide added successfully!", "success");
             document.getElementById("slide-title").value = "";
             document.getElementById("slide-desc").value = "";
             document.getElementById("slide-media").value = "";
@@ -637,7 +649,7 @@ if (isAdminPage) {
         } else {
           await addSlide(slide);
           displayAllTopics();
-          alert("Slide added successfully!");
+          showPopup("Slide added successfully!", "success");
           document.getElementById("slide-title").value = "";
           document.getElementById("slide-desc").value = "";
           document.getElementById("slide-media").value = "";
@@ -648,11 +660,12 @@ if (isAdminPage) {
     document
       .getElementById("deleteAllBtn")
       .addEventListener("click", async () => {
-        if (confirm("⚠ Delete ALL topics and slides? This cannot be undone.")) {
+        if (await showConfirm("Delete ALL topics and slides? This cannot be undone.")) {
+          showPopup("Deleting ALL topics and slides...", "error");
           await deleteAllTopicsAndSlides();
           await loadTopicsAdmin();
           displayAllTopics();
-          alert("All topics and slides deleted.");
+          showPopup("All topics and slides deleted.", "info");
         }
       });
   });
@@ -750,7 +763,7 @@ if (isAccountPage) {
     const activeUser = sessionUser || (isRemembered ? rememberUser : null);
 
     if (!activeUser) {
-      alert("Access denied. Please login.");
+      showPopup("Access denied. Please login.", "error");
       window.location.href = "index.html";
       return;
     }
@@ -927,3 +940,42 @@ window.addEventListener("storage", (e) => {
     location.reload();
   }
 });
+
+// Onscreen popup for 5 seconds
+function showPopup(message, type = "info") {
+  const popup = document.getElementById("popup");
+
+  popup.textContent = message;
+  popup.className = `popup show ${type}`;
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  },5000);
+}
+
+// Custom confirm function that returns a promise
+function showConfirm(message) {
+  return new Promise((resolve) => {
+    const popup = document.getElementById("popup");
+
+    popup.innerHTML = `${message}<br><div class="confirm-buttons"><button id="confirmYes">Yes</button><button id="confirmNo">No</button></div>`;
+    popup.className = `popup show info`;
+
+    document.getElementById("confirmYes").addEventListener("click", () => {
+      popup.classList.remove("show");
+      popup.innerHTML = "";
+      resolve(true);
+    });
+
+    document.getElementById("confirmNo").addEventListener("click", () => {
+      popup.classList.remove("show");
+      popup.innerHTML = "";
+      resolve(false);
+    });
+  });
+}
+
+// Function to clear inputs
+function clearInputs(...inputs) {
+  inputs.forEach(input => input.value = "");
+}
