@@ -1,44 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Slides | Sunesis</title>
-  <link rel="icon" href="images/sunesisIcon.png" type="image/png" sizes="512x512">
-  <link rel="stylesheet" href="slide-view.css">
-  <link rel="stylesheet" href="web-view.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
-  <div class="top-banner">
-    <div class="top-left">
-      <img src="images/sunesisBG2.png" alt="Image">
-      <h1><span>Su</span><span>ne</span>sis</h1>
-    </div>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search...">
-      <button id="searchBtn"><i class="fa-solid fa-magnifying-glass-arrow-right"></i></button>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Slides | Sunesis</title>
+    <link
+      rel="icon"
+      href="images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link rel="stylesheet" href="slide-view.css" />
+    <link rel="stylesheet" href="all.css" />
+    <link rel="stylesheet" href="web-view.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="top-banner">
+      <div class="top-left">
+        <img src="images/sunesisBG2.png" alt="Image" />
+        <h1><span>Su</span><span>ne</span>sis</h1>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchBtn">
+          <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
+        </button>
+      </div>
 
-    <div class="top-right">
-      <ul class="nav-links" id="navLinks">
-        <li><a href="account.html"><i class="fa-solid fa-house-user"></i></a></li>
-        <li><a href="slide-view.html"><i class="fa-solid fa-tv"></i></a></li>
-        <li><a href="slide-admin.html">Setup</a></li>
-        <li id="topicsMenu" class="topics-menu">
-          Topics
-          <div class="topics-dropdown">
-            <select id="topicSelect">
-              <option value="">Choose a topic</option>
-            </select>
-          </div>
-        </li>
-        <li><a href="#" onclick="logout(); return false;">Logout</a></li>
-      </ul>
-      <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a href="account.html"><i class="fa-solid fa-house-user"></i></a>
+          </li>
+          <li>
+            <a href="slide-view.html"><i class="fa-solid fa-tv"></i></a>
+          </li>
+          <li><a href="slide-admin.html">Setup</a></li>
+          <li id="topicsMenu" class="topics-menu">
+            Topics
+            <div class="topics-dropdown">
+              <select id="topicSelect">
+                <option value="">Choose a topic</option>
+              </select>
+            </div>
+          </li>
+          <li>
+            <a
+              href="#"
+              onclick="
+                logout();
+                return false;
+              "
+              >Logout</a
+            >
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      </div>
     </div>
-  </div>
-<!--
+    <!--
   <div class="snap-toggle">
     <label>
       <input type="checkbox" id="snap-toggle" checked>
@@ -46,9 +70,9 @@
     </label>
   </div>
 -->
-  
-  <div class="main-scroll-container">
-<!--    <section class="jsslide-container">
+
+    <div class="main-scroll-container">
+      <!--    <section class="jsslide-container">
       <div class="header">
         <div class="header-text">
           <h1>The Side/Adverse Effects of Drugs</h1>
@@ -60,32 +84,32 @@
         </div>
       </div>
     </section> -->
-    
-    <section class="js-slide-container"></section>
-  </div>
 
-  <script src="sunesis.js"></script>
-  <script>
-    const topicsMenu = document.getElementById("topicsMenu");
-    const topicsDropdown = document.querySelector(".topics-dropdown");
-    if (topicsMenu && topicsDropdown) {
-      // Toggle dropdown when clicking "Topics"
-      topicsMenu.addEventListener("click", (e) => {
-        e.stopPropagation();
-        topicsDropdown.style.display =
-          topicsDropdown.style.display === "block" ? "none" : "block";
-      });
+      <section class="js-slide-container"></section>
+    </div>
 
-      // Prevent clicks inside dropdown from closing it
-      topicsDropdown.addEventListener("click", (e) => {
-        e.stopPropagation();
-      });
+    <script src="sunesis.js"></script>
+    <script>
+      const topicsMenu = document.getElementById("topicsMenu");
+      const topicsDropdown = document.querySelector(".topics-dropdown");
+      if (topicsMenu && topicsDropdown) {
+        // Toggle dropdown when clicking "Topics"
+        topicsMenu.addEventListener("click", (e) => {
+          e.stopPropagation();
+          topicsDropdown.style.display =
+            topicsDropdown.style.display === "block" ? "none" : "block";
+        });
 
-      // Close only when clicking truly outside
-      document.addEventListener("click", () => {
-        topicsDropdown.style.display = "none";
-      });
-    }
-  </script>
-</body>
+        // Prevent clicks inside dropdown from closing it
+        topicsDropdown.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+
+        // Close only when clicking truly outside
+        document.addEventListener("click", () => {
+          topicsDropdown.style.display = "none";
+        });
+      }
+    </script>
+  </body>
 </html>
