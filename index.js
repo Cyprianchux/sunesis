@@ -86,13 +86,15 @@ async function register() {
     password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)
   ) {
     showPopup(
-      "Password must be at least 8 characters, include a number and an uppercase letter.", "error",
+      "Password must be at least 8 characters, include a number and an uppercase letter.", "info",
     );
     return;
   }
 
   if (password !== confirmPassword) {
     showPopup("Passwords do not match!", "error");
+    clearInputs(regUser, regPass, confirmPass);
+
     return;
   }
 
@@ -123,6 +125,7 @@ async function login() {
 
   if (!users[username]) {
     showPopup("Invalid username or password", "error");
+    clearInputs(loginUser, loginPass);
     return;
   }
 
@@ -130,6 +133,7 @@ async function login() {
 
   if (hash !== users[username].password) {
     showPopup("Invalid username or password", "error");
+    clearInputs(loginUser, loginPass);
     return;
   }
 
@@ -205,6 +209,8 @@ document.addEventListener("keydown", function (e) {
     else if (!registerBox.classList.contains("hidden")) {
       register();
     }
+
+    clearInputs(loginUser, loginPass, regUser, regPass, confirmPass);
   }
 });
 
