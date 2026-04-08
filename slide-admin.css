@@ -27,7 +27,7 @@
 
 .create-topic h2, .add-slide h2 {
   margin: 0 auto 10px 10px;
-  color: firebrick;  
+  color: #0f426b;  
   font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
@@ -38,7 +38,7 @@
 
 .create-topic input {
   padding: 5px;
-  font-size: 14.5px;
+  font-size: 15px;
 }
 
 .add-slide button {
@@ -81,7 +81,7 @@ section input, section button {
 textarea {
   width: 91%;
   padding: 6px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 #slide-media {
@@ -127,4 +127,7 @@ textarea {
   transition: 0.5s;
   color: crimson;
 }
+
+
+
 
