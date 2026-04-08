@@ -1,0 +1,330 @@
+/* Shared CSS properties */
+
+/* Body padding for pages with top-banner */
+body {
+  padding-top: 70px;
+}
+
+/* Top banner */
+.top-banner {
+  display: grid;
+  grid-template-columns: 300px 1fr 410px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: linear-gradient(to left, firebrick, #fdfeff);
+  border-bottom: 1px solid rgba(178, 34, 34, 0.4);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.top-left {
+  padding-bottom: 0px;
+  height: 70px;
+  display: flex;
+}
+
+.top-left img {
+  width: 4.5rem;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.top-left span:first-child {
+  color: #145a7d;
+}
+.top-left span:last-child {
+  color: #0f426b;
+}
+
+.top-left h1 {
+  color: #0b1f6d;
+  font-size:38px;
+  font-weight: bold;
+  margin-left: 7px;
+  margin-top: 16px;
+}
+
+.search-bar {
+  padding: 17px 5px;
+  margin-left: 50px;
+  margin-right: 10px;
+  display: flex;
+  max-width: 400px;
+}
+
+.search-bar input {
+  font-size: 16px;
+  width: 80%;
+  border-radius: 5px 0 0 5px;
+  border: 1px solid firebrick;
+  height: 34px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  background: floralwhite;
+  padding-left: 10px;
+}
+
+.search-bar button {
+  padding: 0px 6px;
+  cursor: pointer;
+  background: floralwhite;
+  color: firebrick;
+  border-radius: 0 5px 5px 0;
+  transition: background 0.3s;
+  border: 1px solid firebrick;
+  border-left: none;
+  height: 37.5px;
+  font-size: 18px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.search-bar button:hover {
+  background: rgb(206, 106, 106);
+  box-shadow: none;
+}
+
+button {
+  padding: 7px 15px;
+  border-radius: 15px;
+  background-color: floralwhite;
+  border: 1px solid firebrick;
+  color: firebrick;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: blanchedalmond;
+  border: 1px solid firebrick;
+  color: floralwhite;
+}
+
+button:active {
+  scale: 1.03;
+}
+
+.top-right {
+  position: relative;
+  justify-content: space-between;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  position: absolute;
+  top: 16px;
+  right: 15px;
+  color: floralwhite;
+  border-radius: 5px;
+  padding: 0 8px 4px 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.nav-toggle:hover {
+  background: floralwhite;
+  color: firebrick;
+  border: none;
+  box-shadow: none;
+  transition: 0.3s;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 25px;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0px 5px;
+  color: floralwhite;
+}
+
+.nav-links a:hover {
+  color: rgba(255, 241, 240, 0.7);
+  transition: 0.6s ease;
+}
+
+/* Topics menu dropdown */
+.topics-menu {
+  position: relative;
+  color: floralwhite;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.topics-menu:hover {
+  color: rgba(255, 250, 240, 0.7);
+  transition: 0.6s ease;
+}
+
+.topics-dropdown {
+  display: none;
+  position: absolute;
+  top: 35px; 
+  right: 0;
+  background: white;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* Small arrow pointer */
+.topics-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 15px;
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+.topics-dropdown select {
+  padding: 8px;
+  width: 150px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  color: firebrick;
+  border: 1px solid firebrick;
+}
+
+/* Media queries for top-banner */
+@media screen and (max-width: 857px) {
+  .top-banner {
+    grid-template-columns: 210px 2fr 0.8fr;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 10rem;
+    position: absolute;
+    top: 80px;
+    right: 0px;
+    padding: 30px 10px;
+    text-align: right;
+    font-size: large;
+    background-color: firebrick;
+    border-radius: 0 0 0 15px;
+    row-gap: 30px;
+  }
+
+  .nav-links a {
+    color: floralwhite;
+    padding: 5px;
+    border-radius: 10px 0;
+  }
+
+  .nav-links a:hover {
+    background-color: floralwhite;
+    color: firebrick;
+    padding: 5px 15px;
+    transition: 0.8s ease;
+  }
+  .nav-links a:active {
+    font-size: 20px;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+    margin-top: 0;
+  }
+
+  .topics-menu {
+    color: floralwhite;
+    padding: 5px;
+    border-radius: 10px 0 10px 0;
+  }
+
+  .topics-menu:hover {
+    background: floralwhite;
+    color: #0b1f6d;
+    padding: 5px 15px;
+    transition: 0.5s ease;
+  }
+  
+  .topics-menu:active {
+    font-size: 20px;
+  }
+}
+
+/* Popup styles */
+.popup {
+  position: fixed;
+  top: 75px;
+  left: 50%;
+  transform: translate(-50%, -10px);
+  padding: 12px 18px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 9;
+  opacity: 0;
+  transition: all 0.3s ease;
+  max-width: calc(100% - 2rem);
+  width: auto;
+  text-align: center;
+}
+
+.popup.show {
+  opacity: 0.95;
+  transform: translate(-50%, 0);
+}
+
+.popup.success {
+  background-color: #28a745;
+}
+
+.popup.error {
+  background-color: #dc3545;
+}
+
+.popup.info {
+  background-color: #007bff;
+}
+
+/* Confirm buttons */
+
+#confirmYes, #confirmNo {
+  margin: 5px 8px;
+  padding: 5px 15px;
+}
+
+#confirmYes:hover, #confirmNo:hover {
+  color: blue;
+}
+
+#confirmYes {
+  color: darkgreen;
+  border-color: darkgreen;
+}
+#confirmNo {
+  color: darkred;
+  border-color: darkred;
+}
+
+.confirm-buttons {
+  text-align: center;
+}
