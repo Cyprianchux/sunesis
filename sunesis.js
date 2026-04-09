@@ -1,16 +1,24 @@
-/* ---------- AUTH GUARD ---------- 
-const sessionUser = sessionStorage.getItem("sunesis_user");
-const rememberUser = localStorage.getItem("sunesis_user");
-const isRemembered = localStorage.getItem("sunesis_remember");
+/* ---------- AUTH GUARD ---------- */
+function getActiveUser() {
+  const sessionUser = sessionStorage.getItem("sunesis_user");
+  const rememberUser = localStorage.getItem("sunesis_user");
+  const isRemembered = localStorage.getItem("sunesis_remember");
 
-const activeUser = sessionUser || (isRemembered ? rememberUser : null);
-
-if (!activeUser) {
-  ("Access denied. Please login.");
-  window.location.href = "index.html";
-  return;
+  return sessionUser || (isRemembered ? rememberUser : null);
 }
-*/
+
+function requireAuth(redirectUrl = "index.html") {
+  const activeUser = getActiveUser();
+  console.log("Active user:", activeUser);
+
+  if (!activeUser) {
+    console.log("No active user, redirecting to", redirectUrl);
+    window.location.href = redirectUrl;
+  }
+}
+
+requireAuth();
+
 // Menu Toggle function
 function menuToggle() {
   const navLinks = document.getElementById("navLinks");

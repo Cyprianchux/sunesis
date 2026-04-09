@@ -1,3 +1,19 @@
+/* ---------- SHARED AUTH HELPERS ---------- */
+function getActiveUser() {
+  const sessionUser = sessionStorage.getItem("sunesis_user");
+  const rememberUser = localStorage.getItem("sunesis_user");
+  const isRemembered = localStorage.getItem("sunesis_remember");
+
+  return sessionUser || (isRemembered ? rememberUser : null);
+}
+
+function logout() {
+  sessionStorage.clear();
+  localStorage.removeItem("sunesis_remember");
+  localStorage.removeItem("sunesis_user");
+  window.location.href = "index.html";
+}
+
 // UI TOGGLE
 function showRegister() {
   loginBox.classList.add("hidden");
@@ -50,6 +66,23 @@ function validatePassword(password, prefix) {
   }
 }
 
+// Reset validation colors to red (remove "valid" class)
+function resetValidationColors(prefix) {
+  const lengthRule = document.getElementById(prefix + "-length");
+  const upperRule = document.getElementById(prefix + "-uppercase");
+  const numberRule = document.getElementById(prefix + "-number");
+
+  [lengthRule, upperRule, numberRule].forEach(rule => {
+    if (rule) rule.classList.remove("valid");
+  });
+}
+
+// Reset all validation colors for both register and login
+function resetAllValidationColors() {
+  resetValidationColors("reg");
+  resetValidationColors("login");
+}
+
 //Event listeners for password typing
 // REGISTER typing
 regPass.addEventListener("input", () => {
@@ -73,7 +106,7 @@ async function hashPassword(password) {
 
 // REGISTER
 async function register() {
-  const username = regUser.value.trim();
+  const username = regUser.value.trim().toLowerCase();
   const password = regPass.value;
   const confirmPassword = confirmPass.value;
 
@@ -118,7 +151,7 @@ async function register() {
 
 // LOGIN
 async function login() {
-  const username = loginUser.value.trim();
+  const username = loginUser.value.trim().toLowerCase();
   const password = loginPass.value;
 
   const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
@@ -220,6 +253,11 @@ function showPopup(message, type = "info") {
 
   popup.textContent = message;
   popup.className = `popup show ${type}`;
+
+  // Reset validation colors if error popup
+  if (type === "error") {
+    resetAllValidationColors();
+  }
 
   setTimeout(() => {
     popup.classList.remove("show");
