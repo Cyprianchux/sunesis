@@ -114,7 +114,7 @@ All data is stored safely in your browser. No external servers are required.
 
 ### Layer & Technology Used
 
-**Frontend:** HTML5, CSS#, JavaScript
+**Frontend:** HTML5, CSS3, JavaScript
 **Storage:** IndexedDB
 **Security:** Web Crypto API (SHA-256)
 **Architecture:** Client-side style
@@ -177,7 +177,15 @@ It is **not intended for sensitive or production-level data**.
 - Hashed using SHA-256
 - Session based access control
 - Remember-me stored separately
+- Usernames are case-insensitive for login (stored in lowercase, displayed with first letter capitalized)
 - For production: backend auth is recommended
+
+## Recent Updates
+
+- **Authentication Improvements**: Enhanced auth guard with shared helpers for consistent access control across pages
+- **Case-Insensitive Usernames**: Login and registration now handle usernames case-insensitively while displaying them with proper capitalization
+- **UI Validation**: Password validation colors reset to invalid state on errors or input clearing for better user feedback
+- **Code Refactoring**: Improved code organization with reusable auth functions
 
 ---
 
