@@ -11,7 +11,7 @@
       sizes="512x512"
     />
     <link rel="stylesheet" href="all.css" />
-    <link rel="stylesheet" href="slide-view.css" />
+    <link rel="stylesheet" href="board.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -25,7 +25,7 @@
       </div>
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search..." />
-        <button id="searchBtn" data-tooltip="Search" aria-label="Search">
+        <button id="searchBtn">
           <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
         </button>
       </div>
@@ -33,7 +33,10 @@
       <div class="top-right">
         <ul class="nav-links" id="navLinks">
           <li>
-            <a href="account.html" data-tooltip="Home" aria-label="Home"
+            <a
+              href="account.html"
+              data-tooltip="Home page"
+              aria-label="Home page"
               ><i class="fa-solid fa-house-user"></i
             ></a>
           </li>
@@ -45,7 +48,14 @@
               ><i class="fa-solid fa-tv"></i
             ></a>
           </li>
-          <li><a href="slide-admin.html">Setup</a></li>
+          <li>
+            <a
+              href="slide-admin.html"
+              data-tooltip="Manage slides"
+              aria-label="Manage slides"
+              >Setup</a
+            >
+          </li>
           <li id="topicsMenu" class="topics-menu">
             Topics
             <div class="topics-dropdown">
@@ -69,40 +79,42 @@
       </div>
     </div>
 
-    <main class="container">
-      <!-- Slide Display -->
-      <section class="display-slide">
-        <div id="slideDisplay" class="slide-viewer">
-          <button id="prevArrow" class="arrow-btn" disabled>&#10094;</button>
-          <button id="nextArrow" class="arrow-btn" disabled>&#10095;</button>
-
-          <p>Select a topic to view slides</p>
+    <main>
+      <div class="board-wrapper">
+        <!-- DISPLAY BOARD -->
+        <div class="board-screen" id="boardScreen">
+          <p class="board-placeholder" id="boardPlaceholder">
+            Start typing below...
+          </p>
         </div>
-      </section>
+
+        <!-- CONTROLS -->
+        <div class="board-controls">
+          <textarea
+            id="boardInput"
+            placeholder="Type here..."
+            rows="2"
+          ></textarea>
+
+          <div class="board-buttons">
+            <button id="addBoardBtn">
+              <i class="fa-solid fa-plus"></i> Enter
+            </button>
+
+            <button id="deleteLastBtn">
+              <i class="fa-solid fa-delete-left"></i> Delete Last
+            </button>
+
+            <button id="clearAllBtn">
+              <i class="fa-solid fa-trash"></i> Clear All
+            </button>
+          </div>
+        </div>
+      </div>
     </main>
 
+    <script src="backend-client.js"></script>
     <script src="sunesis.js"></script>
-    <script>
-      const topicsMenu = document.getElementById("topicsMenu");
-      const topicsDropdown = document.querySelector(".topics-dropdown");
-      if (topicsMenu && topicsDropdown) {
-        // Toggle dropdown when clicking "Topics"
-        topicsMenu.addEventListener("click", (e) => {
-          e.stopPropagation();
-          topicsDropdown.style.display =
-            topicsDropdown.style.display === "block" ? "none" : "block";
-        });
-
-        // Prevent clicks inside dropdown from closing it
-        topicsDropdown.addEventListener("click", (e) => {
-          e.stopPropagation();
-        });
-
-        // Close only when clicking truly outside
-        document.addEventListener("click", () => {
-          topicsDropdown.style.display = "none";
-        });
-      }
-    </script>
+    <script src="board.js"></script>
   </body>
 </html>

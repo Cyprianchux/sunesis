@@ -64,6 +64,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   background: floralwhite;
   padding-left: 10px;
+  outline: none;
 }
 
 .search-bar button {
@@ -156,6 +157,53 @@ button:active {
 .nav-links a:hover {
   color: rgba(255, 241, 240, 0.7);
   transition: 0.6s ease;
+}
+
+.nav-links a[data-tooltip],
+.search-bar button[data-tooltip] {
+  position: relative;
+}
+
+.nav-links a[data-tooltip]::after,
+.search-bar button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.nav-links a[data-tooltip]::before,
+.search-bar button[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.nav-links a[data-tooltip]:hover::after,
+.nav-links a[data-tooltip]:hover::before,
+.search-bar button[data-tooltip]:hover::after,
+.search-bar button[data-tooltip]:hover::before {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Topics menu dropdown */

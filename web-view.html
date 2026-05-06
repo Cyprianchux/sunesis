@@ -26,7 +26,7 @@
       </div>
       <div class="search-bar">
         <input type="text" id="searchInput" placeholder="Search..." />
-        <button id="searchBtn">
+        <button id="searchBtn" data-tooltip="Search" aria-label="Search">
           <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
         </button>
       </div>
@@ -34,10 +34,17 @@
       <div class="top-right">
         <ul class="nav-links" id="navLinks">
           <li>
-            <a href="account.html"><i class="fa-solid fa-house-user"></i></a>
+            <a href="account.html" data-tooltip="Home" aria-label="Home"
+              ><i class="fa-solid fa-house-user"></i
+            ></a>
           </li>
           <li>
-            <a href="slide-view.html"><i class="fa-solid fa-tv"></i></a>
+            <a
+              href="slide-view.html"
+              data-tooltip="View slides"
+              aria-label="View slides"
+              ><i class="fa-solid fa-tv"></i
+            ></a>
           </li>
           <li><a href="slide-admin.html">Setup</a></li>
           <li id="topicsMenu" class="topics-menu">
