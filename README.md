@@ -1,5 +1,7 @@
 # Sunesis — Intelligent Learning & Knowledge Presentation Platform
 
+#### Click <a href="https://sunesis.vercel.app">here</a> to view the website.
+
 ## What is Sunesis?
 
 **Sunesis** is a simple, easy-to-use learning and presentation web platform. It allows users to:
@@ -191,10 +193,4 @@ It is **not intended for sensitive or production-level data**.
 
 ## Author
 
-Developed by **CyprianchuX**
-
----
-
-## License
-
-This project is for educational and learning purposes.
+Owned and Developed by **CyprianchuX**
