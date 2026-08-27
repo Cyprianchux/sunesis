@@ -1,5 +1,8 @@
 (function () {
-  const apiBase = window.SUNESIS_API_URL || `${window.location.origin}/api/server`;
+  const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const apiBase =
+    window.SUNESIS_API_URL ||
+    (isLocalHost ? "http://localhost:3000" : `${window.location.origin}/api`);
 
   async function request(path, options = {}) {
     const token =
