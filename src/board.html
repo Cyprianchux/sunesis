@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Slides | Sunesis</title>
+    <link
+      rel="icon"
+      href="./images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/board.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="top-banner">
+      <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Sunesis home">
+          <img src="./images/sunesisBG2.png" alt="" />
+          <span>sunesis</span>
+        </a>
+      </header>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchBtn">
+          <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a
+              href="slide-view.html"
+              data-tooltip="Slide view"
+              aria-label="Web view"
+              ><i class="fa-solid fa-tv"></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="slide-admin.html"
+              data-tooltip="Manage slides"
+              aria-label="Manage slides"
+              >Setup</a
+            >
+          </li>
+
+          <li id="topicsMenu" class="topics-menu">
+            Notes
+            <div class="topics-dropdown">
+              <select id="savedNotesSelect">
+                <option value="">-- Load Write-ups --</option>
+              </select>
+            </div>
+          </li>
+          <!--
+          <li id="topicsMenu" class="topics-menu">
+            Topics
+            <div class="topics-dropdown">
+              <select id="topicSelect">
+                <option value="">Choose a topic</option>
+              </select>
+            </div>
+          </li>
+-->
+          <li>
+            <a
+              href="#"
+              onclick="
+                logout();
+                return false;
+              "
+              >Logout</a
+            >
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      </div>
+    </div>
+
+    <div id="popup" class="popup hidden"></div>
+
+    <main>
+      <div class="board-wrapper">
+        <!-- TOOLBAR -->
+        <div class="board-toolbar">
+          <button id="lightToggleBtn" title="Toggle Light/Dark">
+            <i class="fa-solid fa-circle-half-stroke"></i>
+          </button>
+
+          <button id="fontDecreaseBtn" title="Decrease Font Size">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+
+          <button id="fontIncreaseBtn" title="Increase Font Size">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+
+          <button id="alignLeftBtn" title="Align Left">
+            <i class="fa-solid fa-align-left"></i>
+          </button>
+
+          <button id="alignCenterBtn" title="Align Center">
+            <i class="fa-solid fa-align-center"></i>
+          </button>
+
+          <button id="bulletBtn" title="Bullet Point">
+            <i class="fa-solid fa-list-ul"></i>
+          </button>
+        </div>
+
+        <!-- WRITING BOARD (MS WORD STYLE) -->
+        <div
+          class="board-screen"
+          id="boardScreen"
+          contenteditable="true"
+          spellcheck="true"
+        ></div>
+
+        <p class="board-tip">Enter = new line | Shift + Enter = Save</p>
+
+        <!-- CONTROLS -->
+        <div class="board-buttons">
+          <button id="saveBoardBtn">
+            <i class="fa-solid fa-floppy-disk"></i> Enter
+          </button>
+
+          <button id="deleteLastBtn">
+            <i class="fa-solid fa-delete-left"></i> Delete Last
+          </button>
+
+          <button id="clearAllBtn">
+            <i class="fa-solid fa-trash"></i> Clear All
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script src="./js/api-client.js"></script>
+    <script src="./js/sunesis.js"></script>
+    <script src="./js/board.js"></script>
+  </body>
+</html>

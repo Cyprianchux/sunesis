@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Sunesis</title>
+    <link
+      rel="icon"
+      href="./images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/account.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="top-banner">
+      <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Sunesis home">
+          <img src="./images/sunesisBG2.png" alt="" />
+          <span>sunesis</span>
+        </a>
+      </header>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchBtn">
+          <i class="fa-solid fa-circle-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a
+              href="slide-admin.html"
+              data-tooltip="Manage slides"
+              aria-label="Manage slides"
+              >Setup</a
+            >
+          </li>
+          <li>
+            <a
+              href="board.html"
+              data-tooltip="Text Board"
+              aria-label="Text Board"
+              >Board</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              data-tooltip="Back to Home"
+              onclick="
+                logout();
+                return false;
+              "
+              >Logout</a
+            >
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      </div>
+    </div>
+
+    <div class="banner">
+      <h1>Welcome, <span id="loginUser"></span></h1>
+      <p>Select a topic to continue</p>
+      <!--    <button class="back-btn" onclick="logout()">← Logout</button> -->
+    </div>
+
+    <div class="topics-container" id="topicsContainer">
+      <!-- Auto-generated topic cards from slide-admin -->
+    </div>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="/src/footer-pages?page=platform-overview"
+            >Platform Overview</a
+          >
+          <a href="/src/footer-pages?page=solutions">Solutions</a>
+          <a href="/src/footer-pages?page=how-it-works">How It Works</a>
+          <a href="/src/footer-pages?page=safety-approach">Safety Approach</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="/src/footer-pages?page=help-center">Help Center</a>
+          <a href="/src/footer-pages?page=guides">Guides</a>
+          <a href="/src/footer-pages?page=updates">Updates</a>
+          <a href="/src/footer-pages?page=community">Community</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="/src/footer-pages?page=privacy-policy">Privacy Policy</a>
+          <a href="/src/footer-pages?page=terms-of-use">Terms of Use</a>
+          <a href="/src/footer-pages?page=cookies">Cookies</a>
+          <a href="/src/footer-pages?page=data-protection">Data Protection</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="/src/footer-pages?page=about-sunesis">About Sunesis</a>
+          <a href="/src/footer-pages?page=contact">Contact</a>
+          <a href="/src/footer-pages?page=careers">Careers</a>
+          <a href="/src/footer-pages?page=partnerships">Partnerships</a>
+        </div>
+      </div>
+
+      <p class="footer-copy">© 2026 Sunesis. All rights reserved.</p>
+    </footer>
+
+    <div id="popup" class="popup"></div>
+
+    <script src="./js/sunesis.js"></script>
+    <script src="./js/api-client.js"></script>
+  </body>
+</html>

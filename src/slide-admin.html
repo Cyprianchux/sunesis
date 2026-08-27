@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Manager | Sunesis</title>
+    <link
+      rel="icon"
+      href="./images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/slide-view.css" />
+    <link rel="stylesheet" href="css/slide-admin.css" />
+  </head>
+  <body>
+    <div class="top-banner">
+      <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Sunesis home">
+          <img src="./images/sunesisBG2.png" alt="" />
+          <span>sunesis</span>
+        </a>
+      </header>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search slides..." />
+        <button id="searchBtn" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a
+              href="slide-view.html"
+              data-tooltip="View slides"
+              aria-label="View slides"
+              ><i class="fa-solid fa-tv"></i
+            ></a>
+          </li>
+          <li>
+            <a href="board.html" data-tooltip="Typing board">Board</a>
+          </li>
+          <li id="topicsMenu" class="topics-menu">
+            Topics
+            <div class="topics-dropdown">
+              <select id="navTopicSelect">
+                <option value="">Choose a topic</option>
+              </select>
+            </div>
+          </li>
+          <li>
+            <a
+              href="#"
+              onclick="
+                logout();
+                return false;
+              "
+              >Logout</a
+            >
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()" aria-label="Menu">
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <div id="popup" class="popup hidden"></div>
+
+    <!-- Floating Action Button -->
+    <button id="floatingAddBtn" class="floating-btn" title="Add a Slide">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <main class="admin-main">
+      <header class="page-head">
+        <h1>Content Manager</h1>
+        <p>Create topics, compose slides, and organize your knowledge base.</p>
+      </header>
+
+      <div class="admin-layout">
+        <aside class="admin-forms">
+          <!-- Create New Topic -->
+          <section class="panel create-topic">
+            <button
+              class="panel-toggle"
+              data-tooltip="Maximize"
+              aria-label="Maximize"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <h2><i class="fa-solid fa-folder-plus"></i> Create a New Topic</h2>
+            <label for="topicName">Topic name</label>
+            <input
+              type="text"
+              id="topicName"
+              placeholder="e.g. Pharmacology Basics"
+              required
+            />
+            <button id="createTopicBtn">
+              <i class="fa-solid fa-plus"></i> Create Topic
+            </button>
+            <div class="wide-create-topic">
+              <img src="./images/sunesisIcon2.png" alt="" />
+            </div>
+          </section>
+
+          <!-- Add Slide -->
+          <section class="panel add-slide">
+            <button
+              class="panel-toggle"
+              data-tooltip="Maximize"
+              aria-label="Maximize"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <h2><i class="fa-solid fa-layer-group"></i> Add a Slide</h2>
+
+            <label for="topicSelect">Select topic</label>
+            <select id="topicSelect">
+              <option value="">-- Choose a topic --</option>
+            </select>
+
+            <label for="slide-title">Slide title</label>
+            <textarea
+              id="slide-title"
+              placeholder="Enter slide title"
+              rows="1"
+            ></textarea>
+
+            <label for="slide-desc"
+              >Slide description <span>(optional)</span></label
+            >
+            <textarea
+              id="slide-desc"
+              placeholder="Enter slide description"
+              rows="4"
+            ></textarea>
+
+            <label for="slide-media"
+              >Upload media <span>(optional)</span></label
+            >
+            <input type="file" id="slide-media" accept="image/*,video/*" />
+
+            <button id="addSlideBtn">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Add Slide
+            </button>
+          </section>
+        </aside>
+
+        <!-- Existing content -->
+        <section class="panel slide-list">
+          <h2>
+            <i class="fa-solid fa-book-open"></i> Existing Topics &amp; Slides
+          </h2>
+          <div id="slideContainer"></div>
+        </section>
+      </div>
+
+      <div class="danger-zone">
+        <button id="deleteAllBtn">
+          <i class="fa-solid fa-trash-can"></i> Delete All Topics &amp; Slides
+        </button>
+      </div>
+    </main>
+
+    <script src="./js/sunesis.js"></script>
+    <script src="./js/api-client.js"></script>
+    <script>
+      document.querySelectorAll(".panel-toggle").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const panel = btn.closest(".panel");
+          const maximized = panel.classList.toggle("maximized");
+          const icon = btn.querySelector("i");
+          icon.classList.toggle("fa-plus", !maximized);
+          icon.classList.toggle("fa-minus", maximized);
+          const label = maximized ? "Minimize" : "Maximize";
+          btn.dataset.tooltip = label;
+          btn.setAttribute("aria-label", label);
+        });
+      });
+    </script>
+  </body>
+</html>

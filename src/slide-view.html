@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Slides | Sunesis</title>
+    <link
+      rel="icon"
+      href="./images/sunesisIcon.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link rel="stylesheet" href="css/all.css" />
+    <link rel="stylesheet" href="css/slide-view.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="top-banner">
+      <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Sunesis home">
+          <img src="./images/sunesisBG2.png" alt="" />
+          <span>sunesis</span>
+        </a>
+      </header>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchBtn">
+          <i class="fa-solid fa-magnifying-glass-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="top-right">
+        <ul class="nav-links" id="navLinks">
+          <li>
+            <a
+              href="web-view.html"
+              data-tooltip="Web view"
+              aria-label="Web view"
+              ><i class="fa-solid fa-tv"></i
+            ></a>
+          </li>
+          <li>
+            <a
+              href="slide-admin.html"
+              data-tooltip="Manage slides"
+              aria-label="Manage slides"
+              >Setup</a
+            >
+          </li>
+          <li><a href="board.html">Board</a></li>
+          <li id="topicsMenu" class="topics-menu">
+            Topics
+            <div class="topics-dropdown">
+              <select id="topicSelect">
+                <option value="">Choose a topic</option>
+              </select>
+            </div>
+          </li>
+          <li>
+            <a
+              href="#"
+              onclick="
+                logout();
+                return false;
+              "
+              >Logout</a
+            >
+          </li>
+        </ul>
+        <button class="nav-toggle" onclick="menuToggle()">☰</button>
+      </div>
+    </div>
+
+    <main class="container">
+      <!-- Slide Display -->
+      <section class="display-slide">
+        <div id="slideDisplay" class="slide-viewer">
+          <button id="prevArrow" class="arrow-btn" disabled>&#10094;</button>
+          <button id="nextArrow" class="arrow-btn" disabled>&#10095;</button>
+
+          <p>Select a topic to view slides</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="./js/api-client.js"></script>
+    <script src="./js/sunesis.js"></script>
+  </body>
+</html>

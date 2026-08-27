@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Footer Info | Sunesis</title>
+    <link rel="icon" href="images/sunesisIcon.png" type="image/png" />
+    <link rel="stylesheet" href="css/footer.css" />
+  </head>
+  <body>
+    <div class="body-container">
+      <section class="footer-info">
+        <header class="footer-info-image">
+          <div class="brand" href="../index.html" aria-label="Sunesis home">
+            <img src="./images/sunesisBG2.png" alt="" />
+            <span>sunesis</span>
+          </div>
+        </header>
+        <div class="footer-info-content">
+          <h1 id="pageTitle">Sunesis</h1>
+          <p id="pageIntro"></p>
+          <div class="cta">
+            <a class="primary" href="../index.html">Login or Register</a>
+            <a class="secondary" href="account.html">Back to Dashboard</a>
+          </div>
+        </div>
+      </section>
+
+      <div id="contentCards"></div>
+
+      <footer>
+        <p>
+          © 2026 Sunesis. A browser-first platform for learning and
+          presentation.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      /* ---------- AUTH GUARD ---------- */
+      function getActiveUser() {
+        const sessionUser = sessionStorage.getItem("sunesis_user");
+        const rememberUser = localStorage.getItem("sunesis_user");
+        const isRemembered = localStorage.getItem("sunesis_remember");
+
+        return sessionUser || (isRemembered ? rememberUser : null);
+      }
+
+      function requireAuth(redirectUrl = "../index.html") {
+        const activeUser = getActiveUser();
+        console.log("Active user:", activeUser);
+
+        if (!activeUser) {
+          console.log("No active user, redirecting to", redirectUrl);
+          window.location.href = redirectUrl;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        requireAuth();
+      });
+
+      const pages = {
+        "platform-overview": {
+          title: "Platform Overview",
+          intro:
+            "Sunesis is a browser-based learning and content presentation platform that turns structured knowledge into interactive slides and web-style content views. It helps learners, educators, and teams organize information clearly and access it in a simple, modern experience.",
+          sections: [
+            {
+              heading: "What Sunesis does",
+              paragraph:
+                "Sunesis turns structured information into clear, accessible learning experiences that feel modern and easy to navigate. It is designed to simplify the way individuals and organizations manage information, collaborate, and achieve their goals. The platform provides a secure, user-friendly environment where users can access tools, services, and resources that improve productivity and decision-making.",
+            },
+            {
+              heading: "Why it matters",
+              paragraph:
+                "Users can create accounts, build topics, add slides with text, images, and videos, and explore content in slide view or full web view. The platform is designed to make knowledge easy to follow and easy to manage for individuals, educational institutions and training teams. By continuously improving our platform and listening to user feedback, Sunesis remains committed to delivering exceptional value and a trusted digital experience.",
+            },
+            {
+              heading: "Who it is for",
+              items: [
+                "Students and learners who need structured information.",
+                "Educators and presenters creating clear content flow.",
+                "Organizations that want a lightweight knowledge hub.",
+              ],
+            },
+            {
+              heading: "Key capabilities",
+              items: [
+                "Create and organize learning topics with ease.",
+                "Present content in slide view or full web view.",
+                "Search, manage, and revisit content from one place.",
+              ],
+            },
+            {
+              heading: "How it works",
+              items: [
+                "Register or log in to your Sunesis account.",
+                "Browse available topics and slides.",
+                "Create your own materials and manage them with clear permissions and ownership.",
+              ],
+            },
+          ],
+        },
+        solutions: {
+          title: "Solutions",
+          intro:
+            "Sunesis supports learners, educators, and teams looking for a clear way to share and explore knowledge.",
+          sections: [
+            {
+              heading: "Collaboration and communication",
+              paragraph:
+                "Sunesis enables effective collaboration by providing secure channels for sharing information, coordinating activities, and working together in real time. Our tools help users organize tasks, manage workflows, and improve operational workflows through intuitive digital processes.",
+            },
+            {
+              heading: "Data management",
+              paragraph:
+                "Users can securely store, manage, and access information while maintaining accuracy, consistency, and control over their data.",
+            },
+            {
+              heading: "Insights and analytics",
+              paragraph:
+                "The plaform helps users to make informed decisons through data-driven insights of the number of contents contained in a topic, and search through to find a topic.",
+            },
+            {
+              heading: "Built for practical use",
+              items: [
+                "Structured study content for students and classrooms.",
+                "Visual content presentations for educators and trainers.",
+                "Simple knowledge hubs for organizations and communities.",
+              ],
+            },
+          ],
+        },
+        "how-it-works": {
+          title: "How It Works",
+          intro:
+            "Using Sunesis is simple and straightforward. The experience is designed to be approachable, with a simple flow from sign-in to creating and sharing content.",
+          sections: [
+            {
+              heading: "The simple flow",
+              items: [
+                "Register or log in to your Sunesis account.",
+                "Browse available topics and slides.",
+                "Create your own materials and manage them with clear permissions.",
+              ],
+            },
+            {
+              heading: "Navigating the web application",
+              items: [
+                "<b>Create an account:</b> Users register and create a secure account to access platform services and features.",
+                "<b>Create topics and content:</b> Users can create topics and add contents that can be text, media (image or video), or both.",
+                "<b>Continous improvement:</b> Sunesis regularly updates based on user feedback and technological advancements.",
+              ],
+            },
+          ],
+        },
+        "safety-approach": {
+          title: "Safety Approach",
+          intro:
+            "Sunesis emphasizes secure access, clear permissions, and careful handling of user content.",
+          sections: [
+            {
+              heading: "Security and trust",
+              items: [
+                "Protected account access with hashed credentials.",
+                "Permission-based content management for safe collaboration.",
+                "Reliable browser-based storage with a clear local-first approach.",
+              ],
+            },
+            {
+              heading: "Our Safety Approach",
+              items: [
+                "<b>Data Security:</b> We use secure technologies and encryption protocols to safeguard information during transmission and storage.",
+                "<b>Monitoring and Protection:</b> Our systems are continuously monitored to identify potential threats, suspicious activity, and security vulnerabilities.",
+                "<b>Privacy First:</b> We collect and process information responsibly, respecting user privacy and complying with applicable data protection regulations.",
+                "<b>Continuous Improvement:</b> Security practices are regularly reviewed and updated to address emerging threats and maintain a secure environment for all users.",
+                "<b>User Responsibility:</b> Users are encouraged to maintain strong passwords, protect account credentials, and report any suspected security concerns promptly.",
+              ],
+            },
+          ],
+        },
+        "help-center": {
+          title: "Help Center",
+          intro:
+            "Welcome to the Sunesis Help Center. Find information for getting started, managing topics and contents, and navigating the platform.",
+          sections: [
+            {
+              heading: "Support options",
+              items: [
+                "Step-by-step guidance for new users.",
+                "Tips for creating slides and managing topics.",
+                "Answers for common account and navigation questions.",
+              ],
+            },
+            {
+              heading: "Frequently Asked Questions (FAQ)",
+              attach1: " ",
+            },
+            {
+              heading: "What is Sunesis?",
+              paragraph:
+                "Sunesis is a platform designed to help individuals and organizations improve productivity, collaboration, and information management through modern technology.",
+            },
+            {
+              heading: "How do I create an account?",
+              paragraph:
+                "Users can register an account through the platform's home (sign-up) page by providing the required information, marjorly, a username and password.",
+            },
+            {
+              heading: "Is my information secure?",
+              paragraph:
+                "Yes. Sunesis implements industry-standard security measures to protect user information.",
+            },
+            {
+              heading: "Can I access Sunesis on mobile devices?",
+              paragraph:
+                "Yes. The platform is designed to provide a seamless experience across desktop, tablet, and mobile devices.",
+            },
+            {
+              heading: "How do I contact support?",
+              paragraph:
+                "Support requests can be submitted through our Contact page to the designated contact channels.",
+            },
+            {
+              heading: "Are new features added regularly?",
+              paragraph:
+                "Yes. We continuously improve the platform and release updates based on innovative ideas and user feedback.",
+            },
+            {
+              heading: "Need Additional Help?",
+              paragraph:
+                "If you cannot find the information you're looking for, contact our support team for personalized assistance. Our goal is to make your experience with Sunesis as smooth and productive as possible.",
+            },
+          ],
+        },
+        guides: {
+          title: "Guides",
+          intro:
+            "Explore practical guidance for using Sunesis in a smooth, confident way.",
+          sections: [
+            {
+              heading: " ",
+              paragraph:
+                "Go through detailed tutorials, best practices, and educational resources on the dashboard, designed to help you maximize the value of Sunesis.",
+            },
+            {
+              heading: "Available Resources",
+              items: [
+                "Getting Started Guide",
+                "User Tutorials",
+                "Feature Walkthroughs",
+                "Security Best Practices",
+                "Productivity Tips",
+                "Frequently Asked Questions",
+              ],
+            },
+            {
+              heading: "What you will find",
+              items: [
+                "Quick-start guidance for first-time visitors.",
+                "Best practices for organizing content.",
+                "Reference ideas for building better presentations.",
+              ],
+            },
+          ],
+        },
+        updates: {
+          title: "Updates",
+          intro:
+            "Stay informed about the latest improvements, feature releases, performance enhancements, and announcements.",
+          sections: [
+            {
+              heading: " ",
+              paragraph:
+                "Sunesis continues to grow with improvements to presentation, navigation, and content management.",
+            },
+            {
+              heading: "What You'll Find",
+              items: [
+                "New Feature Releases",
+                "Platform Improvements",
+                "Security Updates",
+                "Maintenance Notices",
+                "Company Announcements",
+              ],
+            },
+            {
+              heading: "Recent focus areas",
+              items: [
+                "Better usability across the learning experience.",
+                "More polished content views and navigation.",
+                "Improved consistency between desktop and mobile use.",
+              ],
+            },
+            {
+              heading: " ",
+              paragraph:
+                "We continuously improve Sunesis to provide a better experience for all users.",
+            },
+          ],
+        },
+        community: {
+          title: "Community",
+          intro:
+            "Sunesis is built to support shared learning and collaborative knowledge sharing.",
+          sections: [
+            {
+              heading: " ",
+              paragraph:
+                "Our community helps shape the future of Sunesis through engagement, feedback, and shared learning. Together, we can build a stronger and more innovative ecosystem.",
+            },
+            {
+              heading: "Community Benefits",
+              items: [
+                "Discussions and Knowledge Sharing",
+                "User Feedback Opportunities",
+                "Product Suggestions",
+                "Networking and Collaboration",
+              ],
+            },
+            {
+              heading: "Community value",
+              items: [
+                "Engage with content created by learners and educators.",
+                "Discover new topics and presentations over time.",
+                "Build a more connected knowledge experience together.",
+              ],
+            },
+          ],
+        },
+        "privacy-policy": {
+          title: "Privacy Policy",
+          intro:
+            "Sunesis respects your privacy and is committed to protecting your personal information.",
+          sections: [
+            {
+              heading: " ",
+              paragraph: "Last updated: <b>June 2026</b>",
+            },
+            {
+              heading: "Privacy commitments",
+              items: [
+                "Local-first content storage for a lightweight experience.",
+                "Secure account handling and role-based access.",
+                "Respect for user privacy and clear, simple account use.",
+              ],
+            },
+            {
+              heading: "Information we collect",
+              items: [
+                "Account registration information such as username and password for user authentication.",
+                "Information submitted through platform features and services.",
+                "Device, browser, and usage information.",
+                "Communication records when users contact support.",
+              ],
+            },
+            {
+              heading: "We use collected information to:",
+              items: [
+                "provide and improve our services.",
+                "Manage user accounts.",
+                "Respond to inquires and support requests.",
+                "Enhace platform security.",
+                "Comply with legal obligations.",
+              ],
+            },
+            {
+              heading: "Information sharing",
+              paragraph:
+                "Sunesis does not sell personal information. Information may be shared with trusted service providers who support platform operations or when required by law.",
+            },
+            {
+              heading: "Data security",
+              paragraph:
+                "We implement reasonable technical and organizational measures to protect personal information against unauthorized access, disclosure, alteration, or destruction.",
+            },
+            {
+              heading: "User rights",
+              paragraph:
+                "Users may request access, correction, or deletion of their personal information, subject to applicable legal requirements.",
+            },
+            {
+              heading: "Changes to this policy",
+              paragraph:
+                "We may update this Privacy Policy periodically. Updates will be posted on this page with a revised effective date.",
+            },
+            {
+              heading: "Contact us",
+              paragraph:
+                "For privacy-related questions, please contact us through the support channels provided on the platform.",
+            },
+          ],
+        },
+        "terms-of-use": {
+          title: "Terms of Use",
+          intro:
+            "The terms reflect a simple expectation for respectful and responsible platform use. By accessing or using Sunesis, you agree to comply with these Terms of Use.",
+          sections: [
+            {
+              heading: " ",
+              paragraph: "Last updated: <b>June 2026</b>",
+            },
+            {
+              heading: "Acceptance of Terms",
+              paragraph:
+                "<b>Your use of the platform constitutes acceptance of the terms below and any related policies:</b>",
+            },
+            {
+              heading: "User Responsibilities",
+              items: [
+                "Users agree to provide accurate information.",
+                "Users agree to maintain account security.",
+                "Users agree to use the platform lawfully.",
+                "Users agree to respect the rights of other users.",
+              ],
+            },
+            {
+              heading: "Prohibited Activities",
+              items: [
+                "Users must not attempt unauthorized access to systems or accounts.",
+                "Users must not upload harmful or malicious content.",
+                "Users must not interfere with platform operations.",
+                "Users must not violate applicable laws or regulations.",
+              ],
+            },
+            {
+              heading: "Intellectual Property",
+              paragraph:
+                "All platform consent, branding, designs, and technology remain the property of Sunesis or its licensors unless otherwise stated.",
+            },
+            {
+              heading: "Service Availability",
+              paragraph:
+                "We strive to maintain uninterrupted access but do not guarantee that services will always be available without interruption.",
+            },
+            {
+              heading: "Limitation of Liability",
+              paragraph:
+                "Sunesis shall not be liable for indirect, incidental, or consequential damages arising from the use of the platform to the extent permitted by law.",
+            },
+            {
+              heading: "Termination",
+              paragraph:
+                "We reserve the right to suspend or terminate access to users who violate these terms.",
+            },
+            {
+              heading: "Changes to Terms",
+              paragraph:
+                "These terms may be updated periodically. Continued use of the platform after updates constitutes acceptance of the revised terms.",
+            },
+            {
+              heading: "Use Expectations",
+              items: [
+                "Use Sunesis for learning, presentations, and knowledge sharing.",
+                "Respect the content and permissions of other users.",
+                "Keep your account and materials secure and appropriate.",
+              ],
+            },
+          ],
+        },
+        cookies: {
+          title: "Cookies",
+          intro:
+            "Sunesis uses browser-based features that may rely on local storage and session preferences to improve convenience.",
+          sections: [
+            {
+              heading: " ",
+              paragraph: "Last updated: <b>June 2026</b>",
+            },
+            {
+              heading: "What Are Cookies?",
+              paragraph:
+                "Cookies are small text files stored on a user's device when visiting a website or using online services.",
+            },
+            {
+              heading: "Types of Cookies We Use",
+              items: [
+                "<b>Essential Cookies:</b> Required for basic platform functionality, authentication, and security.",
+                "<b>Performance Cookies:</b> Help us understand how users interact with the platform and improve service quality.",
+                "<b>Preference Cookies:</b> Remember user settings and preferences to provide a personalized experience.",
+                "<b>Analytics Cookies:</b> Provide aggregated information about platform usage and performance.",
+                "<b>Managing Cookies:</b> Users may control or disable cookies through browser settings. Some features may not function properly if cookies are disabled.",
+              ],
+            },
+            {
+              heading: "Updates",
+              paragraph:
+                "This Cookie Policy may be updated periodically to reflect changes in technology, regulations, or platform operations.",
+            },
+            {
+              heading: "Browser preferences",
+              items: [
+                "Remember your login choice when selected.",
+                "Keep your experience consistent across visits.",
+                "Support the simple flow of local content and account access.",
+              ],
+            },
+          ],
+        },
+        "data-protection": {
+          title: "Data Protection",
+          intro:
+            "Sunesis is committed to protecting personal data and ensuring responsible data processing practices.",
+          sections: [
+            {
+              heading: " ",
+              paragraph: "Last updated: <b>June 2026</b>",
+            },
+            {
+              heading: "Data Protection Principles",
+              paragraph:
+                "We process personal data according to the following principles: Lawfulness, fairness, transparency, accuracy, storage limitation, integrity, confidentiality, and accountability.",
+            },
+            {
+              heading: "Data Collection and Processing",
+              paragraph:
+                "Personal data is collected only when necessary to provide services, fulfill contractual obligations, improve user experience, or comply with legal requirements.",
+            },
+            {
+              heading: "Data Retention",
+              paragraph:
+                "Data is retained only for as long as necessary to fulfill the purposes for which it was collected or as required by law.",
+            },
+            {
+              heading: "Security Measures",
+              paragraph:
+                "We implement administrative, technical, and organizational safeguards designed to protect personal information from unauthorized access, misuse, or disclosure.",
+            },
+            {
+              heading: "Third-Party Service Providers",
+              paragraph:
+                "Where necessary, trusted third-party providers may process data on our behalf under appropriate contractual and security obligations.",
+            },
+            {
+              heading: "User Rights",
+              attach1:
+                "Subject to applicable law, users may request the following:",
+            },
+            {
+              heading: " ",
+              attach2: [
+                "Access to personal data.",
+                "Correction of inaccurate information.",
+                "Deletion of personal data.",
+                "Restriction of processing.",
+              ],
+            },
+            {
+              heading: "Contact and Complaints",
+              paragraph:
+                "Questions regarding data protection practices may be submitted through our designated support channels. Users also retain the right to contact applicable regulatory authorities where permitted by law.",
+            },
+            {
+              heading: "Data handling principles",
+              items: [
+                "Use browser storage for a lightweight experience.",
+                "Maintain permission-based access to content.",
+                "Protect account interactions with secure authentication measures.",
+              ],
+            },
+          ],
+        },
+        "about-sunesis": {
+          title: "About Sunesis",
+          intro:
+            "Sunesis is a knowledge presentation platform that turns structured information into usable content.",
+          sections: [
+            {
+              heading: "Why Sunesis Exists",
+              items: [
+                "To help make information easier to follow.",
+                "To support learning, teaching, and content creation in one place.",
+                "To keep the experience simple, polished, and access-friendly.",
+              ],
+            },
+            {
+              heading: "Our Mission",
+              paragraph:
+                "To provide innovative digital solutions that enable individuals, teams, and organizations to achieve sustainable growth and operational excellence.",
+            },
+            {
+              heading: "Our Vision",
+              paragraph:
+                "To become a trusted global platform recognized for innovation, reliability, security, and positive impact.",
+            },
+            {
+              heading: "Our Values",
+              items: [
+                "Innovation",
+                "Integrity",
+                "Security",
+                "Transparency",
+                "Customer/user sucess",
+                "Continous improvement",
+              ],
+            },
+            {
+              heading: " ",
+              paragraph:
+                "At Sunesis, we are committed to building technology that creates value, fosters collaboration, and supports the evolving needs of our users.",
+            },
+          ],
+        },
+        contact: {
+          title: "Contact Us",
+          intro:
+            "WE ARE HERE TO HELP. Questions, feedback, or technical assistance needed, our team is ready to assist you.",
+          sections: [
+            {
+              heading: "Contact Us",
+              attach1:
+                "We strive to respond to all inquires as quickly as possible and provide timely support to our users. Send a message to:",
+            },
+            {
+              heading: " ",
+              attach2: [
+                "<b>https://www.linkedin/in/cyprianchux</b>",
+                "<b>https://www.x.com/cyprianchux</b>",
+              ],
+            },
+            {
+              heading: "Reach Out",
+              attach1:
+                "We value your feedback and look forward to hearing from you.",
+            },
+            {
+              heading: " ",
+              attach2: [
+                "Use the platform as a simple starting point for questions.",
+                "Share ideas for new learning experiences and features.",
+                "Continue the conversation through the Sunesis project workflow.",
+              ],
+            },
+          ],
+        },
+        careers: {
+          title: "Careers",
+          intro:
+            "Sunesis is a growing project for people interested in thoughtful digital learning and content presentation.",
+          sections: [
+            {
+              heading: "Build The Future With Us",
+              paragraph:
+                "At Sunesis, we're passionate about creating innovative solutions that make a difference. We welcome talented, motivated, and creative individuals who share our commitment to excellence and innovation.",
+            },
+            {
+              heading: "Why Work With Us",
+              items: [
+                "<b>Meaningful Impact:</b> Contribute to products and services that help users achieve their goals and improve their digital experiences.",
+                "<b>Growth Opportunities:</b> We support continuous learning, professional development, and career advancement.",
+                "<b>Collaborative Culture:</b> Work alongside developers in an environment that values teamwork, creativity, and innovation.",
+                "<b>Innovation-Driven Environment:</b> We encourage new ideas, experimentation, and continuous improvement.",
+              ],
+            },
+            {
+              heading: "Areas We Hire For",
+              items: [
+                "Software development",
+                "Product management",
+                "Design and user experience",
+                "Marketing and communications",
+                "Customer support",
+                "Business development",
+                "Data analytics",
+              ],
+            },
+            {
+              heading: "Future Opportunities",
+              items: [
+                "Design and product-minded contributors are welcome.",
+                "Front-end and learning experience work is a natural fit.",
+                "The platform continues to grow with new ideas and use cases.",
+              ],
+            },
+            {
+              heading: "Join Our Team",
+              paragraph:
+                "We're always interested in meeting talented individuals who are passionate about technology and innovation.",
+            },
+          ],
+        },
+        partnerships: {
+          title: "Partnerships",
+          intro:
+            "Let's grow together. Sunesis believes in the power of strategic partnerships to create greater value for customers and communities.",
+          sections: [
+            {
+              heading: "Potential collaboration areas",
+              items: [
+                "Educational institutions and training teams.",
+                "Content creators and digital learning partners.",
+                "Organizations looking for lightweight knowledge sharing tools.",
+              ],
+            },
+            {
+              heading: " ",
+              paragraph:
+                "Sunesis can support collaborations where shared learning and clear presentation matter. If you're interested in exploring partnership opportunities, we'd love to hear from you.",
+            },
+          ],
+        },
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const key = params.get("page");
+      const page = pages[key];
+
+      document.getElementById("pageTitle").textContent = page.title;
+      document.getElementById("pageIntro").textContent = page.intro;
+
+      const sections =
+        Array.isArray(page?.sections) && page.sections.length > 0
+          ? page.sections
+          : [
+              {
+                heading: page?.heading || "Add a heading here",
+                items: Array.isArray(page?.items) ? page.items : [],
+              },
+            ];
+
+      const cardsContainer = document.getElementById("contentCards");
+      cardsContainer.innerHTML = sections
+        .map(({ heading, items, paragraph, attach1, attach2 }) => {
+          if (paragraph) {
+            return `
+              <section class="content-card">
+                <h2>${heading}</h2>
+                <p>${paragraph}</p>
+              </section>
+            `;
+          } else if (attach1) {
+            return `
+              <section class="card1">
+                <h2>${heading}</h2>
+                <p>${attach1}</p>
+              </section>
+            `;
+          } else if (attach2) {
+            return `
+              <section class="card2">
+                <h2>${heading}</h2>
+                <ul>
+                  ${attach2.map((item) => `<li>${item}</li>`).join("")}
+                </ul>
+              </section>
+            `;
+          }
+
+          return `
+            <section class="content-card">
+              <h2>${heading}</h2>
+              <ul>
+                ${items.map((item) => `<li>${item}</li>`).join("")}
+              </ul>
+            </section>
+          `;
+        })
+        .join("");
+    </script>
+  </body>
+</html>
