@@ -142,8 +142,8 @@ server-side environment settings. Public registration always creates a `user`.
 Create the single admin account privately in Supabase by setting its `role` to
 `admin`; the browser never contains an admin username or admin secret. The
 service-role key must also remain server-side. Start the API locally with
-`pnpm start`; the browser client
-uses `/api/server` by default and can be pointed elsewhere with
+`pnpm start`; the browser client uses `/api` on Vercel and
+`http://localhost:3000` on local development. It can be pointed elsewhere with
 `window.SUNESIS_API_URL`.
 
 ---

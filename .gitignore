@@ -1,8 +1,9 @@
 node_modules/
 .env
 .env.*
-!.env.example
+.env.example
 
 supabase-seed.sql
 supabase.sql
 reset-supabase.sql
+supabase-tables.sql
