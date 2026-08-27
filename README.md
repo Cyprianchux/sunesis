@@ -92,9 +92,9 @@ All data is stored safely in your browser. No external servers are required.
 
 ### Persistent Storage
 
-- Uses IndexedDB for high-performance browser storage
-- Data persists across sessions
-- No server required
+- Supabase PostgreSQL stores registered users, topics, and slides
+- IndexedDB keeps a local copy for offline reading and editing
+- Local changes automatically sync when the connection returns
 
 ### Authentication System
 
@@ -117,18 +117,34 @@ All data is stored safely in your browser. No external servers are required.
 ### Layer & Technology Used
 
 **Frontend:** HTML5, CSS3, JavaScript
-**Storage:** IndexedDB
+**Storage:** Supabase PostgreSQL + IndexedDB offline cache
 **Security:** Web Crypto API (SHA-256)
 **Architecture:** Client-side style
 **UI Icons:** Font Awesome
 
 ---
 
-## Security Note (Important)
+## Supabase setup
 
-Sunesis uses browser storage for learning and demonstration purposes.
+1. Run `supabase.sql` in the Supabase SQL editor.
+2. Install dependencies with `pnpm install`.
+3. Configure the API environment:
 
-It is **not intended for sensitive or production-level data**.
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+JWT_SECRET=use-a-long-random-secret
+PORT=3000
+```
+
+Keep `.env` private and configure the same variables in the hosting provider's
+server-side environment settings. Public registration always creates a `user`.
+Create the single admin account privately in Supabase by setting its `role` to
+`admin`; the browser never contains an admin username or admin secret. The
+service-role key must also remain server-side. Start the API locally with
+`pnpm start`; the browser client
+uses `/api/server` by default and can be pointed elsewhere with
+`window.SUNESIS_API_URL`.
 
 ---
 
