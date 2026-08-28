@@ -4,6 +4,11 @@
       "source": "/:path.html",
       "destination": "/:path",
       "permanent": true
+    },
+    {
+      "source": "/src/:path.html",
+      "destination": "/src/:path",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -12,8 +17,28 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/:path",
-      "destination": "/:path.html"
+      "source": "/src/account",
+      "destination": "/src/account.html"
+    },
+    {
+      "source": "/src/board",
+      "destination": "/src/board.html"
+    },
+    {
+      "source": "/src/footer-pages",
+      "destination": "/src/footer-pages.html"
+    },
+    {
+      "source": "/src/slide-admin",
+      "destination": "/src/slide-admin.html"
+    },
+    {
+      "source": "/src/slide-view",
+      "destination": "/src/slide-view.html"
+    },
+    {
+      "source": "/src/web-view",
+      "destination": "/src/web-view.html"
     }
   ]
 }

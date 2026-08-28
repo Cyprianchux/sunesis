@@ -30,7 +30,7 @@ function getActiveUser() {
   return sessionUser || (isRemembered ? rememberUser : null);
 }
 
-function requireAuth(redirectUrl = "../index.html") {
+function requireAuth(redirectUrl = "/") {
   const activeUser = getActiveUser();
   console.log("Active user:", activeUser);
 

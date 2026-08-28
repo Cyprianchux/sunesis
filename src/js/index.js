@@ -13,7 +13,7 @@ function logout() {
   localStorage.removeItem("sunesis_user");
   localStorage.removeItem("sunesis_token");
   localStorage.removeItem("sunesis_role");
-  window.location.href = "index.html";
+  window.location.href = "/";
 }
 
 // Loading state management
