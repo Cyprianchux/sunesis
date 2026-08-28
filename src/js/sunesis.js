@@ -1289,7 +1289,7 @@ if (isAccountPage) {
 
     if (!activeUser) {
       showPopup("Access denied. Please login.", "error");
-      window.location.href = "../index.html";
+      window.location.href = "/";
       return;
     }
 
@@ -1355,7 +1355,7 @@ function renderDefaultTopics() {
           Sunesis.
         </p>
         <button
-          onclick="window.location.href='footer-pages.html?page=how-it-works'"
+          onclick="window.location.href='/src/footer-pages?page=how-it-works'"
         >
           View
         </button>
@@ -1369,20 +1369,20 @@ function openTopic(topicName) {
   localStorage.setItem("sunesis_selected_topic", topicName);
 
   // Navigate
-  window.location.href = `slide-view.html?topic=${encodeURIComponent(topicName)}`;
+  window.location.href = `/src/slide-view?topic=${encodeURIComponent(topicName)}`;
 }
 
 // Protect pages (Access control)
 /*function requireAuth() {
   if (!sessionStorage.getItem("sunesis_logged_in")) {
-    window.location.replace("login.html");
+    window.location.replace("/");
   }
 }
 console.log("auth check");
 
 
 if (!sessionStorage.getItem("sunesis_logged_in")) {
-  window.location.href = "login.html";
+  window.location.href = "/";
 }
 */
 
@@ -1392,7 +1392,7 @@ function logout() {
   localStorage.removeItem("sunesis_remember");
   localStorage.removeItem("sunesis_user");
   localStorage.removeItem("sunesisBoard");
-  window.location.href = "../index.html";
+  window.location.href = "/";
 }
 
 function renderPageSlides(list) {

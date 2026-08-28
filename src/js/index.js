@@ -246,7 +246,7 @@ async function login() {
       showPopup("Login successful", "success");
       clearInputs(loginUser, loginPass);
       setTimeout(() => {
-        window.location.href = "frontend/account.html";
+        window.location.href = "/src/account";
       }, 900);
       return;
     } catch (error) {
@@ -286,7 +286,7 @@ async function login() {
   clearInputs(loginUser, loginPass);
 
   setTimeout(() => {
-    window.location.href = "frontend/account.html";
+    window.location.href = "/src/account";
   }, 900);
 }
 

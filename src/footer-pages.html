@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Footer Info | Sunesis</title>
-    <link rel="icon" href="images/sunesisIcon.png" type="image/png" />
-    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="icon" href="/src/images/sunesisIcon.png" type="image/png" />
+    <link rel="stylesheet" href="/src/css/footer.css" />
   </head>
   <body>
     <div class="body-container">
       <section class="footer-info">
         <header class="footer-info-image">
-          <div class="brand" href="../index.html" aria-label="Sunesis home">
-            <img src="./images/sunesisBG2.png" alt="" />
+          <div class="brand" aria-label="Sunesis home">
+            <img src="/src/images/sunesisBG2.png" alt="" />
             <span>sunesis</span>
           </div>
         </header>
@@ -20,8 +20,8 @@
           <h1 id="pageTitle">Sunesis</h1>
           <p id="pageIntro"></p>
           <div class="cta">
-            <a class="primary" href="../index.html">Login or Register</a>
-            <a class="secondary" href="account.html">Back to Dashboard</a>
+            <a class="primary" href="/">Login or Register</a>
+            <a class="secondary" href="/src/account">Back to Dashboard</a>
           </div>
         </div>
       </section>
@@ -46,7 +46,7 @@
         return sessionUser || (isRemembered ? rememberUser : null);
       }
 
-      function requireAuth(redirectUrl = "../index.html") {
+      function requireAuth(redirectUrl = "/") {
         const activeUser = getActiveUser();
         console.log("Active user:", activeUser);
 
