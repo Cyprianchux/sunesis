@@ -30,7 +30,8 @@ body {
   left: 0;
   right: 0;
   height: 70px;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 440px) minmax(0, 1fr);
   align-items: center;
   gap: clamp(10px, 2vw, 24px);
   padding: 0 clamp(14px, 3vw, 32px);
@@ -47,7 +48,7 @@ body {
 
 .site-header {
   align-items: center; display: flex; justify-content: space-between;
-  margin: 0 auto; max-width: 1180px; padding: 0px 10px; width: 100%;
+  margin: 0; max-width: none; min-width: 0; padding: 0 10px; width: auto;
 }
 .brand { align-items: center; color: var(--maroon); display: flex; font-size: 1.35rem; font-weight: 800; gap: 10px; letter-spacing: -.04em; text-decoration: none; }
 .brand img { height: auto; width: clamp(2.8rem, 4vw, 3rem); }
@@ -58,9 +59,11 @@ body {
 /* ----- Search ----- */
 .search-bar {
   position: relative;
-  flex: 2 1 auto;
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
   max-width: 440px;
-  margin: 0 auto;
+  margin: 0;
   min-width: 0;
 }
 
@@ -112,26 +115,15 @@ body {
   color: var(--brick-dark);
 }
 
-/* Perfectly center the search bar within the banner on wide screens */
-@media screen and (min-width: 858px) {
-  .search-bar {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(240px, 34vw, 440px);
-    margin: 0;
-    flex: none;
-  }
-}
-
 /* ----- Nav zone ----- */
 .top-right {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  flex: 1 1 0;
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
   height: 70px;
 }
 
@@ -312,12 +304,16 @@ body {
    ============================================================ */
 @media screen and (max-width: 857px) {
   .top-banner {
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 1.6fr) auto;
     gap: 8px;
     padding: 0 10px 0 8px;
   }
 
+  .site-header {
+    padding: 0;
+  }
+
   .top-left {
-    flex: 1 1 auto;
     gap: 7px;
   }
 
@@ -331,7 +327,8 @@ body {
   }
 
   .search-bar {
-    flex: 1 1 90px;
+    grid-column: 2;
+    width: 100%;
     max-width: none;
     margin: 0;
   }
@@ -365,6 +362,11 @@ body {
     font-size: 1.25rem;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .top-right {
+    grid-column: 3;
+    height: 70px;
   }
 
   .nav-toggle:hover {
