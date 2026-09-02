@@ -27,6 +27,15 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "15mb" }));
 
+// Vercel rewrites /api/* to this function without removing the /api prefix.
+// Normalize it before Express matches the endpoint routes.
+app.use((req, _res, next) => {
+  if (req.url === "/api" || req.url.startsWith("/api/")) {
+    req.url = req.url.slice(4) || "/";
+  }
+  next();
+});
+
 const ADMIN_ROLE = "admin";
 
 function hashPassword(password) {
