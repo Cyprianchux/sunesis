@@ -78,7 +78,7 @@ main { background: linear-gradient(180deg, #fdf6f5 0%, #fff 52%, #fdf6f5 100%); 
 .password-field { position: relative; }
 .password-field label { margin-top: 15px; }
 .password-field input { padding-right: 46px; }
-.toggle-password { align-items: center; bottom: 0; color: #a38989; cursor: pointer; display: inline-flex; font-size: 1rem; height: 45px; justify-content: center; position: absolute; right: 5px; transition: color .2s; width: 36px; }
+.toggle-password { align-items: center; color: #a38989; cursor: pointer; display: inline-flex; font-size: 1rem; height: 45px; justify-content: center; position: absolute; right: 5px; top: 36px; transition: color .2s; width: 36px; }
 .toggle-password:hover { color: var(--brick); }
 .password-rules { color: #db6d6d; font-size: .7rem; list-style: none; line-height: 1.7; margin: 8px 0 0; padding: 0; }
 .password-rules li.valid { color: #45a878; }

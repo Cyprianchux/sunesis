@@ -597,6 +597,13 @@ async function loadTopicsAdmin() {
 async function displayAllTopics() {
   const container = document.getElementById("slideContainer");
   const topics = await getAdminPageTopics();
+  const slides = await getAdminPageSlides();
+  displayAdminTopics(topics, slides, container);
+}
+
+function displayAdminTopics(topics, allSlides, container = document.getElementById("slideContainer")) {
+  if (!container) return;
+
   container.innerHTML = "";
 
   if (topics.length === 0) {
@@ -604,10 +611,8 @@ async function displayAllTopics() {
     return;
   }
 
-  const activeUser = getActiveUser();
-
   for (const topic of topics) {
-    const topicSlides = await getSlidesByTopic(topic.name);
+    const topicSlides = allSlides.filter((slide) => slide.topic === topic.name);
     const topicDiv = document.createElement("div");
     topicDiv.classList.add("topic-section");
     const manageTopic = canManageTopic(topic);
@@ -651,6 +656,28 @@ async function displayAllTopics() {
   bindAdminActions();
 }
 
+async function displayAdminUserSearch(username) {
+  const term = username.trim().toLowerCase();
+  const topics = await getAdminPageTopics();
+  const allSlides = await getAdminPageSlides();
+  const matchingTopicNames = new Set(
+    topics
+      .filter((topic) => topic.creator?.toLowerCase().includes(term))
+      .map((topic) => topic.name),
+  );
+
+  allSlides.forEach((slide) => {
+    if (slide.creator?.toLowerCase().includes(term)) {
+      matchingTopicNames.add(slide.topic);
+    }
+  });
+
+  displayAdminTopics(
+    topics.filter((topic) => matchingTopicNames.has(topic.name)),
+    allSlides,
+  );
+}
+
 // COMMON SEARCH FUNCTIONALITY
 
 async function performSearch() {
@@ -686,6 +713,10 @@ async function performSearch() {
 
     if (isAdminPage) {
       displayAllTopics();
+    }
+
+    if (isAccountPage) {
+      renderTopicCards();
     }
 
     if (isWebPage) {
@@ -724,7 +755,29 @@ async function performSearch() {
 
   // ADMIN PAGE SEARCH (across allowed slides)
   if (isAdminPage) {
+    if (!isAdminUser()) {
+      const allSlides = await getAdminPageSlides();
+      const filtered = allSlides.filter(
+        (s) =>
+          s.title?.toLowerCase().includes(term) ||
+          s.desc?.toLowerCase().includes(term) ||
+          s.topic?.toLowerCase().includes(term),
+      );
+
+      displayFilteredAdminSlides(filtered);
+      return;
+    }
+
+    const topics = await getAdminPageTopics();
     const allSlides = await getAdminPageSlides();
+    const matchesUsername = topics.some((topic) =>
+      topic.creator?.toLowerCase().includes(term),
+    ) || allSlides.some((slide) => slide.creator?.toLowerCase().includes(term));
+
+    if (matchesUsername) {
+      await displayAdminUserSearch(term);
+      return;
+    }
 
     const filtered = allSlides.filter(
       (s) =>
@@ -747,12 +800,35 @@ async function performSearch() {
 
     renderPageSlides(filtered);
   }
+
+  // ACCOUNT PAGE SEARCH (topics and their associated slides)
+  if (isAccountPage) {
+    const topics = await getAllTopics();
+    const allSlides = await getAllSlides();
+    const matchingTopics = topics.filter((topic) => {
+      const topicMatches = topic.name?.toLowerCase().includes(term);
+      const topicSlides = allSlides.filter((slide) => slide.topic === topic.name);
+      return (
+        topicMatches ||
+        topicSlides.some(
+          (slide) =>
+            slide.title?.toLowerCase().includes(term) ||
+            slide.desc?.toLowerCase().includes(term),
+        )
+      );
+    });
+
+    renderTopicCards(matchingTopics);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchBtn = document.getElementById("searchBtn");
   const searchInput = document.getElementById("searchInput");
   if (searchBtn && searchInput) {
+    if (isAdminPage && isAdminUser()) {
+      searchInput.placeholder = "Search topics, slides, or username...";
+    }
     searchBtn.addEventListener("click", performSearch);
     searchInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") performSearch();
@@ -1305,19 +1381,23 @@ if (isAccountPage) {
   });
 }
 
-async function renderTopicCards() {
+async function renderTopicCards(topics = null) {
   const container = document.getElementById("topicsContainer");
   if (!container) return;
 
-  const topics = await getAllTopics();
+  const visibleTopics = topics || (await getAllTopics());
   container.innerHTML = "";
 
-  if (topics.length === 0) {
-    renderDefaultTopics();
+  if (visibleTopics.length === 0) {
+    if (topics) {
+      container.innerHTML = "<p style='text-align:center;'>No matching topics or slides found.</p>";
+    } else {
+      renderDefaultTopics();
+    }
     return;
   }
 
-  for (const topic of topics) {
+  for (const topic of visibleTopics) {
     const slides = await getSlidesByTopic(topic.name);
 
     // Skip empty topics (optional – remove if you want empty topics visible)

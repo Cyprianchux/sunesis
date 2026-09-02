@@ -115,6 +115,35 @@ body {
   color: var(--brick-dark);
 }
 
+.search-bar button[data-tooltip] {
+  position: absolute;
+}
+
+.search-bar button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  background: var(--maroon);
+  color: #fff;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 20;
+}
+
+.search-bar button[data-tooltip]:hover::after,
+.search-bar button[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 /* ----- Nav zone ----- */
 .top-right {
   position: relative;
