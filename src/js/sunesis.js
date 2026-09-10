@@ -1388,12 +1388,17 @@ async function renderTopicCards(topics = null) {
   const visibleTopics = topics || (await getAllTopics());
   container.innerHTML = "";
 
-  if (visibleTopics.length === 0) {
-    if (topics) {
-      container.innerHTML = "<p style='text-align:center;'>No matching topics or slides found.</p>";
-    } else {
-      renderDefaultTopics();
-    }
+  if (topics && visibleTopics.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>No matching topics or slides found.</p>";
+    return;
+  }
+
+  // Show the welcome container on the account page by default,
+  // not just for first-time users with no topics yet.
+  if (isAccountPage && !topics) {
+    renderDefaultTopics(visibleTopics.length > 0);
+  } else if (visibleTopics.length === 0) {
+    renderDefaultTopics();
     return;
   }
 
@@ -1417,7 +1422,7 @@ async function renderTopicCards(topics = null) {
   }
 }
 
-function renderDefaultTopics() {
+function renderDefaultTopics(hasTopics = false) {
   const container = document.getElementById("topicsContainer");
   if (!container) return;
 
@@ -1425,13 +1430,16 @@ function renderDefaultTopics() {
     <div class="default-topics-container">
       <h2 class="default-topics-title">Welcome to Sunesis!</h2>
       <p class="default-topics-text">
-        You don't have any topics yet. Learn how Sunesis works to create your
-        first one.
+        ${
+          hasTopics
+            ? "Explore your topics below, or learn how Sunesis works to get the most out of it."
+            : "You don't have any topics yet. Learn how Sunesis works to create your first one."
+        }
       </p>
       <div class="topic-card default-topic-card">
         <h3>Getting Started</h3>
         <p>
-          New here? Discover the simple flow behind topics and slides on
+          Learn the simple flow behind topics and slides on
           Sunesis.
         </p>
         <button
