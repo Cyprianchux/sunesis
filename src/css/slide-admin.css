@@ -283,6 +283,7 @@
 }
 
 /* Decorative illustration in create-topic card */
+/*
 .wide-create-topic {
   display: none;
 }
@@ -300,7 +301,7 @@
     box-shadow: 0 6px 18px rgba(87, 19, 19, 0.08);
   }
 }
-
+*/
 /* ===== Existing topics & slides ===== */
 .slide-list h2 {
   margin-bottom: 4px;
