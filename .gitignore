@@ -16,5 +16,5 @@ e2e-server-err.txt
 e2e-server-out.txt
 server-err.txt
 server-out.txt
-test-results/.playwright-artifacts-5/
+test-results/
 vitest-out.txt
