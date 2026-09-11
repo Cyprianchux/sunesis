@@ -37,6 +37,14 @@
       "destination": "/src/slide-view.html"
     },
     {
+      "source": "/src/verify-email",
+      "destination": "/src/verify-email.html"
+    },
+    {
+      "source": "/src/reset-password",
+      "destination": "/src/reset-password.html"
+    },
+    {
       "source": "/src/web-view",
       "destination": "/src/web-view.html"
     }
