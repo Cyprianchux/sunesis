@@ -25,6 +25,67 @@ body {
   margin: 0;
 }
 
+/* Unverified email warning banner (dismissible) */
+.verify-banner {
+  align-items: center;
+  background: #fff7e6;
+  border-bottom: 1px solid #f3dfb0;
+  color: #7a5a12;
+  display: none;
+  font-size: 0.85rem;
+  gap: 12px;
+  justify-content: center;
+  padding: 10px 16px;
+  text-align: center;
+}
+
+.verify-banner.show {
+  display: flex;
+}
+
+.verify-banner-text {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.verify-banner-text i { color: #b8891f; }
+
+.verify-banner-btn {
+  background: #b22222;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  transition: background 0.2s;
+}
+
+.verify-banner-btn:hover { background: #8f1a1a; }
+
+.verify-banner-btn.loading { cursor: not-allowed; opacity: 0.7; pointer-events: none; }
+
+.verify-banner-close {
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: #a38030;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px;
+}
+
+.verify-banner-close:hover { color: #7a5a12; background: #f0e2c0; }
+
+@media (max-width: 600px) {
+  .verify-banner {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
 .topics-container {
   display: flex;
   justify-content: center;

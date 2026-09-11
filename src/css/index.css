@@ -85,10 +85,14 @@ main { background: linear-gradient(180deg, #fdf6f5 0%, #fff 52%, #fdf6f5 100%); 
 .remember-me { align-items: center; display: flex; gap: 8px; margin: 17px 0 20px; }
 .remember-me input[type=checkbox] { accent-color: var(--brick); height: 15px; padding: 0; width: 15px; }
 .remember-me label { color: var(--muted); cursor: pointer; font-size: .78rem; margin: 0; }
+.forgot-link { color: var(--brick); cursor: pointer; font-size: .78rem; font-weight: 700; margin-left: auto; text-decoration: none; }
+.forgot-link:hover { text-decoration: underline; }
 .submit-btn { font-size: .9rem; margin: 7px 0 12px; padding: 14px; width: 100%; }
 .account-container form p { color: var(--muted); font-size: .78rem; text-align: center; }
 .toggle-link { color: var(--brick); cursor: pointer; font-weight: 700; text-decoration: none; }
 .toggle-link:hover { text-decoration: underline; }
+.back-link { color: var(--brick); cursor: pointer; font-weight: 700; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
 .hidden { display: none; }
 .features { margin: 0 auto; max-width: 1180px; padding: 95px 32px 110px; }
 .section-heading { margin: 0 auto 42px; max-width: 560px; text-align: center; }
