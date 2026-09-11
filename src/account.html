@@ -66,6 +66,29 @@
       </div>
     </div>
 
+    <div class="verify-banner" id="verifyBanner">
+      <span class="verify-banner-text">
+        <i class="fa-solid fa-envelope-circle-check"></i>
+        Your email is not verified. Check your inbox for a verification link.
+      </span>
+      <button
+        class="verify-banner-btn"
+        id="resendVerifyBtn"
+        type="button"
+        onclick="resendVerification()"
+      >
+        Resend link
+      </button>
+      <button
+        class="verify-banner-close"
+        type="button"
+        aria-label="Dismiss"
+        onclick="dismissVerifyBanner()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
     <div class="banner">
       <h1>Welcome, <span id="loginUser"></span></h1>
       <p>Select a topic to continue</p>

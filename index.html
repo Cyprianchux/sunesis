@@ -104,38 +104,79 @@
                     <p>Sign in to your workspace</p>
                   </div>
                 </div>
-                <label for="loginUser">Username</label>
-                <input
-                  id="loginUser"
-                  placeholder="Enter your username"
-                  autocomplete="username"
-                />
-                <div class="password-field">
-                  <label for="loginPass">Password</label>
+                <div id="loginFields">
+                  <label for="loginUser">Username</label>
                   <input
-                    id="loginPass"
-                    type="password"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
+                    id="loginUser"
+                    placeholder="Enter your username"
+                    autocomplete="username"
                   />
-                  <i
-                    class="fa-solid fa-eye toggle-password"
-                    onclick="togglePassword('loginPass', this)"
-                  ></i>
+                  <div class="password-field">
+                    <label for="loginPass">Password</label>
+                    <input
+                      id="loginPass"
+                      type="password"
+                      placeholder="Enter your password"
+                      autocomplete="current-password"
+                    />
+                    <i
+                      class="fa-solid fa-eye toggle-password"
+                      onclick="togglePassword('loginPass', this)"
+                    ></i>
+                  </div>
+
+                  <ul class="password-rules" id="loginRules">
+                    <li id="login-length">At least 8 characters</li>
+                    <li id="login-uppercase">Contains uppercase letter</li>
+                    <li id="login-number">Contains a number</li>
+                  </ul>
+                  <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" />
+                    <label for="rememberMe"><span>Remember Me</span></label>
+                    <span
+                      class="forgot-link"
+                      role="button"
+                      tabindex="0"
+                      onclick="showForgot()"
+                      >Forgot password?</span
+                    >
+                  </div>
+                  <button class="submit-btn" type="button" onclick="login()">
+                    Sign in <i class="fa-solid fa-arrow-right"></i>
+                  </button>
                 </div>
 
-                <ul class="password-rules" id="loginRules">
-                  <li id="login-length">At least 8 characters</li>
-                  <li id="login-uppercase">Contains uppercase letter</li>
-                  <li id="login-number">Contains a number</li>
-                </ul>
-                <div class="remember-me">
-                  <input type="checkbox" id="rememberMe" />
-                  <label for="rememberMe"><span>Remember Me</span></label>
+                <div id="forgotBox" class="hidden">
+                  <div class="form-heading">
+                    <span class="form-icon"
+                      ><i class="fa-solid fa-key"></i
+                    ></span>
+                    <div>
+                      <h2>Reset your password</h2>
+                      <p>We'll email you a reset link</p>
+                    </div>
+                  </div>
+                  <label for="forgotEmail">Email</label>
+                  <input
+                    id="forgotEmail"
+                    type="email"
+                    placeholder="Email used at registration"
+                    autocomplete="email"
+                  />
+                  <button
+                    class="submit-btn"
+                    type="button"
+                    onclick="forgotPassword()"
+                  >
+                    Send reset link <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <p>
+                    Remembered your password?
+                    <span class="back-link" onclick="showLoginFields()"
+                      >Back to sign in</span
+                    >
+                  </p>
                 </div>
-                <button class="submit-btn" type="button" onclick="login()">
-                  Sign in <i class="fa-solid fa-arrow-right"></i>
-                </button>
                 <p>
                   Don’t have an account?
                   <span class="toggle-link" onclick="showRegister()"
@@ -157,6 +198,13 @@
                     <p>Begin your learning journey</p>
                   </div>
                 </div>
+                <label for="regEmail">Email</label>
+                <input
+                  id="regEmail"
+                  type="email"
+                  placeholder="Enter your email"
+                  autocomplete="email"
+                />
                 <label for="regUser">Username</label>
                 <input
                   id="regUser"
