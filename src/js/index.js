@@ -13,6 +13,8 @@ function logout() {
   localStorage.removeItem("sunesis_user");
   localStorage.removeItem("sunesis_token");
   localStorage.removeItem("sunesis_role");
+  localStorage.removeItem("sunesis_email");
+  localStorage.removeItem("sunesis_email_verified");
   window.location.href = "/";
 }
 
@@ -39,6 +41,44 @@ function showRegister() {
 function showLogin() {
   registerBox.classList.add("hidden");
   loginBox.classList.remove("hidden");
+  forgotBox.classList.add("hidden");
+  loginFields.classList.remove("hidden");
+}
+
+function showForgot() {
+  loginFields.classList.add("hidden");
+  forgotBox.classList.remove("hidden");
+  forgotEmail.focus();
+}
+
+function showLoginFields() {
+  forgotBox.classList.add("hidden");
+  loginFields.classList.remove("hidden");
+}
+
+async function forgotPassword() {
+  const email = forgotEmail.value.trim().toLowerCase();
+  const forgotBtn = document.querySelector("#forgotBox button");
+
+  if (!email || !EMAIL_RE.test(email)) {
+    showPopup("Please provide a valid email address.", "error");
+    return;
+  }
+
+  setButtonLoading(forgotBtn, true);
+  try {
+    await remoteForgotPassword(email);
+    showPopup(
+      "If an account exists with that email, a password reset link has been sent.",
+      "success",
+    );
+    clearInputs(forgotEmail);
+    showLoginFields();
+  } catch (error) {
+    showPopup(error.message, "error");
+  } finally {
+    setButtonLoading(forgotBtn, false);
+  }
 }
 
 // Toggle password visibility
@@ -95,6 +135,7 @@ function resetValidationColors(prefix) {
 
 // Reset all validation colors for both register and login
 const LOCAL_ONLY_MODE_KEY = "sunesis_local_only_mode";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function setLocalOnlyMode(enabled) {
   if (enabled) {
@@ -111,11 +152,13 @@ function warnLocalOnlyMode(message) {
   showPopup(message, "info");
 }
 
-async function saveLocalUser(username, password, role) {
+async function saveLocalUser(username, email, password, role) {
   const users = JSON.parse(localStorage.getItem("sunesis_users")) || {};
   users[username] = {
+    email,
     password: await hashPassword(password),
     role,
+    email_verified: true,
   };
   localStorage.setItem("sunesis_users", JSON.stringify(users));
 }
@@ -153,12 +196,18 @@ async function hashPassword(password) {
 // REGISTER
 async function register() {
   const username = regUser.value.trim().toLowerCase();
+  const email = regEmail.value.trim().toLowerCase();
   const password = regPass.value;
   const confirmPassword = confirmPass.value;
   const registerBtn = document.querySelector("#registerBox button");
 
-  if (!username || !password || !confirmPassword) {
+  if (!username || !email || !password || !confirmPassword) {
     showPopup("All fields are required", "error");
+    return;
+  }
+
+  if (!EMAIL_RE.test(email)) {
+    showPopup("Please provide a valid email address.", "error");
     return;
   }
 
@@ -173,7 +222,7 @@ async function register() {
 
   if (password !== confirmPassword) {
     showPopup("Passwords do not match!", "error");
-    clearInputs(regUser, regPass, confirmPass);
+    clearInputs(regUser, regEmail, regPass, confirmPass);
 
     return;
   }
@@ -190,15 +239,18 @@ async function register() {
 
   if (isOnline()) {
     try {
-      await remoteRegister(username, password, role);
+      await remoteRegister(username, email, password, role);
       setLocalOnlyMode(false);
-      showPopup("Registration successful. Please login.", "success");
-      clearInputs(regUser, regPass, confirmPass);
+      showPopup(
+        "Account created. A verification link has been sent to your email. Check your inbox to verify your email and complete your registration.",
+        "success",
+      );
+      clearInputs(regUser, regEmail, regPass, confirmPass);
       setButtonLoading(registerBtn, false);
       showLogin();
       return;
     } catch (error) {
-      if (error.message.includes("User already exists")) {
+      if (error.message.includes("User already exists") || error.message.includes("already registered")) {
         showPopup(error.message, "error");
         setButtonLoading(registerBtn, false);
         return;
@@ -209,12 +261,15 @@ async function register() {
   }
 
   // If remote failed or offline, save locally immediately (don't wait)
-  await saveLocalUser(username, password, role);
+  await saveLocalUser(username, email, password, role);
   warnLocalOnlyMode(
     "Local-only mode active: the account was saved in this browser only and will not sync across devices until the connection returns.",
   );
-  showPopup("Registration successful. Please login.", "success");
-  clearInputs(regUser, regPass, confirmPass);
+  showPopup(
+    "Registration successful. A verification link has been sent to your email.",
+    "success",
+  );
+  clearInputs(regUser, regEmail, regPass, confirmPass);
   setButtonLoading(registerBtn, false);
   showLogin();
 }
@@ -239,9 +294,13 @@ async function login() {
       if (rememberMe.checked) {
         localStorage.setItem("sunesis_remember", "true");
         localStorage.setItem("sunesis_user", username);
+        localStorage.setItem("sunesis_email", response.user.email);
+        localStorage.setItem("sunesis_email_verified", String(Boolean(response.user.email_verified)));
       }
       sessionStorage.setItem("sunesis_logged_in", "true");
       sessionStorage.setItem("sunesis_user", username);
+      sessionStorage.setItem("sunesis_email", response.user.email);
+      sessionStorage.setItem("sunesis_email_verified", String(Boolean(response.user.email_verified)));
 
       showPopup("Login successful", "success");
       clearInputs(loginUser, loginPass);
@@ -270,11 +329,15 @@ async function login() {
     localStorage.setItem("sunesis_remember", "true");
     localStorage.setItem("sunesis_user", username);
     localStorage.setItem("sunesis_role", users[username].role);
+    localStorage.setItem("sunesis_email", users[username].email || "");
+    localStorage.setItem("sunesis_email_verified", "true");
   }
 
   sessionStorage.setItem("sunesis_logged_in", "true");
   sessionStorage.setItem("sunesis_user", username);
   sessionStorage.setItem("sunesis_role", users[username].role);
+  sessionStorage.setItem("sunesis_email", users[username].email || "");
+  sessionStorage.setItem("sunesis_email_verified", "true");
 
   if (remoteLoginFailed) {
     warnLocalOnlyMode(
@@ -336,8 +399,12 @@ regUser.addEventListener("keypress", function (e) {
 // For 'Enter' key pressing
 document.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
+    // If forgot box is visible → forgot password
+    if (!forgotBox.classList.contains("hidden")) {
+      forgotPassword();
+    }
     // If login box is visible → login
-    if (!loginBox.classList.contains("hidden")) {
+    else if (!loginBox.classList.contains("hidden")) {
       login();
     }
 
@@ -346,7 +413,7 @@ document.addEventListener("keydown", function (e) {
       register();
     }
 
-    clearInputs(loginUser, loginPass, regUser, regPass, confirmPass);
+    clearInputs(loginUser, loginPass, regUser, regEmail, regPass, confirmPass);
   }
 });
 

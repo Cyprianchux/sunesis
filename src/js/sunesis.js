@@ -1004,12 +1004,9 @@ function renderCurrentSlide() {
       <h1>Slide ${currentSlideIndex + 1} of ${slides.length}</h1>
     </div>
     
-    <button id="prevArrow" class="arrow-btn">&#10094;</button>
-    <button id="nextArrow" class="arrow-btn">&#10095;</button>
+    <button id="prevArrow" class="arrow-btn" ${currentSlideIndex === 0 ? "disabled" : ""}>&#10094;</button>
+    <button id="nextArrow" class="arrow-btn" ${currentSlideIndex === slides.length - 1 ? "disabled" : ""}>&#10095;</button>
   `;
-
-  prev.disabled = currentSlideIndex === 0;
-  next.disabled = currentSlideIndex === slides.length - 1;
 
   document.getElementById("prevArrow").onclick = () => {
     if (currentSlideIndex > 0) {
@@ -1369,6 +1366,16 @@ if (isAccountPage) {
       return;
     }
 
+    /* ---------- UNVERIFIED EMAIL BANNER ---------- */
+    const emailVerified =
+      sessionStorage.getItem("sunesis_email_verified") ||
+      (isRemembered ? localStorage.getItem("sunesis_email_verified") : null);
+
+    const verifyBanner = document.getElementById("verifyBanner");
+    if (verifyBanner && emailVerified !== "true") {
+      verifyBanner.classList.add("show");
+    }
+
     /* ---------- DISPLAY USERNAME ---------- */
     const formattedName =
       activeUser.charAt(0).toUpperCase() + activeUser.slice(1);
@@ -1379,6 +1386,40 @@ if (isAccountPage) {
     await syncAllRemoteData();
     renderTopicCards();
   });
+}
+
+async function resendVerification() {
+  const email =
+    sessionStorage.getItem("sunesis_email") ||
+    localStorage.getItem("sunesis_email");
+  const button = document.getElementById("resendVerifyBtn");
+
+  if (!email) {
+    showPopup("No email on file for this account.", "error");
+    return;
+  }
+
+  if (button) {
+    button.classList.add("loading");
+    button.disabled = true;
+  }
+
+  try {
+    await remoteResendVerification(email);
+    showPopup("Verification email sent. Check your inbox.", "success");
+  } catch (error) {
+    showPopup(error.message, "error");
+  } finally {
+    if (button) {
+      button.classList.remove("loading");
+      button.disabled = false;
+    }
+  }
+}
+
+function dismissVerifyBanner() {
+  const banner = document.getElementById("verifyBanner");
+  if (banner) banner.classList.remove("show");
 }
 
 async function renderTopicCards(topics = null) {
@@ -1480,6 +1521,8 @@ function logout() {
   localStorage.removeItem("sunesis_remember");
   localStorage.removeItem("sunesis_user");
   localStorage.removeItem("sunesisBoard");
+  localStorage.removeItem("sunesis_email");
+  localStorage.removeItem("sunesis_email_verified");
   window.location.href = "/";
 }
 

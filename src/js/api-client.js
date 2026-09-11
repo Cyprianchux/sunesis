@@ -40,16 +40,37 @@
     }
   }
 
-  window.remoteRegister = async (username, password, role) =>
+  window.remoteRegister = async (username, email, password, role) =>
     request("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ username, password, role }),
+      body: JSON.stringify({ username, email, password, role }),
     });
 
   window.remoteLogin = (username, password) =>
     request("/auth/login", {
       method: "POST",
       body: JSON.stringify({ username, password }),
+    });
+
+  window.remoteVerifyEmail = (token) =>
+    request(`/auth/verify-email?token=${encodeURIComponent(token)}`);
+
+  window.remoteForgotPassword = (email) =>
+    request("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+
+  window.remoteResetPassword = (token, newPassword) =>
+    request("/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, newPassword }),
+    });
+
+  window.remoteResendVerification = (email) =>
+    request("/auth/resend-verification", {
+      method: "POST",
+      body: JSON.stringify({ email }),
     });
 
   window.remoteRegisterLocalUser = (username, passwordHash, role) =>

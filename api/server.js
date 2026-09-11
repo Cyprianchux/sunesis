@@ -5,6 +5,7 @@ const cors = require("cors");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const { createClient } = require("@supabase/supabase-js");
+const { generateToken, sendVerificationEmail, sendResetEmail } = require("./email");
 
 const {
   SUPABASE_URL,
@@ -33,6 +34,8 @@ function createApp(supabase) {
   });
 
   const ADMIN_ROLE = "admin";
+  const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+  const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
   function hashPassword(password) {
     return crypto.createHash("sha256").update(password, "utf8").digest("hex");
@@ -41,6 +44,12 @@ function createApp(supabase) {
   function normalizeUsername(username) {
     return String(username || "").trim().toLowerCase();
   }
+
+  function normalizeEmail(email) {
+    return String(email || "").trim().toLowerCase();
+  }
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function isAdmin(user) {
     return user.role === ADMIN_ROLE;
@@ -76,11 +85,59 @@ function createApp(supabase) {
   async function getUser(username) {
     const { data, error } = await supabase
       .from("users")
-      .select("username, role, password_hash")
+      .select("username, role, email, email_verified, password_hash")
       .eq("username", normalizeUsername(username))
       .maybeSingle();
     if (error) throw error;
     return data;
+  }
+
+  async function getUserByEmail(email) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("username, role, email, email_verified, password_hash")
+      .eq("email", normalizeEmail(email))
+      .maybeSingle();
+    if (error) throw error;
+    return data;
+  }
+
+  async function createTokenRecord(username, type, ttlMs) {
+    const token = generateToken();
+    const { error } = await supabase.from("tokens").insert({
+      token,
+      username,
+      type,
+      expires_at: new Date(Date.now() + ttlMs).toISOString(),
+    });
+    if (error) throw error;
+    return token;
+  }
+
+  async function consumeToken(token, type) {
+    const { data, error } = await supabase
+      .from("tokens")
+      .select("token, username, type, expires_at")
+      .eq("token", token)
+      .eq("type", type)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return null;
+    if (new Date(data.expires_at).getTime() <= Date.now()) {
+      await supabase.from("tokens").delete().eq("token", token);
+      return null;
+    }
+    await supabase.from("tokens").delete().eq("token", token);
+    return data;
+  }
+
+  function safeUser(user) {
+    return {
+      username: user.username,
+      role: user.role,
+      email: user.email,
+      email_verified: Boolean(user.email_verified),
+    };
   }
 
   function topicResponse(topic) {
@@ -109,21 +166,28 @@ function createApp(supabase) {
   app.post("/auth/register", async (req, res) => {
     try {
       const username = normalizeUsername(req.body.username);
+      const email = normalizeEmail(req.body.email);
       const password = String(req.body.password || "");
       const role = "user";
 
-      if (!username || !password) {
-        return res.status(400).json({ message: "Username and password are required." });
+      if (!username || !password || !email) {
+        return res.status(400).json({ message: "Username, email, and password are required." });
+      }
+      if (!EMAIL_RE.test(email)) {
+        return res.status(400).json({ message: "Please provide a valid email address." });
       }
 
       if (await getUser(username)) {
         return res.status(409).json({ message: "User already exists." });
       }
+      if (await getUserByEmail(email)) {
+        return res.status(409).json({ message: "That email is already registered." });
+      }
 
       const { data, error } = await supabase
         .from("users")
-        .insert({ username, password_hash: hashPassword(password), role })
-        .select("username, role")
+        .insert({ username, email, email_verified: false, password_hash: hashPassword(password), role })
+        .select("username, role, email, email_verified")
         .single();
       if (error) {
         if (error.code === "23505") {
@@ -131,7 +195,11 @@ function createApp(supabase) {
         }
         throw error;
       }
-      return res.status(201).json({ user: data });
+
+      const token = await createTokenRecord(username, "verify", VERIFY_TOKEN_TTL_MS);
+      await sendVerificationEmail({ email, username, token });
+
+      return res.status(201).json({ user: safeUser(data) });
     } catch (error) {
       return handleError(res, error);
     }
@@ -147,14 +215,15 @@ function createApp(supabase) {
       }
       if (await getUser(username)) return res.status(200).json({ message: "User already exists." });
 
+      const email = `${username}@sunesis.local`;
       const { error } = await supabase
         .from("users")
-        .insert({ username, password_hash: passwordHash.toLowerCase(), role });
+        .insert({ username, email, email_verified: true, password_hash: passwordHash.toLowerCase(), role });
       if (error) {
         if (error.code === "23505") return res.status(200).json({ message: "User already exists." });
         throw error;
       }
-      return res.status(201).json({ user: { username, role } });
+      return res.status(201).json({ user: { username, role, email_verified: true } });
     } catch (error) {
       return handleError(res, error);
     }
@@ -170,14 +239,100 @@ function createApp(supabase) {
         return res.status(401).json({ message: "Invalid username or password." });
       }
 
-      const safeUser = { username: user.username, role: user.role };
-      return res.json({ user: safeUser, token: createToken(safeUser) });
+      const safeUserOut = safeUser(user);
+      return res.json({ user: safeUserOut, token: createToken(safeUserOut) });
     } catch (error) {
       return handleError(res, error);
     }
   });
 
   app.get("/auth/me", authenticate, (req, res) => res.json({ user: req.user }));
+
+  app.get("/auth/verify-email", async (req, res) => {
+    try {
+      const token = String(req.query.token || "");
+      if (!token) return res.status(400).json({ message: "Verification token is required." });
+
+      const record = await consumeToken(token, "verify");
+      if (!record) {
+        return res.status(400).json({ message: "Invalid or expired verification link." });
+      }
+
+      const { error } = await supabase
+        .from("users")
+        .update({ email_verified: true })
+        .eq("username", record.username);
+      if (error) throw error;
+
+      return res.json({ message: "Email verified successfully. You can now sign in." });
+    } catch (error) {
+      return handleError(res, error);
+    }
+  });
+
+  app.post("/auth/resend-verification", async (req, res) => {
+    try {
+      const email = normalizeEmail(req.body.email);
+      if (!email || !EMAIL_RE.test(email)) {
+        return res.status(400).json({ message: "Please provide a valid email address." });
+      }
+      const user = await getUserByEmail(email);
+      if (!user || user.email_verified) {
+        return res.status(404).json({ message: "No unverified account found for that email." });
+      }
+      const token = await createTokenRecord(user.username, "verify", VERIFY_TOKEN_TTL_MS);
+      await sendVerificationEmail({ email: user.email, username: user.username, token });
+      return res.json({ message: "Verification email sent." });
+    } catch (error) {
+      return handleError(res, error);
+    }
+  });
+
+  app.post("/auth/forgot-password", async (req, res) => {
+    try {
+      const email = normalizeEmail(req.body.email);
+      if (!EMAIL_RE.test(email)) {
+        return res.status(400).json({ message: "Please provide a valid email address." });
+      }
+      const user = await getUserByEmail(email);
+      if (user) {
+        const token = await createTokenRecord(user.username, "reset", RESET_TOKEN_TTL_MS);
+        await sendResetEmail({ email: user.email, username: user.username, token });
+      }
+      return res.json({ message: "If an account exists for that email, a password reset link has been sent." });
+    } catch (error) {
+      return handleError(res, error);
+    }
+  });
+
+  app.post("/auth/reset-password", async (req, res) => {
+    try {
+      const token = String(req.body.token || "");
+      const password = String(req.body.newPassword || "");
+
+      if (!token || !password) {
+        return res.status(400).json({ message: "Token and new password are required." });
+      }
+      if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+        return res.status(400).json({ message: "Password must be at least 8 characters, include a number and an uppercase letter." });
+      }
+
+      const record = await consumeToken(token, "reset");
+      if (!record) {
+        return res.status(400).json({ message: "Invalid or expired reset link." });
+      }
+
+      const { error } = await supabase
+        .from("users")
+        .update({ password_hash: hashPassword(password) })
+        .eq("username", record.username);
+      if (error) throw error;
+
+      return res.json({ message: "Password reset successfully. You can now sign in." });
+    } catch (error) {
+      return handleError(res, error);
+    }
+  });
 
   app.get("/topics", authenticate, async (_req, res) => {
     try {
