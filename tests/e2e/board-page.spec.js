@@ -19,6 +19,7 @@ test.describe("Board Page (board.html)", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);
@@ -74,7 +75,7 @@ test.describe("Board Page (board.html)", () => {
   test("saved notes dropdown shows saved entries", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/board`);
-    await page.waitForSelector("#savedNotesSelect", { timeout: 5000 });
+    await page.waitForSelector("#savedNotesSelect", { state: "attached", timeout: 5000 });
     await page.click("#boardScreen");
     await page.keyboard.type("Dropdown test note");
     page.on("dialog", async (dialog) => {
@@ -90,7 +91,7 @@ test.describe("Board Page (board.html)", () => {
   test("loading a saved note populates the board", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/board`);
-    await page.waitForSelector("#savedNotesSelect", { timeout: 5000 });
+    await page.waitForSelector("#savedNotesSelect", { state: "attached", timeout: 5000 });
     await page.click("#boardScreen");
     await page.keyboard.type("Loadable note");
     page.on("dialog", async (dialog) => {

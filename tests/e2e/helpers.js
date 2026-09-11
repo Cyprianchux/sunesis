@@ -2,10 +2,11 @@ const { chromium } = require("@playwright/test");
 
 const BASE_URL = "http://localhost:3000";
 
-async function registerUser(page, username, password) {
+async function registerUser(page, username, password, email = `${username}@test.com`) {
   await page.goto(`${BASE_URL}`);
   await page.click(".toggle-link");
   await page.waitForSelector("#registerBox:not(.hidden)", { timeout: 5000 });
+  await page.fill("#regEmail", email);
   await page.fill("#regUser", username);
   await page.fill("#regPass", password);
   await page.fill("#confirmPass", password);
@@ -27,4 +28,15 @@ async function setAuthInStorage(context, username, role = "user") {
   await context.storageState();
 }
 
-module.exports = { registerUser, loginUser, setAuthInStorage, BASE_URL };
+async function selectTopic(page, topicName, { timeout = 5000 } = {}) {
+  const dropdown = page.locator(".topics-dropdown");
+  if (await dropdown.count() > 0) {
+    const display = await dropdown.evaluate((el) => getComputedStyle(el).display);
+    if (display === "none") {
+      await page.locator("#topicsMenu").click();
+    }
+  }
+  await page.selectOption("#topicSelect", topicName, { timeout });
+}
+
+module.exports = { registerUser, loginUser, setAuthInStorage, selectTopic, BASE_URL };

@@ -21,6 +21,8 @@ const VERCEL_REWRITES = [
   { source: "/src/slide-view", dest: "/src/slide-view.html" },
   { source: "/src/web-view", dest: "/src/web-view.html" },
   { source: "/src/footer-pages", dest: "/src/footer-pages.html" },
+  { source: "/src/verify-email", dest: "/src/verify-email.html" },
+  { source: "/src/reset-password", dest: "/src/reset-password.html" },
 ];
 
 server.use((req, res, next) => {

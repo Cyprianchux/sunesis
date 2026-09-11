@@ -22,7 +22,7 @@ test.describe("Landing Page (index.html)", () => {
   test("displays feature boxes section", async ({ page }) => {
     await page.goto(BASE_URL);
     const features = page.locator(".feature-box");
-    await expect(features).toHaveCount(11);
+    await expect(features).toHaveCount(12);
   });
 
   test("displays login form by default", async ({ page }) => {
@@ -107,6 +107,7 @@ test.describe("Registration Flow", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)", { timeout: 5000 });
+    await page.fill("#regEmail", `${uniqueUser}@test.com`);
     await page.fill("#regUser", uniqueUser);
     await page.fill("#regPass", "Test1234");
     await page.fill("#confirmPass", "Test1234");
@@ -119,6 +120,7 @@ test.describe("Registration Flow", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", "testuser2@test.com");
     await page.fill("#regUser", "testuser2");
     await page.fill("#regPass", "Test1234");
     await page.fill("#confirmPass", "Different123");

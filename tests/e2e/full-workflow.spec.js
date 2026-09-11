@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { selectTopic } = require("./helpers");
 
 const BASE_URL = "http://localhost:3000";
 
@@ -13,6 +14,7 @@ test.describe("Full User Workflow E2E", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)", { timeout: 5000 });
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);
@@ -48,7 +50,7 @@ test.describe("Full User Workflow E2E", () => {
     await expect(option).toBeAttached();
 
     // Step 7: Add first slide
-    await page.selectOption("#topicSelect", topicName);
+    await selectTopic(page, topicName);
     await page.fill("#slide-title", "Introduction to Topic");
     await page.fill("#slide-desc", "This is the introduction slide for our E2E topic.");
     await page.click("#addSlideBtn");
@@ -67,9 +69,9 @@ test.describe("Full User Workflow E2E", () => {
 
     // Step 10: Navigate to Slide View
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", topicName);
+    await selectTopic(page, topicName);
     await page.waitForTimeout(1000);
 
     // Step 11: Verify slides display
@@ -83,9 +85,9 @@ test.describe("Full User Workflow E2E", () => {
 
     // Step 13: Navigate to Web View
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", topicName);
+    await selectTopic(page, topicName);
     await page.waitForTimeout(1000);
 
     // Step 14: Verify web view shows both slides
@@ -150,6 +152,7 @@ test.describe("Cross-page Navigation", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${navUser}@test.com`);
     await page.fill("#regUser", navUser);
     await page.fill("#regPass", navPass);
     await page.fill("#confirmPass", navPass);
@@ -188,6 +191,7 @@ test.describe("Offline/Online Behavior", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${offlineUser}@test.com`);
     await page.fill("#regUser", offlineUser);
     await page.fill("#regPass", offlinePass);
     await page.fill("#confirmPass", offlinePass);

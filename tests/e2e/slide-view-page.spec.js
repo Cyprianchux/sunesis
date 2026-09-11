@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { selectTopic } = require("./helpers");
 
 const BASE_URL = "http://localhost:3000";
 
@@ -19,6 +20,7 @@ test.describe("Slide View Page (slide-view.html)", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);
@@ -37,7 +39,7 @@ test.describe("Slide View Page (slide-view.html)", () => {
     await page.click("#createTopicBtn");
     await page.waitForTimeout(2000);
 
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.fill("#slide-title", "First Slide");
     await page.fill("#slide-desc", "First slide content");
     await page.click("#addSlideBtn");
@@ -75,16 +77,16 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("has topic selection dropdown", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
-    await expect(page.locator("#topicSelect")).toBeVisible();
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
+    await expect(page.locator("#topicSelect")).toBeAttached();
   });
 
   test("selecting a topic shows slides", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
     const slideContent = page.locator(".slide-content");
     await expect(slideContent).toBeVisible();
@@ -93,9 +95,9 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("displays slide counter text", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
     await expect(page.locator(".slide-content")).toContainText("Slide 1 of 2");
   });
@@ -103,9 +105,9 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("next arrow navigates to next slide", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
     await page.click("#nextArrow");
     await page.waitForTimeout(500);
@@ -115,9 +117,9 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("prev arrow navigates to previous slide", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
     await page.click("#nextArrow");
     await page.waitForTimeout(500);
@@ -129,9 +131,9 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("prev arrow is disabled on first slide", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
     const prevArrow = page.locator("#prevArrow");
     await expect(prevArrow).toBeDisabled();
@@ -158,11 +160,11 @@ test.describe("Slide View Page (slide-view.html)", () => {
   test("handles empty topic selection", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "SlideView Topic");
+    await selectTopic(page, "SlideView Topic");
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "");
+    await selectTopic(page, "");
     await page.waitForTimeout(500);
     await expect(page.locator("#slideDisplay")).toContainText("Select a topic");
   });

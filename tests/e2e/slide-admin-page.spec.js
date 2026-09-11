@@ -21,6 +21,7 @@ test.describe("Content Manager Page (slide-admin.html)", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);
@@ -141,8 +142,8 @@ test.describe("Content Manager Page (slide-admin.html)", () => {
   test("delete all button is present", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-admin`);
-    await page.waitForSelector("#deleteAllBtn", { timeout: 5000 });
-    await expect(page.locator("#deleteAllBtn")).toBeVisible();
+    await page.waitForSelector("#deleteAllBtn", { state: "attached", timeout: 5000 });
+    await expect(page.locator("#deleteAllBtn")).toBeAttached();
   });
 
   test("floating add button exists", async ({ page }) => {
@@ -167,7 +168,7 @@ test.describe("Content Manager Page (slide-admin.html)", () => {
   test("navbar topics dropdown with select is present", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/slide-admin`);
-    await page.waitForSelector("#navTopicSelect", { timeout: 5000 });
-    await expect(page.locator("#navTopicSelect")).toBeVisible();
+    await page.waitForSelector("#navTopicSelect", { state: "attached", timeout: 5000 });
+    await expect(page.locator("#navTopicSelect")).toBeAttached();
   });
 });

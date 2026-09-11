@@ -38,6 +38,7 @@ test.describe("Footer Pages (footer-pages.html)", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);

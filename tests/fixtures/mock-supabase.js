@@ -8,6 +8,7 @@ const db = {
   users: new Map(),
   topics: new Map(),
   slides: new Map(),
+  tokens: new Map(),
 };
 
 function hashPassword(password) {
@@ -18,14 +19,27 @@ function resetMockDb() {
   db.users.clear();
   db.topics.clear();
   db.slides.clear();
+  db.tokens.clear();
 }
 
-function seedMockUser(username, password, role = "user") {
+function seedMockUser(username, password, role = "user", overrides = {}) {
   const normalized = String(username).trim().toLowerCase();
   db.users.set(normalized, {
     username: normalized,
+    email: overrides.email || `${normalized}@test.com`,
+    email_verified: overrides.email_verified !== undefined ? overrides.email_verified : true,
     password_hash: hashPassword(password),
     role,
+    created_at: new Date().toISOString(),
+  });
+}
+
+function seedMockToken(token, username, type, expiresAt) {
+  db.tokens.set(token, {
+    token,
+    username,
+    type,
+    expires_at: expiresAt || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
     created_at: new Date().toISOString(),
   });
 }
@@ -87,12 +101,14 @@ function createMockSupabaseClient() {
     single() { this._single = true; return this; }
     maybeSingle() { this._maybeSingle = true; return this; }
     insert(data) { this._insertData = Array.isArray(data) ? data : [data]; this._deleteMode = false; return this; }
+    update(data) { this._updateData = data; this._deleteMode = false; this._insertData = null; return this; }
     delete() { this._deleteMode = true; return this; }
 
     _getStore() {
       if (this.table === "users") return db.users;
       if (this.table === "topics") return db.topics;
       if (this.table === "slides") return db.slides;
+      if (this.table === "tokens") return db.tokens;
       return new Map();
     }
 
@@ -117,6 +133,17 @@ function createMockSupabaseClient() {
 
     async execute() {
       const store = this._getStore();
+
+      if (this._updateData) {
+        const toUpdate = this._applyFilters([...store.values()]);
+        for (const item of toUpdate) {
+          const merged = { ...item, ...this._updateData };
+          for (const [key, val] of store) {
+            if (val === item) store.set(key, merged);
+          }
+        }
+        return { data: null, error: null };
+      }
 
       if (this._deleteMode) {
         if (this._notNullFilter) {
@@ -156,6 +183,10 @@ function createMockSupabaseClient() {
             }
             const newItem = { ...item, created_at: item.created_at || new Date().toISOString() };
             db.topics.set(item.name, newItem);
+            results.push(newItem);
+          } else if (this.table === "tokens") {
+            const newItem = { ...item, created_at: item.created_at || new Date().toISOString() };
+            db.tokens.set(item.token, newItem);
             results.push(newItem);
           } else {
             results.push(item);
@@ -197,6 +228,7 @@ module.exports = {
   seedMockUser,
   seedMockTopic,
   seedMockSlide,
+  seedMockToken,
   hashPassword,
   db,
   TEST_JWT_SECRET,

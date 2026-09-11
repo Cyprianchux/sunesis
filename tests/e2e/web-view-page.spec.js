@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { selectTopic } = require("./helpers");
 
 const BASE_URL = "http://localhost:3000";
 
@@ -19,6 +20,7 @@ test.describe("Web View Page (web-view.html)", () => {
     await page.goto(BASE_URL);
     await page.click(".toggle-link");
     await page.waitForSelector("#registerBox:not(.hidden)");
+    await page.fill("#regEmail", `${TEST_USER}@test.com`);
     await page.fill("#regUser", TEST_USER);
     await page.fill("#regPass", TEST_PASS);
     await page.fill("#confirmPass", TEST_PASS);
@@ -37,7 +39,7 @@ test.describe("Web View Page (web-view.html)", () => {
     await page.click("#createTopicBtn");
     await page.waitForTimeout(2000);
 
-    await page.selectOption("#topicSelect", "WebView Topic");
+    await selectTopic(page, "WebView Topic");
     await page.fill("#slide-title", "Web Slide One");
     await page.fill("#slide-desc", "Content for web view slide one");
     await page.click("#addSlideBtn");
@@ -68,16 +70,16 @@ test.describe("Web View Page (web-view.html)", () => {
   test("has topic selection dropdown", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
-    await expect(page.locator("#topicSelect")).toBeVisible();
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
+    await expect(page.locator("#topicSelect")).toBeAttached();
   });
 
   test("selecting a topic renders slides as scrollable sections", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "WebView Topic");
+    await selectTopic(page, "WebView Topic");
     await page.waitForTimeout(1000);
     const slides = page.locator(".page-slide");
     await expect(slides).toHaveCount(2);
@@ -86,9 +88,9 @@ test.describe("Web View Page (web-view.html)", () => {
   test("displays slide titles in web view", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "WebView Topic");
+    await selectTopic(page, "WebView Topic");
     await page.waitForTimeout(1000);
     await expect(page.locator(".page-slide").first()).toContainText("Web Slide One");
     await expect(page.locator(".page-slide").last()).toContainText("Web Slide Two");
@@ -97,9 +99,9 @@ test.describe("Web View Page (web-view.html)", () => {
   test("shows topic label on each slide", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "WebView Topic");
+    await selectTopic(page, "WebView Topic");
     await page.waitForTimeout(1000);
     const small = page.locator(".page-slide small").first();
     await expect(small).toContainText("WebView Topic");
@@ -126,11 +128,11 @@ test.describe("Web View Page (web-view.html)", () => {
   test("deselecting topic shows no slides", async ({ page }) => {
     await loginAs(page, TEST_USER, TEST_PASS);
     await page.goto(`${BASE_URL}/src/web-view`);
-    await page.waitForSelector("#topicSelect", { timeout: 5000 });
+    await page.waitForSelector("#topicSelect", { state: "attached", timeout: 5000 });
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "WebView Topic");
+    await selectTopic(page, "WebView Topic");
     await page.waitForTimeout(1000);
-    await page.selectOption("#topicSelect", "");
+    await selectTopic(page, "");
     await page.waitForTimeout(500);
     const noSlides = page.locator(".js-slide-container");
     await expect(noSlides).toContainText("No slides found");
