@@ -5,6 +5,7 @@ node_modules/
 
 supabase-seed.sql
 supabase.sql
+supabase-migrate-email.sql
 reset-supabase.sql
 supabase-tables.sql
 
