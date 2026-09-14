@@ -104,7 +104,7 @@ function sendVerificationEmail({ email, username, token }) {
     html: layout("Verify your email", `
       <h1 style="color:#571313;font-size:20px;margin:0 0 10px;">Verify your email</h1>
       <p style="color:#8c7073;font-size:14px;line-height:1.7;margin:0 0 20px;">
-        Hi ${username || "there"},<br/>
+        Hi <strong>${username || "there"}</strong>,<br/>
         Welcome to Sunesis. Tap the button below to verify your email address and complete your registration.
       </p>
       <div style="text-align:center;margin:0 0 20px;">${buttonHref(link, "Verify email")}</div>
