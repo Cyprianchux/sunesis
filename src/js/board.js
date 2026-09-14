@@ -271,6 +271,16 @@ function handleAutoBullet(e) {
 
   // If current line contains bullet "•"
   if (textBeforeCursor.trim().startsWith("•")) {
+    if (textBeforeCursor.trim() === "•") {
+      e.preventDefault();
+      if (range.startContainer.nodeType === Node.TEXT_NODE) {
+        const bulletStart = Math.max(0, range.startOffset - textBeforeCursor.length);
+        range.setStart(range.startContainer, bulletStart);
+        range.deleteContents();
+      }
+      return;
+    }
+
     setTimeout(() => {
       insertBulletPoint();
     }, 0);

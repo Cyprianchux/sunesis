@@ -31,7 +31,7 @@ body {
   right: 0;
   height: 70px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 440px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 440px) max-content;
   align-items: center;
   gap: clamp(10px, 2vw, 24px);
   padding: 0 clamp(14px, 3vw, 32px);
@@ -152,7 +152,7 @@ body {
   justify-content: flex-end;
   grid-column: 3;
   grid-row: 1;
-  min-width: 0;
+  min-width: max-content;
   height: 70px;
 }
 
@@ -333,7 +333,7 @@ body {
    ============================================================ */
 @media screen and (max-width: 857px) {
   .top-banner {
-    grid-template-columns: minmax(0, 1fr) minmax(120px, 1.6fr) auto;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
     gap: 8px;
     padding: 0 10px 0 8px;
   }
@@ -360,6 +360,7 @@ body {
     width: 100%;
     max-width: none;
     margin: 0;
+    min-width: 0;
   }
 
   .search-bar input {
@@ -478,6 +479,26 @@ body {
   .nav-links a[data-tooltip]::after,
   .nav-links a[data-tooltip]::before {
     display: none;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .top-banner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  .brand img {
+    width: 2.5rem;
+  }
+
+  .search-bar input {
+    font-size: 0.78rem;
+    padding-left: 10px;
   }
 }
 

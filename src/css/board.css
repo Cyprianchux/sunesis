@@ -9,21 +9,22 @@
 /* Toolbar */
 .board-toolbar {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   flex-wrap: wrap;
   background: #f7eceb;
   border: 1px solid #f0dfdd;
-  padding: 5px;
+  padding: 4px;
   border-radius: 10px;
   justify-content: center;
 }
 
 .board-toolbar button {
-  padding: 10px 14px;
+  position: relative;
+  padding: 7px 10px;
   border: 1px solid #f0dfdd;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   background: #ffffff;
   color: #b22222;
   transition: 0.2s ease;
@@ -32,6 +33,57 @@
 .board-toolbar button:hover {
   background: #faeceb;
 } 
+
+.board-toolbar button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  background: #571313;
+  color: #fff;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(87, 19, 19, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 20;
+}
+
+.board-toolbar button::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #571313;
+  transform: translate(-50%, 4px) rotate(45deg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 21;
+}
+
+.board-toolbar button:hover::after,
+.board-toolbar button:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.board-toolbar button:hover::before,
+.board-toolbar button:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0) rotate(45deg);
+}
 
 /* Screen (Typing Area) */
 .board-screen {
@@ -114,7 +166,7 @@
 }
 
 #saveBoardBtn {
-  background: #b22222;
+  background: #45a878;
   color: white;
 }
 
