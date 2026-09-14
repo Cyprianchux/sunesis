@@ -1571,6 +1571,7 @@ function renderPageSlides(list) {
 if (isWebPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     await initDB();
+    await syncAllRemoteData();
     allSlidesCache = await getAllSlides();
     await loadTopicsView();
     bindTopicSelection();
