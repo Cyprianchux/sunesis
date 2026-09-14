@@ -135,10 +135,15 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 JWT_SECRET=use-a-long-random-secret
 PORT=3000
+BASE_URL=https://sunesis.vercel.app
 ```
 
 Keep `.env` private and configure the same variables in the hosting provider's
-server-side environment settings. Public registration always creates a `user`.
+server-side environment settings. `BASE_URL` must be the public frontend URL;
+otherwise email links fall back to localhost for local development. On Vercel,
+set it to the production URL (for example `https://sunesis.vercel.app`) in
+Project Settings > Environment Variables, then redeploy. Public registration
+always creates a `user`.
 Create the single admin account privately in Supabase by setting its `role` to
 `admin`; the browser never contains an admin username or admin secret. The
 service-role key must also remain server-side. Start the API locally with
