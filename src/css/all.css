@@ -31,7 +31,7 @@ body {
   right: 0;
   height: 70px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(140px, 440px) max-content;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 440px) max-content;
   align-items: center;
   gap: clamp(10px, 2vw, 24px);
   padding: 0 clamp(14px, 3vw, 32px);
@@ -484,12 +484,8 @@ body {
 
 @media screen and (max-width: 520px) {
   .top-banner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: max-content minmax(0, 1fr) auto;
     gap: 6px;
-  }
-
-  .brand span {
-    display: none;
   }
 
   .brand img {
