@@ -47,11 +47,9 @@ test.describe("Footer Pages (footer-pages.html)", () => {
     await page.close();
   });
 
-  test("redirects to home when not logged in", async ({ page }) => {
+  test("is accessible when not logged in", async ({ page }) => {
     await page.goto(`${BASE_URL}/src/footer-pages?page=about-sunesis`);
-    await page.waitForTimeout(2000);
-    const url = page.url();
-    expect(url).toMatch(/\/$/);
+    await expect(page.locator("#pageTitle")).toContainText("About Sunesis");
   });
 
   for (const { key, title } of PAGES) {
@@ -96,6 +94,11 @@ test.describe("Footer Pages (footer-pages.html)", () => {
     const dashLink = page.locator("a.secondary");
     await expect(dashLink).toBeVisible();
     await expect(dashLink).toHaveAttribute("href", "/src/account");
+  });
+
+  test("back to dashboard links home when not logged in", async ({ page }) => {
+    await page.goto(`${BASE_URL}/src/footer-pages?page=about-sunesis`);
+    await expect(page.locator("a.secondary")).toHaveAttribute("href", "/");
   });
 
   test("footer copyright is displayed", async ({ page }) => {
