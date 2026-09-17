@@ -21,7 +21,7 @@
           <p id="pageIntro"></p>
           <div class="cta">
             <a class="primary" href="/">Login or Register</a>
-            <a class="secondary" href="/src/account">Back to Dashboard</a>
+            <a id="dashboardLink" class="secondary" href="/">Back to Dashboard</a>
           </div>
         </div>
       </section>
@@ -37,7 +37,6 @@
     </div>
 
     <script>
-      /* ---------- AUTH GUARD ---------- */
       function getActiveUser() {
         const sessionUser = sessionStorage.getItem("sunesis_user");
         const rememberUser = localStorage.getItem("sunesis_user");
@@ -46,19 +45,12 @@
         return sessionUser || (isRemembered ? rememberUser : null);
       }
 
-      function requireAuth(redirectUrl = "/") {
-        const activeUser = getActiveUser();
-        console.log("Active user:", activeUser);
-
-        if (!activeUser) {
-          console.log("No active user, redirecting to", redirectUrl);
-          window.location.href = redirectUrl;
-        }
+      const dashboardLink = document.getElementById("dashboardLink");
+      if (getActiveUser()) {
+        dashboardLink.href = "/src/account";
+      } else {
+        dashboardLink.href = "/";
       }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        requireAuth();
-      });
 
       const pages = {
         "platform-overview": {
