@@ -36,10 +36,11 @@
         <ul class="nav-links" id="navLinks">
           <li>
             <a
+              id="webViewNav"
               href="/src/web-view"
               data-tooltip="Web view"
               aria-label="Web view"
-              ><i class="fa-solid fa-tv"></i
+              ><i class="fa-solid fa-globe"></i
             ></a>
           </li>
           <li>
@@ -52,8 +53,13 @@
           </li>
           <li><a href="/src/board">Board</a></li>
           <li id="topicsMenu" class="topics-menu">
-            Topics
+            <span class="topics-trigger"><i class="fa-solid fa-layer-group"></i> Topics</span>
             <div class="topics-dropdown">
+              <div class="dropdown-heading">
+                <i class="fa-solid fa-compass"></i>
+                <span>Browse topics</span>
+              </div>
+              <p class="dropdown-hint">Switch the topic shown in slide view.</p>
               <select id="topicSelect">
                 <option value="">Choose a topic</option>
               </select>
