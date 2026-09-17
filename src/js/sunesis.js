@@ -1564,24 +1564,46 @@ function renderDefaultTopics(hasTopics = false) {
             : "You don't have any topics yet. Learn how Sunesis works to create your first one."
         }
       </p>
-      <div class="topic-card default-topic-card getting-started-card">
-        <div class="getting-started-card-heading">
-          <div>
-            <span class="getting-started-kicker">Your platform tour</span>
-            <h3>Getting Started</h3>
-          </div>
-          <i class="fa-solid fa-route" aria-hidden="true"></i>
+      <div class="default-topic-cards">
+        <div class="topic-card default-topic-card">
+          <h3>Getting Started</h3>
+          <p>
+            Learn the simple flow behind topics and slides on Sunesis.
+          </p>
+          <button onclick="window.location.href='/src/footer-pages?page=how-it-works'">
+            View
+          </button>
         </div>
-        <p class="getting-started-intro">
-          Follow the Sunesis journey from discovering the platform to creating,
-          presenting, reading, and developing your own knowledge.
-        </p>
+        <div class="topic-card default-topic-card navigation-topic-card">
+          <div class="navigation-topic-heading">
+            <h3>Platform Navigation</h3>
+            <i class="fa-solid fa-route" aria-hidden="true"></i>
+          </div>
+          <p>
+            See how Sunesis connects Home, topics, views, and the Board in one
+            learning flow.
+          </p>
+          <button onclick="togglePlatformNavigation(this)">
+            View
+          </button>
+        </div>
+      </div>
+      <div class="platform-navigation-content" hidden>
+        <div class="platform-navigation-header">
+          <div>
+            <span class="getting-started-kicker">A visual tour</span>
+            <h3>How Sunesis fits together</h3>
+          </div>
+          <button class="platform-navigation-close" onclick="togglePlatformNavigation()">
+            Close
+          </button>
+        </div>
         <div class="getting-started-flow">
           ${gettingStartedSteps
             .map(
               (step) => `
                 <article class="page-slide getting-started-step">
-                  <div class="header">
+                  <div class="getting-started-step-layout">
                     <div class="header-text">
                       <h2>${step.title}</h2>
                       <p class="slide-desc">${step.text}</p>
@@ -1603,6 +1625,19 @@ function renderDefaultTopics(hasTopics = false) {
       </div>
     </div>
   `;
+}
+
+function togglePlatformNavigation(trigger) {
+  const content = document.querySelector(".platform-navigation-content");
+  if (!content) return;
+
+  const isOpening = content.hidden;
+  content.hidden = !isOpening;
+  const viewButton = document.querySelector(".navigation-topic-card button");
+  if (viewButton) viewButton.textContent = isOpening ? "Hide" : "View";
+  if (isOpening) {
+    content.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function openTopic(topicName) {
