@@ -38,8 +38,8 @@
             <a
               href="/src/slide-view"
               data-tooltip="Slide view"
-              aria-label="Web view"
-              ><i class="fa-solid fa-tv"></i
+              aria-label="Slide view"
+              ><i class="fa-solid fa-person-chalkboard"></i
             ></a>
           </li>
           <li>
@@ -52,8 +52,13 @@
           </li>
 
           <li id="topicsMenu" class="topics-menu">
-            Notes
+            <span class="topics-trigger"><i class="fa-solid fa-note-sticky"></i> Notes</span>
             <div class="topics-dropdown">
+              <div class="dropdown-heading">
+                <i class="fa-solid fa-bookmark"></i>
+                <span>Saved write-ups</span>
+              </div>
+              <p class="dropdown-hint">Return to a note you saved on the board.</p>
               <select id="savedNotesSelect">
                 <option value="">-- Load Write-ups --</option>
               </select>
