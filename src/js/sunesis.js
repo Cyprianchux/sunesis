@@ -1503,6 +1503,57 @@ function renderDefaultTopics(hasTopics = false) {
   const container = document.getElementById("topicsContainer");
   if (!container) return;
 
+  const gettingStartedSteps = [
+    {
+      title: "1. Start at Home",
+      image: "/screenshots/s-Home.png",
+      text:
+        "The Home page introduces Sunesis as a focused workspace for turning complex information into clear, memorable learning content. Use it as the starting point for discovering the platform and choosing your next step.",
+    },
+    {
+      title: "2. Explore the features",
+      image: "/screenshots/s-Features.png",
+      text:
+        "The Features section gives you a quick view of the tools available across Sunesis: organized topics, visual presentations, search, content management, and spaces for reviewing or writing your own knowledge.",
+    },
+    {
+      title: "3. Sign up or sign in",
+      image: "/screenshots/s-Signup_&_in.png",
+      text:
+        "Create an account to publish and manage your own learning material, or sign in to continue exploring topics already available. Your account keeps your workspace and learning history connected.",
+    },
+    {
+      title: "4. Learn from the Account page",
+      image: "/screenshots/s-Account.png",
+      text:
+        "The Account page is the shared starting point after sign-in. It brings together topics created across the platform so you can open a subject, review its slides, and learn from material contributed by different users.",
+    },
+    {
+      title: "5. Build content in Setup",
+      image: "/screenshots/s-Setup.png",
+      text:
+        "Setup is where ideas become a learning collection. Create a topic, add slide titles, descriptions, images, or videos, then manage the collection as it grows. Published topics become available for others to discover and learn from.",
+    },
+    {
+      title: "6. Present one idea at a time",
+      image: "/screenshots/s-Slide.png",
+      text:
+        "Slide view keeps attention on a single piece of content. Move forward or back through a topic with the controls, making it useful for guided study, demonstrations, revision, and presentations where sequence matters.",
+    },
+    {
+      title: "7. See the whole topic in Web view",
+      image: "/screenshots/s-Web.png",
+      text:
+        "Web view places the topic into one scrollable reading experience. It is useful when you want to scan the full structure, compare sections, revisit earlier ideas, or read at your own pace without changing slides.",
+    },
+    {
+      title: "8. Think and write on the Board",
+      image: "/screenshots/s-Board.png",
+      text:
+        "The Board is a flexible writing space for working through ideas while you learn. Type notes, use the formatting controls, save useful write-ups, and reload them later from the Notes menu when you want to continue thinking.",
+    },
+  ];
+
   container.innerHTML = `
     <div class="default-topics-container">
       <h2 class="default-topics-title">Welcome to Sunesis!</h2>
@@ -1513,17 +1564,42 @@ function renderDefaultTopics(hasTopics = false) {
             : "You don't have any topics yet. Learn how Sunesis works to create your first one."
         }
       </p>
-      <div class="topic-card default-topic-card">
-        <h3>Getting Started</h3>
-        <p>
-          Learn the simple flow behind topics and slides on
-          Sunesis.
+      <div class="topic-card default-topic-card getting-started-card">
+        <div class="getting-started-card-heading">
+          <div>
+            <span class="getting-started-kicker">Your platform tour</span>
+            <h3>Getting Started</h3>
+          </div>
+          <i class="fa-solid fa-route" aria-hidden="true"></i>
+        </div>
+        <p class="getting-started-intro">
+          Follow the Sunesis journey from discovering the platform to creating,
+          presenting, reading, and developing your own knowledge.
         </p>
-        <button
-          onclick="window.location.href='/src/footer-pages?page=how-it-works'"
-        >
-          View
-        </button>
+        <div class="getting-started-flow">
+          ${gettingStartedSteps
+            .map(
+              (step) => `
+                <article class="page-slide getting-started-step">
+                  <div class="header">
+                    <div class="header-text">
+                      <h2>${step.title}</h2>
+                      <p class="slide-desc">${step.text}</p>
+                    </div>
+                    <div class="header-img">
+                      <img src="${step.image}" alt="${step.title} screenshot" loading="lazy">
+                    </div>
+                  </div>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+        <div class="getting-started-actions">
+          <button onclick="window.location.href='/src/footer-pages?page=how-it-works'">
+            Open the written guide <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   `;
