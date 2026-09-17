@@ -128,6 +128,10 @@ test.describe("Registration Flow", () => {
     await page.waitForTimeout(1000);
     const popup = page.locator("#popup");
     await expect(popup).toContainText("do not match");
+    await expect(page.locator("#regEmail")).toHaveValue("testuser2@test.com");
+    await expect(page.locator("#regUser")).toHaveValue("testuser2");
+    await expect(page.locator("#regPass")).toHaveValue("Test1234");
+    await expect(page.locator("#confirmPass")).toHaveValue("Different123");
   });
 
   test("shows error for missing fields", async ({ page }) => {
@@ -150,6 +154,8 @@ test.describe("Login Flow", () => {
     await page.waitForTimeout(2000);
     const popup = page.locator("#popup");
     await expect(popup).toContainText("Invalid");
+    await expect(page.locator("#loginUser")).toHaveValue("nonexistent");
+    await expect(page.locator("#loginPass")).toHaveValue("");
   });
 });
 

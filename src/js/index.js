@@ -222,8 +222,6 @@ async function register() {
 
   if (password !== confirmPassword) {
     showPopup("Passwords do not match!", "error");
-    clearInputs(regUser, regEmail, regPass, confirmPass);
-
     return;
   }
 
@@ -319,7 +317,7 @@ async function login() {
   // Check local credentials immediately (no 8-second wait)
   if (!users[username] || hash !== users[username].password) {
     showPopup("Invalid username or password", "error");
-    clearInputs(loginUser, loginPass);
+    clearInputs(loginPass);
     setButtonLoading(loginBtn, false);
     return;
   }
@@ -413,7 +411,6 @@ document.addEventListener("keydown", function (e) {
       register();
     }
 
-    clearInputs(loginUser, loginPass, regUser, regEmail, regPass, confirmPass);
   }
 });
 
