@@ -40,8 +40,28 @@ function requireAuth(redirectUrl = "/") {
   }
 }
 
+const SELECTED_TOPIC_KEY = "sunesis_selected_topic";
+
+function updateViewNavigationLinks(topicName = localStorage.getItem(SELECTED_TOPIC_KEY)) {
+  const topicQuery = topicName
+    ? `?topic=${encodeURIComponent(topicName)}`
+    : "";
+
+  document.querySelectorAll("#slideViewNav, #webViewNav").forEach((link) => {
+    const route = link.id === "webViewNav" ? "/src/web-view" : "/src/slide-view";
+    link.href = `${route}${topicQuery}`;
+  });
+}
+
+function rememberSelectedTopic(topicName) {
+  if (!topicName) return;
+  localStorage.setItem(SELECTED_TOPIC_KEY, topicName);
+  updateViewNavigationLinks(topicName);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   requireAuth();
+  updateViewNavigationLinks();
 });
 
 function isAdminUser(user = getActiveUser()) {
@@ -580,6 +600,13 @@ async function loadTopicsAdmin() {
       opt.textContent = topic.name;
       select.appendChild(opt);
     });
+    const savedTopic = localStorage.getItem(SELECTED_TOPIC_KEY);
+    if (savedTopic && topics.some((topic) => topic.name === savedTopic)) {
+      select.value = savedTopic;
+    }
+    select.onchange = () => {
+      rememberSelectedTopic(select.value);
+    };
   }
 
   if (navSelect) {
@@ -590,6 +617,13 @@ async function loadTopicsAdmin() {
       opt.textContent = topic.name;
       navSelect.appendChild(opt);
     });
+    const savedTopic = localStorage.getItem(SELECTED_TOPIC_KEY);
+    if (savedTopic && topics.some((topic) => topic.name === savedTopic)) {
+      navSelect.value = savedTopic;
+    }
+    navSelect.onchange = () => {
+      rememberSelectedTopic(navSelect.value);
+    };
   }
 }
 // Display All Topics
@@ -720,7 +754,7 @@ async function performSearch() {
     }
 
     if (isWebPage) {
-      const savedTopic = localStorage.getItem("sunesis_selected_topic");
+      const savedTopic = localStorage.getItem(SELECTED_TOPIC_KEY);
 
       if (savedTopic) {
         selectedTopic = savedTopic;
@@ -860,7 +894,7 @@ if (isViewPage) {
           return;
         }
 
-        localStorage.setItem("sunesis_selected_topic", topicName); // <-- sync
+        rememberSelectedTopic(topicName);
 
         selectedTopic = topicName;
         slides = allSlidesCache.filter((s) => s.topic === topicName);
@@ -898,7 +932,7 @@ if (isViewPage) {
 
     // fallback to saved topic
     if (!topicFromUrl) {
-      topicFromUrl = localStorage.getItem("sunesis_selected_topic");
+      topicFromUrl = localStorage.getItem(SELECTED_TOPIC_KEY);
     }
 
     if (topicFromUrl) {
@@ -912,7 +946,7 @@ if (isViewPage) {
       renderCurrentSlide();
     } 
 
-    /*const savedTopic = localStorage.getItem("sunesis_selected_topic");
+    /*
 
     if (savedTopic) {
       const select = document.getElementById("topicSelect");
@@ -921,7 +955,7 @@ if (isViewPage) {
       selectedTopic = savedTopic;
       currentSlideIndex = 0;
       renderCurrentSlide();
-    }*/
+    */
   });
 }
 
@@ -1089,6 +1123,7 @@ if (isAdminPage) {
           return;
         }
 
+        rememberSelectedTopic(name);
         if (isOnline()) {
           try {
             await remoteCreateTopic(name);
@@ -1130,6 +1165,7 @@ if (isAdminPage) {
           return;
         }
 
+        rememberSelectedTopic(topic);
         setButtonLoading(addSlideBtn, true);
 
         const slide = {
@@ -1495,7 +1531,7 @@ function renderDefaultTopics(hasTopics = false) {
 
 function openTopic(topicName) {
   // Save globally
-  localStorage.setItem("sunesis_selected_topic", topicName);
+  rememberSelectedTopic(topicName);
 
   // Navigate
   window.location.href = `/src/slide-view?topic=${encodeURIComponent(topicName)}`;
@@ -1576,7 +1612,7 @@ if (isWebPage) {
     await loadTopicsView();
     bindTopicSelection();
 
-    const savedTopic = localStorage.getItem("sunesis_selected_topic");
+    const savedTopic = localStorage.getItem(SELECTED_TOPIC_KEY);
     if (savedTopic) {
       const filtered = allSlidesCache.filter(s => s.topic === savedTopic);
       renderPageSlides(filtered);
@@ -1593,7 +1629,8 @@ if (isWebPage) {
 
       select.addEventListener("change", async () => {
         const topicName = select.value;
-        localStorage.setItem("sunesis_selected_topic", topicName); // sync to other pages
+        if (topicName) rememberSelectedTopic(topicName);
+        else localStorage.removeItem(SELECTED_TOPIC_KEY);
         if (!topicName) {
           selectedTopic = null;
           renderPageSlides([]);
@@ -1626,7 +1663,7 @@ if (isWebPage) {
 
 // For real time sync across all tabs
 window.addEventListener("storage", (e) => {
-  if (e.key === "sunesis_selected_topic") {
+  if (e.key === SELECTED_TOPIC_KEY) {
     location.reload();
   }
 });
