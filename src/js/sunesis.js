@@ -1595,7 +1595,7 @@ function renderDefaultTopics(hasTopics = false) {
             <h3>How Sunesis fits together</h3>
           </div>
           <button class="platform-navigation-close" onclick="togglePlatformNavigation()">
-            Close
+            Close the Platform Navigation
           </button>
         </div>
         <div class="getting-started-flow">
@@ -1618,8 +1618,8 @@ function renderDefaultTopics(hasTopics = false) {
             .join("")}
         </div>
         <div class="getting-started-actions">
-          <button onclick="window.location.href='/src/footer-pages?page=how-it-works'">
-            Open the written guide <i class="fa-solid fa-arrow-right"></i>
+          <button onclick="togglePlatformNavigation()">
+            Close the Platform Navigation <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>

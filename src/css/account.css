@@ -167,8 +167,16 @@ body {
 }
 
 .default-topic-cards .topic-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
   margin: 0;
   text-align: left;
+}
+
+.default-topic-cards .topic-card button {
+  align-self: flex-start;
+  margin-top: auto;
 }
 
 .navigation-topic-card {
@@ -218,16 +226,19 @@ body {
 }
 
 .platform-navigation-close {
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--maroon);
+  background: var(--brick);
+  border: 1px solid var(--brick);
+  border-radius: 9px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 10px 15px;
   white-space: nowrap;
 }
 
 .platform-navigation-close:hover {
-  background: var(--soft);
-  border-color: var(--brick);
-  color: var(--brick);
+  background: var(--maroon);
+  border-color: var(--maroon);
 }
 
 .getting-started-kicker {
