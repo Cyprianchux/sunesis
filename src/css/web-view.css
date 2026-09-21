@@ -27,7 +27,7 @@ body {
 /* TEXT LEFT */
 .header-text {
   flex: 1;
-  max-width: auto ;
+  max-width: 100%;
   text-align: left;
 }
 
@@ -46,6 +46,19 @@ body {
   justify-content: flex-start;
   align-items: center;
   justify-content: center;
+}
+
+.text-only-slide .header {
+  justify-content: center;
+}
+
+.text-only-slide .header-text {
+  flex: 0 1 720px;
+  width: 100%;
+}
+
+.text-only-slide .header-text h2 {
+  text-align: left;
 }
 
 /* Media sizing */
