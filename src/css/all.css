@@ -580,6 +580,39 @@ body {
   background-color: var(--maroon);
 }
 
+/* Full-page loading state used while navigating to or loading content pages. */
+.page-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 251, 250, 0.88);
+  color: var(--maroon);
+  font-size: 1rem;
+  font-weight: 700;
+  backdrop-filter: blur(3px);
+}
+
+.page-loading[hidden] {
+  display: none;
+}
+
+.page-loading-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #efd3d0;
+  border-top-color: var(--brick);
+  border-radius: 50%;
+  animation: page-loading-spin 0.8s linear infinite;
+}
+
+@keyframes page-loading-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Confirm buttons */
 
 #confirmYes, #confirmNo {

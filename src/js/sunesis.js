@@ -62,6 +62,23 @@ function rememberSelectedTopic(topicName) {
 document.addEventListener("DOMContentLoaded", () => {
   requireAuth();
   updateViewNavigationLinks();
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (!link || event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const target = new URL(link.href, window.location.href);
+    if (target.origin !== window.location.origin) return;
+
+    const messages = [
+      ["/src/account", "Loading topics ..."],
+      ["/src/slide-view", "Loading slides ..."],
+      ["/src/web-view", "Loading slides ..."],
+      ["/src/slide-admin", "Loading topics and slides ..."],
+    ];
+    const match = messages.find(([path]) => target.pathname.includes(path));
+    if (match) showPageLoading(match[1]);
+  }, true);
 });
 
 function isAdminUser(user = getActiveUser()) {
@@ -101,6 +118,27 @@ function setButtonLoading(button, isLoading) {
     button.disabled = false;
     button.textContent = button.dataset.originalText || button.textContent;
   }
+}
+
+function showPageLoading(message = "Loading...") {
+  let loading = document.getElementById("pageLoading");
+  if (!loading) {
+    loading = document.createElement("div");
+    loading.id = "pageLoading";
+    loading.className = "page-loading";
+    loading.setAttribute("role", "status");
+    loading.setAttribute("aria-live", "polite");
+    loading.innerHTML =
+      '<span class="page-loading-spinner" aria-hidden="true"></span><span id="pageLoadingText"></span>';
+    document.body.appendChild(loading);
+  }
+  loading.querySelector("#pageLoadingText").textContent = message;
+  loading.hidden = false;
+}
+
+function hidePageLoading() {
+  const loading = document.getElementById("pageLoading");
+  if (loading) loading.hidden = true;
 }
 
 async function getTopicByName(name) {
@@ -875,6 +913,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // VIEW PAGE (slide-view.html)
 if (isViewPage) {
   document.addEventListener("DOMContentLoaded", async () => {
+    showPageLoading("Loading slides ...");
     await initDB();
     await syncAllRemoteData();
     allSlidesCache = await getAllSlides();
@@ -896,11 +935,13 @@ if (isViewPage) {
 
         rememberSelectedTopic(topicName);
 
+        showPageLoading("Loading slides ...");
         selectedTopic = topicName;
         slides = allSlidesCache.filter((s) => s.topic === topicName);
 
         currentSlideIndex = 0;
         renderCurrentSlide();
+        hidePageLoading();
       });
     }
 
@@ -945,6 +986,7 @@ if (isViewPage) {
       currentSlideIndex = 0;
       renderCurrentSlide();
     } 
+    hidePageLoading();
 
     /*
 
@@ -1090,10 +1132,12 @@ function displayFilteredSlides(filteredSlides) {
 // ADMIN PAGE (slide-admin.html)
 if (isAdminPage) {
   document.addEventListener("DOMContentLoaded", async () => {
+    showPageLoading("Loading topics and slides ...");
     await initDB();
     await syncAllRemoteData();
     await loadTopicsAdmin();
-    displayAllTopics();
+    await displayAllTopics();
+    hidePageLoading();
 
     const deleteAllBtn = document.getElementById("deleteAllBtn");
     if (deleteAllBtn && !isAdminUser()) {
@@ -1389,6 +1433,7 @@ function formatDescription(rawText = "") {
 
 if (isAccountPage) {
   document.addEventListener("DOMContentLoaded", async () => {
+    showPageLoading("Loading topics ...");
     /* ---------- AUTH GUARD ---------- */
     const sessionUser = sessionStorage.getItem("sunesis_user");
     const rememberUser = localStorage.getItem("sunesis_user");
@@ -1397,6 +1442,7 @@ if (isAccountPage) {
     const activeUser = sessionUser || (isRemembered ? rememberUser : null);
 
     if (!activeUser) {
+      hidePageLoading();
       showPopup("Access denied. Please login.", "error");
       window.location.href = "/";
       return;
@@ -1420,7 +1466,8 @@ if (isAccountPage) {
 
     await initDB();
     await syncAllRemoteData();
-    renderTopicCards();
+    await renderTopicCards();
+    hidePageLoading();
   });
 }
 
@@ -1692,7 +1739,7 @@ function renderPageSlides(list) {
         : "";
 
       return `
-      <section class="page-slide">
+      <section class="page-slide${media ? "" : " text-only-slide"}">
         <div class="header">
           <div class="header-text">
             <h2>${slide.title}</h2>
@@ -1701,9 +1748,7 @@ function renderPageSlides(list) {
             </div>
           </div>
 
-          <div class="header-img">
-            ${media}
-          </div>
+          ${media ? `<div class="header-img">${media}</div>` : ""}
 
         </div>
 
@@ -1717,6 +1762,7 @@ function renderPageSlides(list) {
 // WEB PAGE (web-view.html)
 if (isWebPage) {
   document.addEventListener("DOMContentLoaded", async () => {
+    showPageLoading("Loading slides ...");
     await initDB();
     await syncAllRemoteData();
     allSlidesCache = await getAllSlides();
@@ -1740,16 +1786,19 @@ if (isWebPage) {
 
       select.addEventListener("change", async () => {
         const topicName = select.value;
+        showPageLoading("Loading slides ...");
         if (topicName) rememberSelectedTopic(topicName);
         else localStorage.removeItem(SELECTED_TOPIC_KEY);
         if (!topicName) {
           selectedTopic = null;
           renderPageSlides([]);
+          hidePageLoading();
           return;
         }
         selectedTopic = topicName;
         const filtered = allSlidesCache.filter(s => s.topic === topicName);
         renderPageSlides(filtered);
+        hidePageLoading();
       });
 
     }
@@ -1769,6 +1818,7 @@ if (isWebPage) {
         select.appendChild(opt);
       });
     }
+    hidePageLoading();
   });
 }
 

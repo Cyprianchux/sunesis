@@ -18,6 +18,22 @@ function logout() {
   window.location.href = "/";
 }
 
+function showPageLoading(message = "Loading...") {
+  let loading = document.getElementById("pageLoading");
+  if (!loading) {
+    loading = document.createElement("div");
+    loading.id = "pageLoading";
+    loading.className = "page-loading";
+    loading.setAttribute("role", "status");
+    loading.setAttribute("aria-live", "polite");
+    loading.innerHTML =
+      '<span class="page-loading-spinner" aria-hidden="true"></span><span id="pageLoadingText"></span>';
+    document.body.appendChild(loading);
+  }
+  loading.querySelector("#pageLoadingText").textContent = message;
+  loading.hidden = false;
+}
+
 // Loading state management
 function setButtonLoading(button, isLoading) {
   if (isLoading) {
@@ -302,6 +318,7 @@ async function login() {
 
       showPopup("Login successful", "success");
       clearInputs(loginUser, loginPass);
+      showPageLoading("Loading topics ...");
       setTimeout(() => {
         window.location.href = "/src/account";
       }, 900);
@@ -345,6 +362,7 @@ async function login() {
 
   showPopup("Login successful", "success");
   clearInputs(loginUser, loginPass);
+  showPageLoading("Loading topics ...");
 
   setTimeout(() => {
     window.location.href = "/src/account";
