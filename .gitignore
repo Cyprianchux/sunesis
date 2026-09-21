@@ -1,6 +1,5 @@
 node_modules/
 .env
-.env.*
 .env.example
 
 supabase-seed.sql
@@ -10,12 +9,8 @@ reset-supabase.sql
 supabase-tables.sql
 
 -- Test files
-CREATE-TEST-REPORT.md
+TEST-REPORT.md
 e2e-out.txt
-e2e-results.txt
-e2e-server-err.txt
-e2e-server-out.txt
-server-err.txt
 server-out.txt
 test-results/
 vitest-out.txt
