@@ -589,11 +589,27 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: rgba(255, 251, 250, 0.88);
   color: var(--maroon);
   font-size: 1rem;
   font-weight: 700;
+}
+
+.page-loading::before {
+  content: "";
+  position: absolute;
+  width: min(320px, calc(100vw - 32px));
+  height: 120px;
+  border: 1px solid rgba(240, 223, 221, 0.95);
+  border-radius: 16px;
+  background: rgba(255, 251, 250, 0.88);
+  box-shadow: 0 12px 32px rgba(87, 19, 19, 0.16);
   backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.page-loading > * {
+  position: relative;
+  z-index: 1;
 }
 
 .page-loading[hidden] {
