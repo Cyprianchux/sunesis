@@ -67,11 +67,8 @@
       body: JSON.stringify({ token, newPassword }),
     });
 
-  window.remoteResendVerification = (email) =>
-    request("/auth/resend-verification", {
-      method: "POST",
-      body: JSON.stringify({ email }),
-    });
+  window.remoteResendVerification = () =>
+    request("/auth/resend-verification", { method: "POST" });
 
   window.remoteRegisterLocalUser = (username, passwordHash, role) =>
     request("/auth/register-local", {

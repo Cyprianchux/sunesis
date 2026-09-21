@@ -270,14 +270,10 @@ function createApp(supabase) {
     }
   });
 
-  app.post("/auth/resend-verification", async (req, res) => {
+  app.post("/auth/resend-verification", authenticate, async (req, res) => {
     try {
-      const email = normalizeEmail(req.body.email);
-      if (!email || !EMAIL_RE.test(email)) {
-        return res.status(400).json({ message: "Please provide a valid email address." });
-      }
-      const user = await getUserByEmail(email);
-      if (!user || user.email_verified) {
+      const user = await getUser(req.user.username);
+      if (!user || user.email_verified || !user.email || !EMAIL_RE.test(user.email)) {
         return res.status(404).json({ message: "No unverified account found for that email." });
       }
       const token = await createTokenRecord(user.username, "verify", VERIFY_TOKEN_TTL_MS);

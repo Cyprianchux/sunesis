@@ -1455,13 +1455,13 @@ if (isAccountPage) {
 }
 
 async function resendVerification() {
-  const email =
-    sessionStorage.getItem("sunesis_email") ||
-    localStorage.getItem("sunesis_email");
   const button = document.getElementById("resendVerifyBtn");
 
-  if (!email) {
-    showPopup("No email on file for this account.", "error");
+  const token =
+    sessionStorage.getItem("sunesis_token") ||
+    localStorage.getItem("sunesis_token");
+  if (!token) {
+    showPopup("Please log in again before requesting verification.", "error");
     return;
   }
 
@@ -1471,7 +1471,7 @@ async function resendVerification() {
   }
 
   try {
-    await remoteResendVerification(email);
+    await remoteResendVerification();
     showPopup("Verification email sent. Check your inbox.", "success");
   } catch (error) {
     showPopup(error.message, "error");

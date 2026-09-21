@@ -336,11 +336,15 @@ describe("POST /auth/reset-password", () => {
 });
 
 describe("POST /auth/resend-verification", () => {
+  function authHeader(username = "testuser") {
+    return `Bearer ${jwt.sign({ username, role: "user" }, process.env.JWT_SECRET)}`;
+  }
+
   it("sends a new verification email for an unverified account", async () => {
     seedMockUser("testuser", "Pass1234", "user", { email: "test@example.com", email_verified: false });
     const res = await request(app)
       .post("/auth/resend-verification")
-      .send({ email: "test@example.com" });
+      .set("Authorization", authHeader());
     expect(res.status).toBe(200);
     expect(res.body.message).toMatch(/verification email sent/i);
     expect(latestToken("verify")).toBeTruthy();
@@ -350,22 +354,26 @@ describe("POST /auth/resend-verification", () => {
     seedMockUser("testuser", "Pass1234", "user", { email: "test@example.com", email_verified: true });
     const res = await request(app)
       .post("/auth/resend-verification")
-      .send({ email: "test@example.com" });
+      .set("Authorization", authHeader());
     expect(res.status).toBe(404);
   });
 
-  it("returns 404 for an unknown email", async () => {
+  it("does not accept a recipient email from the client", async () => {
+    seedMockUser("testuser", "Pass1234", "user", { email: "test@example.com", email_verified: false });
+    seedMockUser("otheruser", "Pass1234", "user", { email: "other@example.com", email_verified: false });
     const res = await request(app)
       .post("/auth/resend-verification")
-      .send({ email: "nobody@example.com" });
-    expect(res.status).toBe(404);
+      .set("Authorization", authHeader())
+      .send({ email: "other@example.com" });
+    expect(res.status).toBe(200);
+    expect(latestToken("verify")).toBeTruthy();
+    expect(db.tokens.get(latestToken("verify")).username).toBe("testuser");
   });
 
-  it("returns 400 for an invalid email", async () => {
+  it("requires authentication", async () => {
     const res = await request(app)
-      .post("/auth/resend-verification")
-      .send({ email: "not-an-email" });
-    expect(res.status).toBe(400);
+      .post("/auth/resend-verification");
+    expect(res.status).toBe(401);
   });
 });
 
