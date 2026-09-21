@@ -169,3 +169,15 @@ section {
 #nextArrow {
   right: 15px;
 }
+
+@media screen and (min-width: 769px) {
+  .image-only-slide .slide-body {
+    top: 58px;
+    justify-content: flex-start;
+  }
+
+  .image-only-slide .slide-body img {
+    width: 50vw;
+    max-width: 760px;
+  }
+}
