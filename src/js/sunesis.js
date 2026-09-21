@@ -1042,14 +1042,13 @@ function renderCurrentSlide() {
   }
 
   const slide = slides[currentSlideIndex];
+  const imageOnly = slide.type === "image" && Boolean(slide.media) && !slide.desc?.trim();
 
   display.innerHTML = `
-    <div class="slide-content">
+    <div class="slide-content${imageOnly ? " image-only-slide" : ""}">
       <h4>${slide.title}</h4>
       <div class="slide-body">
-        <div class="slide-desc">
-          ${formatDescription(slide.desc)}
-        </div>
+        ${imageOnly ? "" : `<div class="slide-desc">${formatDescription(slide.desc)}</div>`}
 
         ${
           slide.media
@@ -1715,6 +1714,7 @@ function renderPageSlides(list) {
 
   slideContainer.innerHTML = list
     .map((slide) => {
+      const imageOnly = slide.type === "image" && Boolean(slide.media) && !slide.desc?.trim();
       const media = slide.media
         ? slide.type === "image"
           ? `<img src="${slide.media}" alt="">`
@@ -1722,13 +1722,11 @@ function renderPageSlides(list) {
         : "";
 
       return `
-      <section class="page-slide${media ? "" : " text-only-slide"}">
+      <section class="page-slide${media ? "" : " text-only-slide"}${imageOnly ? " image-only-slide" : ""}">
         <div class="header">
           <div class="header-text">
             <h2>${slide.title}</h2>
-            <div class="slide-desc">
-              ${formatDescription(slide.desc)}
-            </div>
+            ${imageOnly ? "" : `<div class="slide-desc">${formatDescription(slide.desc)}</div>`}
           </div>
 
           ${media ? `<div class="header-img">${media}</div>` : ""}

@@ -70,6 +70,28 @@ body {
   border-radius: 10px;
 }
 
+.header-img img {
+  box-shadow: 0 4px 14px rgba(87, 19, 19, 0.2);
+}
+
+.image-only-slide .header {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.image-only-slide .header-text {
+  flex: 0 1 auto;
+  width: 100%;
+}
+
+.image-only-slide .header-text h2 {
+  text-align: center;
+}
+
+.image-only-slide .header-img {
+  width: 100%;
+}
+
 .page-slide small {
   color: rgba(178, 34, 34, 0.212);
 }
