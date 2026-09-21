@@ -62,23 +62,6 @@ function rememberSelectedTopic(topicName) {
 document.addEventListener("DOMContentLoaded", () => {
   requireAuth();
   updateViewNavigationLinks();
-  document.addEventListener("click", (event) => {
-    const link = event.target.closest("a[href]");
-    if (!link || event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-
-    const target = new URL(link.href, window.location.href);
-    if (target.origin !== window.location.origin) return;
-
-    const messages = [
-      ["/src/account", "Loading topics ..."],
-      ["/src/slide-view", "Loading slides ..."],
-      ["/src/web-view", "Loading slides ..."],
-      ["/src/slide-admin", "Loading topics and slides ..."],
-    ];
-    const match = messages.find(([path]) => target.pathname.includes(path));
-    if (match) showPageLoading(match[1]);
-  }, true);
 });
 
 function isAdminUser(user = getActiveUser()) {
