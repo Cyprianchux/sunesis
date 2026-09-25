@@ -330,12 +330,20 @@ function createApp(supabase) {
     }
   });
 
-  app.get("/topics", authenticate, async (_req, res) => {
+  app.get("/topics", authenticate, async (req, res) => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("topics")
         .select("name, creator, created_at")
         .order("created_at", { ascending: true });
+      if (req.query.limit) {
+        const limit = Math.min(Math.max(Number.parseInt(req.query.limit, 10) || 50, 1), 100);
+        query = query.limit(limit);
+      }
+      if (req.query.updated_since) {
+        query = query.gt("created_at", String(req.query.updated_since));
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return res.json((data || []).map(topicResponse));
     } catch (error) {
@@ -388,6 +396,13 @@ function createApp(supabase) {
         .select("id, topic, title, description, media, type, creator, created_at")
         .order("created_at", { ascending: true });
       if (req.query.topic) query = query.eq("topic", req.query.topic);
+      if (req.query.limit) {
+        const limit = Math.min(Math.max(Number.parseInt(req.query.limit, 10) || 50, 1), 100);
+        query = query.limit(limit);
+      }
+      if (req.query.updated_since) {
+        query = query.gt("created_at", String(req.query.updated_since));
+      }
       const { data, error } = await query;
       if (error) throw error;
       return res.json((data || []).map(slideResponse));
