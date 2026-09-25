@@ -181,6 +181,8 @@ let slides = [];
 let currentSlideIndex = 0;
 let selectedTopic = null;
 let allSlidesCache = [];
+let remoteSyncPromise = null;
+const REMOTE_SYNC_TIME_KEY = "sunesis_remote_sync_at";
 
 // Detect page type
 const pathname = window.location.pathname;
@@ -347,16 +349,21 @@ async function syncRemoteToLocal() {
 
   try {
     const remoteTopics = await remoteFetchTopics();
-    for (const topic of remoteTopics) {
-      await saveLocalTopic({
-        ...topic,
-        remoteSynced: true,
-      });
-    }
+    await saveLocalTopics(remoteTopics.map((topic) => ({
+      ...topic,
+      remoteSynced: true,
+    })));
 
     const remoteSlides = await remoteFetchSlides();
+    const existingSlides = await getAllSlides();
+    const existingByRemoteId = new Map(
+      existingSlides
+        .filter((slide) => slide.remoteId != null)
+        .map((slide) => [Number(slide.remoteId), slide]),
+    );
+    const slidesToSave = [];
     for (const slide of remoteSlides) {
-      const existing = await getSlideByRemoteId(slide.id);
+      const existing = existingByRemoteId.get(Number(slide.id));
       const localSlide = {
         topic: slide.topic,
         title: slide.title,
@@ -371,8 +378,10 @@ async function syncRemoteToLocal() {
       if (existing) {
         localSlide.id = existing.id;
       }
-      await saveLocalSlide(localSlide);
+      slidesToSave.push(localSlide);
     }
+    await saveLocalSlides(slidesToSave);
+    localStorage.setItem(REMOTE_SYNC_TIME_KEY, new Date().toISOString());
   } catch (error) {
     console.warn("Remote sync failed:", error.message);
   }
@@ -381,9 +390,22 @@ async function syncRemoteToLocal() {
 async function syncAllRemoteData() {
   if (!db) await initDB(); 
   if (!isOnline()) return;
-  await syncLocalUsersToRemote();
-  await syncLocalToRemote();
-  await syncRemoteToLocal();
+  if (remoteSyncPromise) return remoteSyncPromise;
+
+  const lastSync = localStorage.getItem(REMOTE_SYNC_TIME_KEY);
+  const shouldRefreshRemote =
+    !lastSync || Date.now() - Date.parse(lastSync) >= 60_000;
+
+  remoteSyncPromise = (async () => {
+    await syncLocalUsersToRemote();
+    await syncLocalToRemote();
+    if (shouldRefreshRemote) await syncRemoteToLocal();
+  })();
+  try {
+    await remoteSyncPromise;
+  } finally {
+    remoteSyncPromise = null;
+  }
 }
 
 async function syncLocalUsersToRemote() {
@@ -438,6 +460,16 @@ function getAllTopics() {
   });
 }
 
+function saveLocalTopics(topics) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("topics", "readwrite");
+    const store = tx.objectStore("topics");
+    topics.forEach((topic) => store.put(topic));
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 // ---- Slides ----
 async function addSlide(slide) {
   if (!db) await initDB();
@@ -461,8 +493,13 @@ async function addSlide(slide) {
 }
 
 async function getSlidesByTopic(topicName) {
-  const allSlides = await getAllSlides();
-  return allSlides.filter(s => s.topic === topicName);
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("slides", "readonly");
+    const index = tx.objectStore("slides").index("topic");
+    const request = index.getAll(topicName);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
 }
 
 function getAllSlides() {
@@ -472,6 +509,16 @@ function getAllSlides() {
     const request = store.getAll();
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
+  });
+}
+
+function saveLocalSlides(slidesToSave) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("slides", "readwrite");
+    const store = tx.objectStore("slides");
+    slidesToSave.forEach((slide) => store.put(slide));
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
   });
 }
 
@@ -898,10 +945,20 @@ if (isViewPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     showPageLoading("Loading slides ...");
     await initDB();
-    await syncAllRemoteData();
     allSlidesCache = await getAllSlides();
     await loadTopicsView();
     bindTopicSelection();
+    hidePageLoading();
+    syncAllRemoteData()
+      .then(async () => {
+        allSlidesCache = await getAllSlides();
+        await loadTopicsView();
+        if (selectedTopic) {
+          slides = allSlidesCache.filter((slide) => slide.topic === selectedTopic);
+          renderCurrentSlide();
+        }
+      })
+      .catch((error) => console.warn("Background content sync failed:", error.message));
 
     function bindTopicSelection() {
       const select = document.getElementById("topicSelect");
@@ -969,8 +1026,6 @@ if (isViewPage) {
       currentSlideIndex = 0;
       renderCurrentSlide();
     } 
-    hidePageLoading();
-
     /*
 
     if (savedTopic) {
@@ -1116,10 +1171,15 @@ if (isAdminPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     showPageLoading("Loading topics and slides ...");
     await initDB();
-    await syncAllRemoteData();
     await loadTopicsAdmin();
     await displayAllTopics();
     hidePageLoading();
+    syncAllRemoteData()
+      .then(async () => {
+        await loadTopicsAdmin();
+        await displayAllTopics();
+      })
+      .catch((error) => console.warn("Background content sync failed:", error.message));
 
     const deleteAllBtn = document.getElementById("deleteAllBtn");
     if (deleteAllBtn && !isAdminUser()) {
@@ -1447,9 +1507,11 @@ if (isAccountPage) {
     document.getElementById("loginUser").textContent = formattedName;
 
     await initDB();
-    await syncAllRemoteData();
     await renderTopicCards();
     hidePageLoading();
+    syncAllRemoteData()
+      .then(() => renderTopicCards())
+      .catch((error) => console.warn("Background content sync failed:", error.message));
   });
 }
 
@@ -1492,6 +1554,11 @@ async function renderTopicCards(topics = null) {
   if (!container) return;
 
   const visibleTopics = topics || (await getAllTopics());
+  const allSlides = await getAllSlides();
+  const slideCounts = new Map();
+  allSlides.forEach((slide) => {
+    slideCounts.set(slide.topic, (slideCounts.get(slide.topic) || 0) + 1);
+  });
   container.innerHTML = "";
 
   if (topics && visibleTopics.length === 0) {
@@ -1509,7 +1576,7 @@ async function renderTopicCards(topics = null) {
   }
 
   for (const topic of visibleTopics) {
-    const slides = await getSlidesByTopic(topic.name);
+    const slideCount = slideCounts.get(topic.name) || 0;
 
     // Skip empty topics (optional – remove if you want empty topics visible)
     //  if (slides.length === 0) continue;
@@ -1519,7 +1586,7 @@ async function renderTopicCards(topics = null) {
 
     card.innerHTML = `
       <h3>${topic.name}</h3>
-      <p class="slide-count">${slides.length} slide${slides.length > 1 ? "s" : ""}</p>
+      <p class="slide-count">${slideCount} slide${slideCount !== 1 ? "s" : ""}</p>
       <button onclick="openTopic('${topic.name}')">View</button>
       <p class="creator-info">created by <strong>${topic.creator || 'Unknown'}</strong>.</p>
     `;
@@ -1745,7 +1812,6 @@ if (isWebPage) {
   document.addEventListener("DOMContentLoaded", async () => {
     showPageLoading("Loading slides ...");
     await initDB();
-    await syncAllRemoteData();
     allSlidesCache = await getAllSlides();
     await loadTopicsView();
     bindTopicSelection();
@@ -1760,6 +1826,17 @@ if (isWebPage) {
       const select = document.getElementById("topicSelect");
       if (select) select.value = "";
     }
+    hidePageLoading();
+    syncAllRemoteData()
+      .then(async () => {
+        allSlidesCache = await getAllSlides();
+        await loadTopicsView();
+        const currentTopic = localStorage.getItem(SELECTED_TOPIC_KEY);
+        renderPageSlides(currentTopic
+          ? allSlidesCache.filter((slide) => slide.topic === currentTopic)
+          : []);
+      })
+      .catch((error) => console.warn("Background content sync failed:", error.message));
 
     function bindTopicSelection() {
       const select = document.getElementById("topicSelect");
@@ -1799,7 +1876,6 @@ if (isWebPage) {
         select.appendChild(opt);
       });
     }
-    hidePageLoading();
   });
 }
 
