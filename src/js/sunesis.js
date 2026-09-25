@@ -1582,7 +1582,7 @@ async function renderTopicCards(topics = null) {
     //  if (slides.length === 0) continue;
 
     const card = document.createElement("div");
-    card.className = "topic-card";
+    card.className = "topic-card user-topic-card";
 
     card.innerHTML = `
       <h3>${topic.name}</h3>

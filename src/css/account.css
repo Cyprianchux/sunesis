@@ -107,6 +107,21 @@ body {
   transition: 0.3s;
 }
 
+.user-topic-card {
+  flex: 0 1 220px;
+  min-width: 0;
+  padding: 14px;
+}
+
+.user-topic-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.user-topic-card .creator-info {
+  margin-top: 14px;
+}
+
 .topic-card:hover {
   transform: translateY(-5px);
   border-color: #e5bcba;
@@ -407,6 +422,10 @@ body {
   .topics-container {
     flex-direction: column;
     margin: 40px;
+  }
+
+  .user-topic-card {
+    flex-basis: 100%;
   }
 }
 
