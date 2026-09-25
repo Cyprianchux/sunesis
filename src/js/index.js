@@ -318,10 +318,7 @@ async function login() {
 
       showPopup("Login successful", "success");
       clearInputs(loginUser, loginPass);
-      showPageLoading("Loading topics ...");
-      setTimeout(() => {
-        window.location.href = "/src/account";
-      }, 900);
+      window.location.href = "/src/account";
       return;
     } catch (error) {
       remoteLoginFailed = true;
@@ -362,11 +359,7 @@ async function login() {
 
   showPopup("Login successful", "success");
   clearInputs(loginUser, loginPass);
-  showPageLoading("Loading topics ...");
-
-  setTimeout(() => {
-    window.location.href = "/src/account";
-  }, 900);
+  window.location.href = "/src/account";
 }
 
 function scrollToAuth() {
