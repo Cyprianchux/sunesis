@@ -47,7 +47,7 @@ function loadBoard() {
 // SAVE CONTENT (Enter button)
 
 function saveBoard() {
-  const currentText = boardScreen.innerText.trim();
+  const currentText = getBoardText();
   if (!currentText) return;
 
   boardEntries.push(currentText);
@@ -58,7 +58,7 @@ function saveBoard() {
 }
 
 function confirmSave() {
-  const currentText = boardScreen.innerText.trim();
+  const currentText = getBoardText();
   if (!currentText) return;
 
   if (confirm("Save this write-up?")) {
@@ -84,6 +84,15 @@ boardScreen.addEventListener("keydown", (e) => {
     confirmSave();
   }
 });
+
+function getBoardText() {
+  return boardScreen.innerText
+    .replace(/\r\n/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/(•[^\n]*)\n+(?=•)/g, "$1\n")
+    .replace(/\n+$/g, "")
+    .trim();
+}
 
 // Load saved write-ups into dropdown
 
@@ -266,25 +275,42 @@ function handleAutoBullet(e) {
 
   const range = selection.getRangeAt(0);
 
-  // Get text before cursor in current line
-  const textBeforeCursor = range.startContainer.textContent?.substring(0, range.startOffset) || "";
+  const line = getCurrentBoardLine(range.startContainer);
+  if (!line) return;
 
-  // If current line contains bullet "•"
-  if (textBeforeCursor.trim().startsWith("•")) {
-    if (textBeforeCursor.trim() === "•") {
-      e.preventDefault();
-      if (range.startContainer.nodeType === Node.TEXT_NODE) {
-        const bulletStart = Math.max(0, range.startOffset - textBeforeCursor.length);
-        range.setStart(range.startContainer, bulletStart);
-        range.deleteContents();
-      }
-      return;
-    }
+  // Pressing Enter on an empty bullet exits the list instead of creating
+  // another bullet line.
+  if (line.textContent.trim() === "•") {
+    e.preventDefault();
+    line.textContent = "";
+    placeCaretAtEnd(line);
+    return;
+  }
 
+  if (line.textContent.trim().startsWith("•")) {
     setTimeout(() => {
       insertBulletPoint();
     }, 0);
   }
+}
+
+function getCurrentBoardLine(node) {
+  let current = node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+  while (current && current !== boardScreen) {
+    if (/^(DIV|P|LI)$/i.test(current.tagName)) return current;
+    current = current.parentElement;
+  }
+  return null;
+}
+
+function placeCaretAtEnd(element) {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  boardScreen.focus();
 }
 
 
