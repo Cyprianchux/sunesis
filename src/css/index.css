@@ -108,7 +108,46 @@ main { background: linear-gradient(180deg, #fdf6f5 0%, #fff 52%, #fdf6f5 100%); 
 .feature-box.highlight h3, .feature-box.highlight p { color: #fff; }
 .cta-btn { background: #fff; border: 0; border-radius: 7px; color: var(--brick); cursor: pointer; font-weight: 700; margin-top: 18px; padding: 10px 14px; width: auto; }
 
-footer { background: #200909; color: #fff; padding: 55px 32px 25px; }.footer-grid { display: grid; gap: 35px; grid-template-columns: repeat(4, 1fr); margin: 0 auto; max-width: 1116px; text-align: left; }.footer-col h4 { color: #fff; font-size: .85rem; margin: 0 0 16px; }.footer-col a { color: #c9a3a0; display: block; font-size: .78rem; margin-bottom: 11px; text-decoration: none; }.footer-col a:hover { color: #fff; }.footer-copy { border-top: 1px solid rgba(255,255,255,.1); color: #a5827f; font-size: .72rem; margin: 35px auto 0; max-width: 1116px; padding-top: 22px; text-align: left; }
+footer { 
+  background: #200909; 
+  color: #c9a3a0; 
+  padding: 55px 32px 25px; 
+}
+.footer-grid { 
+  display: grid; 
+  gap: 35px; 
+  grid-template-columns: repeat(4, 1fr); 
+  margin: 0 auto; 
+  max-width: 1116px; 
+  text-align: left;
+}
+.footer-col h4 { color: #ffb1a8; font-size: 1rem; margin: 0 0 16px; 
+}
+
+.footer-col a { 
+  color: #c9a3a0; 
+  display: block; 
+  font-size: .85rem; 
+  margin-bottom: 0.5rem; 
+  text-decoration: none; 
+  transition: 0.2s;
+}
+
+.footer-col a:hover { 
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.footer-copy { 
+  border-top: 1px solid rgba(255,255,255,.1); 
+  color: #a5827f; 
+  font-size: .95rem; 
+  margin: 35px auto 0; 
+  max-width: 1116px; 
+  padding-top: 22px; 
+  text-align: left; 
+}
+
 .popup { top: 1rem; }
 .spinner { display: inline-block; width: 16px; height: 16px; margin-right: 8px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin .8s linear infinite; vertical-align: middle; } @keyframes spin { to { transform: rotate(360deg); } } button.loading { cursor: not-allowed; opacity: .8; pointer-events: none; }
 @media (max-width: 800px) { .hero { gap: 20px; grid-template-columns: 1fr; padding-top: 35px; text-align: center; }

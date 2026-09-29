@@ -410,9 +410,9 @@ footer {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 3rem;
-  padding: 2rem 4rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 35px;
+  margin: 0 auto; 
   text-align: left;
 }
 
