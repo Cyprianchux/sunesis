@@ -1582,7 +1582,7 @@ async function renderTopicCards(topics = null) {
     //  if (slides.length === 0) continue;
 
     const card = document.createElement("div");
-    card.className = "topic-card";
+    card.className = "topic-card user-topic-card";
 
     card.innerHTML = `
       <h3>${topic.name}</h3>
@@ -1691,7 +1691,7 @@ function renderDefaultTopics(hasTopics = false) {
             <h3>How Sunesis fits together</h3>
           </div>
           <button class="platform-navigation-close" onclick="togglePlatformNavigation()">
-            Close the Platform Navigation
+            Close
           </button>
         </div>
         <div class="getting-started-flow">
@@ -1715,7 +1715,7 @@ function renderDefaultTopics(hasTopics = false) {
         </div>
         <div class="getting-started-actions">
           <button onclick="togglePlatformNavigation()">
-            Close the Platform Navigation <i class="fa-solid fa-xmark"></i>
+            Close the Platform Navigation
           </button>
         </div>
       </div>
