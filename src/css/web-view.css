@@ -100,7 +100,7 @@ body {
   max-width: 700px;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 850px) {
   .header {
     flex-direction: column;
     text-align: center;
@@ -119,5 +119,17 @@ body {
   .header-img img,
   .header-img video {
     max-width: 90%;
+  }
+}
+
+@media (max-width: 600px)  {
+  .header-text h2 {
+    font-size: 1.1em;
+    margin: 5px auto;
+  }
+  .slide-desc {
+    font-size: 1rem;
+    margin: 5px auto;
+    line-height: 1.4;
   }
 }
