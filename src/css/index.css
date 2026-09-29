@@ -146,6 +146,7 @@ footer {
   max-width: 1116px; 
   padding-top: 22px; 
   text-align: left; 
+  opacity: .8;
 }
 
 .popup { top: 1rem; }
