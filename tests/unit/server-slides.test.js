@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
 const { createMockSupabaseClient, resetMockDb, seedMockUser, TEST_JWT_SECRET } = require("../fixtures/mock-supabase");
-const { createApp } = require("../../api/server");
+const { createApp } = require("../../../sunesis-api/server");
 
 let app;
 beforeEach(() => {

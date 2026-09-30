@@ -2,8 +2,15 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
-const { createApp } = require("../../api/server");
-const { createMockSupabaseClient } = require("../fixtures/mock-supabase");
+const {
+  createMockSupabaseClient,
+  TEST_JWT_SECRET,
+} = require("../fixtures/mock-supabase");
+
+process.env.JWT_SECRET = TEST_JWT_SECRET;
+process.env.SMTP_HOST = "";
+
+const { createApp } = require("../../../sunesis-api/server");
 
 const PORT = Number(process.env.E2E_PORT || 3000);
 const ROOT = path.resolve(__dirname, "..", "..");

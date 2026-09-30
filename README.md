@@ -124,32 +124,32 @@ All data is stored safely in your browser. No external servers are required.
 
 ---
 
-## Supabase setup
+## Local development
 
-1. Run `supabase.sql` in the Supabase SQL editor.
-2. Install dependencies with `pnpm install`.
-3. Configure the API environment:
+The frontend and API run in separate terminals. Install the frontend
+dependencies and start the development server:
 
-```env
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-JWT_SECRET=use-a-long-random-secret
-PORT=3000
-BASE_URL=https://sunesis.vercel.app
+```powershell
+pnpm install
+pnpm dev
 ```
 
-Keep `.env` private and configure the same variables in the hosting provider's
-server-side environment settings. `BASE_URL` must be the public frontend URL;
-otherwise email links fall back to localhost for local development. On Vercel,
-set it to the production URL (for example `https://sunesis.vercel.app`) in
-Project Settings > Environment Variables, then redeploy. Public registration
-always creates a `user`.
-Create the single admin account privately in Supabase by setting its `role` to
-`admin`; the browser never contains an admin username or admin secret. The
-service-role key must also remain server-side. Start the API locally with
-`pnpm start`; the browser client uses `/api` on Vercel and
-`http://localhost:3000` on local development. It can be pointed elsewhere with
-`window.SUNESIS_API_URL`.
+Vite serves the frontend at `http://localhost:5173`. In a second terminal, go
+to the sibling `sunesis-api` directory, install its dependencies, configure
+`.env` from `.env.example`, and run `pnpm start` to serve the API at
+`http://localhost:3000`. The frontend connects to that local API automatically.
+The frontend's API unit and end-to-end tests also load the backend from that
+sibling directory.
+
+The API needs `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `JWT_SECRET`.
+Configure SMTP values to send verification and password-reset emails; set
+`BASE_URL` to the frontend URL so those email links open the frontend. Keep
+server-side secrets out of the frontend. Public registration always creates a
+`user`; create or promote the admin account privately in Supabase.
+
+In production, the frontend uses its `/api` route, which Vercel proxies to the
+Sunesis API project. If that project has a different domain from
+`sunesis-api.vercel.app`, update the destination in `vercel.json` and redeploy.
 
 ---
 

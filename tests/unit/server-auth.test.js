@@ -10,7 +10,7 @@ const {
   db,
   TEST_JWT_SECRET,
 } = require("../fixtures/mock-supabase");
-const { createApp } = require("../../api/server");
+const { createApp } = require("../../../sunesis-api/server");
 
 let app;
 beforeEach(() => {
